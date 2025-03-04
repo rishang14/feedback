@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {Poppins } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const popppins = Poppins({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  display: 'swap', 
+  variable:"--font-poppins"
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "feedback-collector",
@@ -24,18 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-      > 
-      <ThemeProvider  
-       attribute="class"
-       defaultTheme="system"
-       enableSystem
-       disableTransitionOnChange
+    <html lang="en" suppressHydrationWarning={true}>
+      <body 
+      suppressHydrationWarning={true}
+        className={`${popppins.variable} antialiased`}
       >
         {children}
-
-      </ThemeProvider>
       </body>
     </html>
   );

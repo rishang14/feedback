@@ -2,7 +2,9 @@
 
 @plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *)); 
+
+
 
 @theme inline {
   --color-background: var(--background);
@@ -43,6 +45,14 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+}
+
+*{
+  box-sizing: border-box; 
+} 
+
+body{
+  background-color: black;
 }
 
 :root {
