@@ -5,8 +5,8 @@ import { Button } from '../ui/button';
 
 const Nav = () => {
   return (
-    <nav className='fixed top-0 bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]'> 
-     <div className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
+    <header className=' bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]'> 
+     <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
         <Link href="/" className="text-2xl text-white font-bold  ">
          ReviewVault
         </Link>  
@@ -15,17 +15,16 @@ const Nav = () => {
            Features
           </Link>
           <Link href="/templates" className="font-medium hover:text-blue-300 text-white text-md">
-            Login
+            Sign-up
           </Link>
-          <Link href="/templates" > 
-          <Button className='font-medium  text-white text-md bg-blue-400' >
-           Signup
+          <Button className='font-medium hover:bg-blue-300   text-md  bg-blue-500' asChild={true} variant={"default"} >
+          <Link href="/" className=' text-white'> 
+           Sign-in
+          </Link>
            </Button>
-            Signup
-          </Link>
         </div> 
-      </div> 
-    </nav>
+      </nav> 
+    </header>
   )
 }
 

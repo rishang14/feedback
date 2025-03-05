@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {Poppins } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/LandingPageComp/Nav";
 
 const popppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -25,7 +26,8 @@ export default function RootLayout({
       <body 
       suppressHydrationWarning={true}
         className={`${popppins.variable} antialiased`}
-      >
+      > 
+           <Nav /> 
         {children}
       </body>
     </html>

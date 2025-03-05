@@ -47,9 +47,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-*{
-  box-sizing: border-box; 
-} 
+
 
 body{
   background-color: black;
