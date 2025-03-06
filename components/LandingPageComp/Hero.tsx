@@ -16,7 +16,7 @@ const Hero = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-             <Button className="bg-blue-600  text-white " size={"lg"} variant={"default"} asChild={false}>
+             <Button className="bg-blue-500   text-white cursor-pointer " size={"lg"} variant={"default"} >
               Get Started 
               </Button>
           </div>
