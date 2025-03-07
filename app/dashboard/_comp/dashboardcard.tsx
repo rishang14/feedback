@@ -3,17 +3,20 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
   } from "@/components/ui/card"
 
 const Dashboardcard = () => {
   return (
-   <Card>
-    <CardContent>
-        <p className='text-white'>hello </p>
-    </CardContent>
+   <Card  className='bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm" '>
+    <CardContent className=' '>
+        <div className='flex justify-between  md:w-[280px]'>
+          <p className='text-white text-xl font-medium '> Hello</p> 
+          <span className='text-white text-xl font-medium'>icon</span>
+        </div>
+    </CardContent> 
+    <CardDescription>
+
+    </CardDescription>
    </Card>
   )
 }
