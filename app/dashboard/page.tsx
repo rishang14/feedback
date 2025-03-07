@@ -1,6 +1,7 @@
 import React from 'react'
 import Dashboardcard from './_comp/dashboardcard' 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button' 
+import { Plus } from "lucide-react"
 
 const page = () => {
   return (
@@ -14,9 +15,12 @@ const page = () => {
     <Dashboardcard />
     </div> 
     </div>  
-    <div className='flex  w-full'>
-    <div className='p-5 flex items-center justify-between'>
-    <h1 className=' md:text-4xl text-2xl font-bold   text-white '>Overview :</h1> 
+    <div className=' mt-25 w-full'>
+    <div className='p-5 flex items-center max-w-[950px] justify-between'>
+    <h1 className=' md:text-4xl text-2xl font-bold   text-white '>Active Spaces</h1>  
+    <Button className='text-white bg-blue-600 text-lg ' size={"lg"}>
+    <Plus />  Create new Space
+    </Button>
     </div> 
     </div> 
     </div>
