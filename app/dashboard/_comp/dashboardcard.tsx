@@ -4,6 +4,20 @@ import {
     CardContent,
     CardDescription,
   } from "@/components/ui/card"
+  import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button'; 
 import { Ellipsis} from "lucide-react";
 
@@ -31,13 +45,37 @@ export default Dashboardcard;
     <Card  className='bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm'>
     <CardContent className='max-w-[250px] flex justify-between items-center '>
         <div className='w-[200px]  flex justify-between  '>
-          <p className='text-white text-xl font-medium '> Hello</p> 
-          <Button variant="outline" className='bg-gray-800 border-none hover:bg-gray-400 cursor-pointer' size="icon"><Ellipsis size={40} color="#fff" strokeWidth={0.75} /></Button>
+          <p className='text-white text-xl font-medium '> Hello</p>  
+          <DropdownMenuDemo/>
         </div>
     </CardContent> 
     <CardDescription>
     </CardDescription>
    </Card>
   )
- }
+ } 
+
+
+const DropdownMenuDemo=()=> {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+      <Button variant="outline" className='bg-gray-800 border-none hover:bg-gray-400 cursor-pointer' size="icon"><Ellipsis size={40} color="#fff" strokeWidth={0.75} /></Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-5 bg-gray-100">
+        <DropdownMenuLabel >Settings</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem className='cursor-pointer'>
+            Edit Space
+          </DropdownMenuItem>
+          <DropdownMenuItem className='cursor-pointer '>
+            Delete Space
+          </DropdownMenuItem> 
+          </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 
