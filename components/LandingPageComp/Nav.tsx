@@ -14,11 +14,11 @@ const Nav = () => {
           <Link href="/" className="font-medium hover:text-blue-300 text-white text-md">
            Features
           </Link>
-          <Link href="/" className="font-medium hover:text-blue-300 text-white text-md">
+          <Link href="/auth/signup" className="font-medium hover:text-blue-300 text-white text-md">
             Sign-up
           </Link>
           <Button className='font-medium text-md  bg-blue-500' asChild={true} variant={"default"} >
-          <Link href="/" className=' text-white'> 
+          <Link href="/auth/signin" className=' text-white'> 
            Sign-in
           </Link>
            </Button>
