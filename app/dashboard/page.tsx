@@ -1,7 +1,9 @@
-import React from "react";
-import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
+import React,{useState} from "react";
+import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard"; 
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Plus, FolderPlus } from "lucide-react";
+import {  FolderPlus } from "lucide-react";
+import Spaceform from "../spaceForm/spaceform";
 const page = () => {
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
@@ -23,7 +25,7 @@ const page = () => {
             Active Spaces
           </h1>
           <Button className="text-white  bg-blue-600  text-lg cursor-pointer">
-            <Plus /> Create new Space
+            + Create new Space
           </Button>
         </div>
         {/* space body section  */}
@@ -41,7 +43,8 @@ export default page;
 
 
 
-const Emptyspace=()=>{
+const Emptyspace=()=>{ 
+  const [open, setOpen] = useState(false);
   return (
      <div className="flex items-center justify-center   ">
             <div className=" flex flex-col gap-4 items-center">
@@ -50,10 +53,17 @@ const Emptyspace=()=>{
               <p className="font-medium text-lg text-center text-gray-600 ">
                 {" "}
                 Create your first space to start collecting review .
-              </p>
-              <Button className="text-white bg-blue-600 text-lg cursor-pointer">
-                <Plus /> Create a new Space
+              </p> 
+              <Dialog open={open} onOpenChange={setOpen}>
+      {/* Button to open modal */}
+      <DialogTrigger asChild>
+      <Button className="text-white bg-blue-600 text-lg cursor-pointer">
+                + Create a new Space
               </Button>
+      </DialogTrigger>
+
+       <Spaceform closeModal={() => setOpen(false)} />
+    </Dialog>
             </div>
           </div> 
   )
