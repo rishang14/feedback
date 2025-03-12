@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import {
     Card,
@@ -15,6 +16,7 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button'; 
 import { Ellipsis} from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 
 const Dashboardcard = () => {
@@ -34,11 +36,15 @@ const Dashboardcard = () => {
 export default Dashboardcard; 
 
  export  const DashboardCardWithMenu =()=>{
+  const router = useRouter(); 
+  const handleClick=(id:any)=>{
+   router.push(`/dashboard/space/${id}`)
+  }
   return(
     <Card  className='bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm'>
     <CardContent className='max-w-[250px] flex justify-between items-center '>
         <div className='w-[200px]  flex justify-between  '>
-          <p className='text-white text-xl font-medium '> Hello</p>  
+          <p className='text-white text-xl font-medium ' onClick={()=>handleClick(123)}> Hello</p> 
           <DropdownMenuDemo/>
         </div>
     </CardContent> 
