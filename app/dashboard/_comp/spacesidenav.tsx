@@ -1,9 +1,9 @@
 import React from 'react'
 
-const sapcesidenav = () => {
+const Spacesidenav = () => {
   return (
     <div>sapcesidenav</div>
   )
 }
 
-export default sapcesidenav
+export default Spacesidenav
