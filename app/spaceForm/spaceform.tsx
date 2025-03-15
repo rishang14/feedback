@@ -34,6 +34,8 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     messageLabel: "Your Message",
     ratingEnabled: true,
     buttonText: "Submit Testimonial",
+    buttonColor: "black",
+    buttonTextColor:"white",
     thankYouTitle: "Thank You!",
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
@@ -42,9 +44,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
 
   return (
     <main className=" p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex  gap-8">
-          <div className="w-[350px] space-y-6">
+      <div className=" ">
+        <div className="flex md:flex-row  flex-col-reverse   gap-8">
+          <div className="w-[400px] flex flex-col items-center mt-2 space-y-6">
             <div className="text-lg font-semibold flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               Live Preview
@@ -52,8 +54,8 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
             {activeTab != "thankyou" ? (
               <Card
                 className={`border-2 ${
-                  formData.theme === "dark" ? "bg-zinc-900" : "bg-white"
-                }`}
+                  formData.theme === "dark" ? "bg-zinc-900" : "bg-white" 
+                } mt-2 min-w-[390px]`}
               >
                 <CardContent className="pt-6">
                   <div className="space-y-6">
@@ -91,7 +93,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         <Label>{formData.messageLabel}</Label>
                         <Textarea placeholder="Share your experience..." />
                       </div>
-                      <Button className="w-full">{formData.buttonText}</Button>
+                      <Button className={`w-full  bg-${formData.buttonColor}  text-${formData.buttonTextColor} `}>{formData.buttonText}</Button>
                     </div>
                   </div>
                 </CardContent>
@@ -209,6 +211,25 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         value={formData.buttonText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonTextcolor">Background color of submit text</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonColor}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonText">Text Color of submit text</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonTextColor}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                     <Button className="bg-blue-500 text-white p-2  w-full text-center">Create Space</Button>
                     </div>
                   </CardContent>
                 </Card>

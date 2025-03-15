@@ -3,16 +3,16 @@
 import React, { useState } from "react";
 import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
 import {
+  DialogContent,
   Dialog,
   DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription, 
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import Spaceform from "../spaceForm/spaceform";
-import { DialogContent } from "@radix-ui/react-dialog";
 const page = () => {
   const [open, setOpen] = useState(false);
   return (
@@ -69,28 +69,27 @@ const Emptyspace = () => {
 const CreateSpaceButton = () => {
   const [open, setOpen] = useState(false);
   return (
-    <Dialog  open={open} onOpenChange={setOpen} modal={true} >
+    <Dialog  open={open} onOpenChange={setOpen} modal={true}  >
       {/* Button to open modal */}
       <DialogTrigger asChild>
         <Button className="text-white bg-blue-600 text-lg cursor-pointer">
           + Create a new Space
         </Button>
       </DialogTrigger>
-      <DialogContent className=" flex flex-col p-6 h-[700px] w-[90%] left-20 overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white absolute top-10"> 
+      <DialogContent className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white " onInteractOutside={(e)=> e.preventDefault()}> 
       <DialogHeader>
-        <DialogTitle>
-          {" "}
-          <h1 className="text-4xl font-bold tracking-tight mb-2 text-center">
+        <DialogTitle className=" ">
+          <h1 className="text-4xl font-bold tracking-tight mb-2 text-center ">
             Customize Your Testimonial Form
-          </h1>
+          </h1> 
         </DialogTitle>
-        <DialogDescription>
+        <DialogDescription className="">
           <p className="text-muted-foreground text-lg text-center">
             Design the perfect testimonial collection experience
           </p>
         </DialogDescription>
       </DialogHeader>
-        <Spaceform closeModal={() => setOpen(false)} />
+        <Spaceform closeModal={() => setOpen(false)} /> 
       </DialogContent>
     </Dialog>
   );
