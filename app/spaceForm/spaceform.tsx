@@ -20,22 +20,37 @@ import {
   MessageSquare,
   Settings,
   Star,
-  ThumbsUp,
+  ThumbsUp, 
+  Trash2 ,
+  CirclePlus
 } from "lucide-react";
 
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   const [activeTab, setavtiveTab] = useState("basic");
   console.log(activeTab);
-  const [formData, setFormData] = useState({
-    title: "Share Your Experience",
-    description: "We would love to hear your feedback!",
-    nameLabel: "Your Name",
-    emailLabel: "Your Email",
+  const [formData, setFormData] = useState({ 
+    spaceName:"",
+    header: "header goes here",
+    customDescription: "We would love to hear your feedback!",
     messageLabel: "Your Message",
     ratingEnabled: true,
-    buttonText: "Submit Testimonial",
+    buttonText: "Submit Testimonial", 
+    questions:[{
+      id:"1", 
+      questions:"demo question"
+    },
+    {
+      id:"2", 
+      questions:"demo question 2"
+    },
+    {
+      id:"3", 
+      questions:"demo question 3"
+    },
+  ], 
+    questionlabel:"Questions",
     buttonColor: "black",
-    buttonTextColor:"white",
+    buttonTextColor:"white", 
     thankYouTitle: "Thank You!",
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
@@ -46,7 +61,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     <main className=" p-6">
       <div className=" ">
         <div className="flex md:flex-row  flex-col-reverse   gap-8">
-          <div className="w-[400px] flex flex-col items-center mt-2 space-y-6">
+          <div className="w-[400px]  flex flex-col items-center mt-2 space-y-6">
             <div className="text-lg font-semibold flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               Live Preview
@@ -55,45 +70,33 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <Card
                 className={`border-2 ${
                   formData.theme === "dark" ? "bg-zinc-900" : "bg-white" 
-                } mt-2 min-w-[390px]`}
+                } mt-2 min-w-[390px] p-4`}
               >
                 <CardContent className="pt-6">
                   <div className="space-y-6">
-                    <div className="space-y-2">
-                      <h2 className="text-2xl font-bold">{formData.title}</h2>
-                      <p className="text-muted-foreground">
-                        {formData.description}
+                    <div className="space-y-2 p-2">
+                      <h2 className="text-2xl text-center font-bold">{formData.header}</h2>
+                      <p className="text-muted-foreground text-center">
+                        {formData.customDescription}
                       </p>
                     </div>
-
                     <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label>{formData.nameLabel}</Label>
-                        <Input placeholder="John Doe" />
+                      <div className="space-y-2 flex flex-col gap-2 "> 
+                        <h3 className="p-2 text-lg  text-black " > {formData.questionlabel}</h3>
+                        {
+                          formData.questions.map(items=>(
+                            <li className="text-gray-500 " key={items.id}>
+                              {items.questions}
+                            </li>
+                          ))
+                        }
                       </div>
-                      <div className="space-y-2">
-                        <Label>{formData.emailLabel}</Label>
-                        <Input placeholder="john@example.com" type="email" />
-                      </div>
-                      {formData.ratingEnabled && (
-                        <div className="space-y-2">
-                          <Label>Rating</Label>
-                          <div className="flex gap-1">
-                            {[1, 2, 3, 4, 5].map((rating) => (
-                              <Star
-                                key={rating}
-                                className="h-6 w-6 text-yellow-400 cursor-pointer"
-                                fill="currentColor"
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      <div className="space-y-2">
-                        <Label>{formData.messageLabel}</Label>
+                      {/* <div className="space-y-2">
+                        <Label>{ formData.messageLabel}</Label>
                         <Textarea placeholder="Share your experience..." />
-                      </div>
-                      <Button className={`w-full  bg-${formData.buttonColor}  text-${formData.buttonTextColor} `}>{formData.buttonText}</Button>
+                      </div> */}
+                      <Button className={`w-full   text-black bg-gray-400 cursor-pointer `}>{formData.buttonText}</Button>
+                      <Button className={`w-full   text-black bg-blue-500 cursor-pointer `}>video testimonial</Button>
                     </div>
                   </div>
                 </CardContent>
@@ -152,27 +155,35 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                   Settings
                 </TabsTrigger>
               </TabsList>
-
+             {/* form section */}
               <TabsContent value="basic" className="space-y-6 mt-6">
                 <Card>
                   <CardContent className="pt-6 space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="title">Form Title</Label>
+                      <Label htmlFor="title" className=" text-gray-700">Space Name</Label>
                       <Input
                         id="title"
-                        value={formData.title}
+                        value={formData.spaceName}
                         //   onChange={(e) => updateFormData('title', e.target.value)}
                       />
-                    </div>
+                    </div> 
                     <div className="space-y-2">
-                      <Label htmlFor="description">Form Description</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
+                      <Label htmlFor="header" className=" text-gray-700">Header Title</Label>
+                      <Input
+                        id="headerTitle"
+                        value={formData.header}
                         //   onChange={(e) => updateFormData('description', e.target.value)}
                       />
                     </div>
                     <div className="space-y-2">
+                      <Label htmlFor="description" className=" text-gray-700">Form Description</Label>
+                      <Textarea
+                        id="description"
+                        value={formData.customDescription}
+                        //   onChange={(e) => updateFormData('description', e.target.value)}
+                      />
+                    </div>
+                    {/* <div className="space-y-2">
                       <Label htmlFor="nameLabel">Name Field Label</Label>
                       <Input
                         id="nameLabel"
@@ -187,45 +198,32 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         value={formData.emailLabel}
                         //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
                       />
+                    </div> */}  
+                    <div className="flex  space-y-2  flex-col">
+                     {
+                      formData.questions.map(item=>{
+                        return (
+                          <div className=" flex gap-2 " key={item.id}>
+                           <Input
+                        id="emailLabel"
+                        placeholder={item.questions}
+                        //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
+                      /> 
+                      <Button className=" text-lg cursor-pointer bg-white hover:text-gray-400" variant={"link"}><Trash2 color="black" /></Button>
+                          </div>
+                        )
+                      })
+                     } 
+
+                     <Button className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer" variant={"ghost"} ><CirclePlus color="black" /> Add more  </Button>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="messageLabel">Message Field Label</Label>
-                      <Input
-                        id="messageLabel"
-                        value={formData.messageLabel}
-                        //   onChange={(e) => updateFormData('messageLabel', e.target.value)}
-                      />
-                    </div>
+
                     <div className="flex items-center justify-between">
                       <Label htmlFor="rating">Enable Rating</Label>
                       <Switch
                         id="rating"
                         checked={formData.ratingEnabled}
                         //   onCheckedChange={(checked) => updateFormData('ratingEnabled', checked)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="buttonText">Submit Button Text</Label>
-                      <Input
-                        id="buttonText"
-                        value={formData.buttonText}
-                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="buttonTextcolor">Background color of submit text</Label>
-                      <Input
-                        id="buttonText"
-                        value={formData.buttonColor}
-                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="buttonText">Text Color of submit text</Label>
-                      <Input
-                        id="buttonText"
-                        value={formData.buttonTextColor}
-                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
                     <div className="space-y-2">
@@ -286,6 +284,38 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           <SelectItem value="system">System</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div> 
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonText">Submit Button Text</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonText}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonTextcolor">Background color of submit text</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonColor}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonText">Text Color of submit text</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonTextColor}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
+                    </div> 
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonTextcolor">Question Label</Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.questionlabel}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
                     </div>
                   </CardContent>
                 </Card>

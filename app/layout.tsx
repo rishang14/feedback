@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import {Poppins } from "next/font/google";
+import localFont from 'next/font/local';
 import "./globals.css";
-import Nav from "@/components/LandingPageComp/Nav";
+import Nav from "@/components/LandingPageComp/Nav"; 
 
-const popppins = Poppins({
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  subsets: ['latin'],
-  display: 'swap', 
-  variable:"--font-poppins"
-})
+const popppins = localFont({
+  display: 'swap',
+  src: [
+    {
+      path: '../public/fonts/poppins.woff2',
+    },
+  ],
+  variable: '--font-poppins',
+});
 
 
 export const metadata: Metadata = {
@@ -27,7 +30,7 @@ export default function RootLayout({
       suppressHydrationWarning={true}
         className={`${popppins.variable} antialiased`}
       > 
-           <Nav /> 
+         <Nav /> 
         {children}
       </body>
     </html>
