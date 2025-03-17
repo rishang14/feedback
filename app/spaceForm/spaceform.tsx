@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch"; 
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -14,43 +15,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
 import {
   ShipWheel as ColorWheel,
   Layout,
   MessageSquare,
   Settings,
   Star,
-  ThumbsUp, 
-  Trash2 ,
-  CirclePlus
+  ThumbsUp,
+  Trash2,
+  CirclePlus,
 } from "lucide-react";
 
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
-  const [activeTab, setavtiveTab] = useState("basic");
-  console.log(activeTab);
-  const [formData, setFormData] = useState({ 
-    spaceName:"",
+  const [activeTab, setactiveTab] = useState("basic");
+  const [formData, setFormData] = useState({
+    spaceName: "",
     header: "header goes here",
     customDescription: "We would love to hear your feedback!",
     messageLabel: "Your Message",
     ratingEnabled: true,
-    buttonText: "Submit Testimonial", 
-    questions:[{
-      id:"1", 
-      questions:"demo question"
-    },
-    {
-      id:"2", 
-      questions:"demo question 2"
-    },
-    {
-      id:"3", 
-      questions:"demo question 3"
-    },
-  ], 
-    questionlabel:"Questions",
+    buttonText: "Submit Testimonial",
+    questions: [
+      {
+        id: "1",
+        questions: "demo question",
+      },
+      {
+        id: "2",
+        questions: "demo question 2",
+      },
+      {
+        id: "3",
+        questions: "demo question 3",
+      },
+    ],
+    questionlabel: "Questions",
     buttonColor: "black",
-    buttonTextColor:"white", 
+    buttonTextColor: "white",
     thankYouTitle: "Thank You!",
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
@@ -66,37 +68,49 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <MessageSquare className="h-5 w-5" />
               Live Preview
             </div>
-            {activeTab != "thankyou" ? (
+            {activeTab !== "thankyou" ? (
               <Card
                 className={`border-2 ${
-                  formData.theme === "dark" ? "bg-zinc-900" : "bg-white" 
+                  formData.theme === "dark" ? "bg-zinc-900" : "bg-white"
                 } mt-2 min-w-[390px] p-4`}
               >
                 <CardContent className="pt-6">
-                  <div className="space-y-6">
+                  <div className="space-y-4">
+                    <div className=" flex justify-center items-center ">
+                      <div className="w-[60px] max-h-[60px] bg-blue-400 p-3 flex items-center justify-center rounded-full">
+                        <ThumbsUp color="white" size={60} />
+                      </div>
+                    </div>
                     <div className="space-y-2 p-2">
-                      <h2 className="text-2xl text-center font-bold">{formData.header}</h2>
+                      <h1 className="text-2xl text-center font-bold">
+                        {formData.header}
+                      </h1>
                       <p className="text-muted-foreground text-center">
                         {formData.customDescription}
                       </p>
                     </div>
                     <div className="space-y-4">
-                      <div className="space-y-2 flex flex-col gap-2 "> 
-                        <h3 className="p-2 text-lg  text-black " > {formData.questionlabel}</h3>
-                        {
-                          formData.questions.map(items=>(
-                            <li className="text-gray-500 " key={items.id}>
-                              {items.questions}
-                            </li>
-                          ))
-                        }
+                      <div className="space-y-2 flex flex-col gap-2 ">
+                        <h3 className="p-2 text-lg  text-black ">
+                          {" "}
+                          {formData.questionlabel}
+                        </h3>
+                        {formData.questions.map((items) => (
+                          <li className="text-gray-500 " key={items.id}>
+                            {items.questions}
+                          </li>
+                        ))}
                       </div>
                       {/* <div className="space-y-2">
                         <Label>{ formData.messageLabel}</Label>
                         <Textarea placeholder="Share your experience..." />
                       </div> */}
-                      <Button className={`w-full   text-black bg-gray-400 cursor-pointer `}>{formData.buttonText}</Button>
-                      <Button className={`w-full   text-black bg-blue-500 cursor-pointer `}>video testimonial</Button>
+                      <Button className={`w-full   text-black bg-gray-400  `}>
+                        {formData.buttonText}
+                      </Button>
+                      <Button className={`w-full   text-black bg-blue-500  `}>
+                        video testimonial
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -105,19 +119,26 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <Card className="border-2 border-dashed">
                 <CardContent className="pt-6">
                   <div className="space-y-4">
+                    <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
+                      <Image
+                        src={
+                          "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjRxcjIxbXJobjVoNzVwempua2twZ2dmbzVjeDZzaDZweHluMnQwaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26gsjCZpPolPr3sBy/giphy.gif"
+                        }
+                        alt="thankyou"
+                        objectPosition="center"
+                        className="w-full h-[250px]"
+                        width={100}
+                        height={100}
+                      />
+                    </div>
                     <div className="space-y-2">
-                      <h3 className="text-xl font-semibold">
+                      <h1 className="text-4xl text-center font-bold text-gray-600">
                         {formData.thankYouTitle}
-                      </h3>
+                      </h1>
                       <p className="text-muted-foreground">
                         {formData.thankYouMessage}
                       </p>
                     </div>
-                    {formData.redirectUrl && (
-                      <Button variant="outline" className="w-full">
-                        Continue to website
-                      </Button>
-                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -128,11 +149,11 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
           <div className="flex flex-1 space-y-6">
             <Tabs
               defaultValue="basic"
-              className="w-full"
+              className="w-full p-2 "
               value={activeTab}
-              onValueChange={setavtiveTab}
+              onValueChange={setactiveTab}
             >
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className=" w-full bg-gray-100 p-2 border-1  rounded-sm ">
                 <TabsTrigger
                   value="basic"
                   className="flex items-center gap-2 data-[state=active]:bg-blue-500 data-[state=active]:text-white rounded-md transition-colors"
@@ -155,20 +176,24 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                   Settings
                 </TabsTrigger>
               </TabsList>
-             {/* form section */}
+              {/* form section */}
               <TabsContent value="basic" className="space-y-6 mt-6">
                 <Card>
                   <CardContent className="pt-6 space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="title" className=" text-gray-700">Space Name</Label>
+                      <Label htmlFor="title" className=" text-gray-700">
+                        Space Name
+                      </Label>
                       <Input
                         id="title"
                         value={formData.spaceName}
                         //   onChange={(e) => updateFormData('title', e.target.value)}
                       />
-                    </div> 
+                    </div>
                     <div className="space-y-2">
-                      <Label htmlFor="header" className=" text-gray-700">Header Title</Label>
+                      <Label htmlFor="header" className=" text-gray-700">
+                        Header Title
+                      </Label>
                       <Input
                         id="headerTitle"
                         value={formData.header}
@@ -176,7 +201,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="description" className=" text-gray-700">Form Description</Label>
+                      <Label htmlFor="description" className=" text-gray-700">
+                        Form Description
+                      </Label>
                       <Textarea
                         id="description"
                         value={formData.customDescription}
@@ -198,24 +225,32 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         value={formData.emailLabel}
                         //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
                       />
-                    </div> */}  
+                    </div> */}
                     <div className="flex  space-y-2  flex-col">
-                     {
-                      formData.questions.map(item=>{
+                      {formData.questions.map((item) => {
                         return (
                           <div className=" flex gap-2 " key={item.id}>
-                           <Input
-                        id="emailLabel"
-                        placeholder={item.questions}
-                        //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
-                      /> 
-                      <Button className=" text-lg cursor-pointer bg-white hover:text-gray-400" variant={"link"}><Trash2 color="black" /></Button>
+                            <Input
+                              id="emailLabel"
+                              placeholder={item.questions}
+                              //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
+                            />
+                            <Button
+                              className=" text-lg cursor-pointer bg-white hover:text-gray-400"
+                              variant={"link"}
+                            >
+                              <Trash2 color="black" />
+                            </Button>
                           </div>
-                        )
-                      })
-                     } 
+                        );
+                      })}
 
-                     <Button className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer" variant={"ghost"} ><CirclePlus color="black" /> Add more  </Button>
+                      <Button
+                        className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
+                        variant={"ghost"}
+                      >
+                        <CirclePlus color="black" /> Add more{" "}
+                      </Button>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -227,7 +262,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       />
                     </div>
                     <div className="space-y-2">
-                     <Button className="bg-blue-500 text-white p-2  w-full text-center">Create Space</Button>
+                      <Button className="bg-blue-500 text-white p-2  w-full text-center">
+                        Create Space
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -236,6 +273,25 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <TabsContent value="thankyou" className="space-y-6 mt-6">
                 <Card>
                   <CardContent className="pt-6 space-y-6">
+                    <div className="space-y-2"> 
+                      <div className="flex items-center gap-2 sapce-x-2">
+                      <label
+                        htmlFor="Thankyouimg"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Hide this img ?
+                      </label>
+                      <Checkbox id="Thankyouimg" className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  " />
+                      </div>
+                     
+                      <Input
+                        id="Thankyouimg"
+                        type="file"
+                        placeholder="Change"
+                        className="w-[65px] cursor-pointer  text-center"
+                        //   onChange={(e) => updateFormData('thankYouTitle', e.target.value)}
+                      />
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="thankYouTitle">Thank You Title</Label>
                       <Input
@@ -269,7 +325,23 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
 
               <TabsContent value="settings" className="space-y-6 mt-6">
                 <Card>
-                  <CardContent className="pt-6 space-y-6">
+                  <CardContent className="pt-6 space-y-6"> 
+                  <div className="space-y-2">
+                      <Label htmlFor="theme">Maximum Video duration</Label>
+                      <Select
+                      // value={formData.theme} onValueChange={(value) => updateFormData('theme', value)} 
+                      
+                      >
+                        <SelectTrigger className="p-3 ">
+                          <SelectValue  />
+                        </SelectTrigger>
+                        <SelectContent className=" ">
+                          <SelectItem value="light">30 sec</SelectItem>
+                          <SelectItem value="dark">45 sec</SelectItem>
+                          <SelectItem value="system">90 sec</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="theme">Form Theme</Label>
                       <Select
@@ -284,7 +356,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           <SelectItem value="system">System</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div> 
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="buttonText">Submit Button Text</Label>
                       <Input
@@ -292,9 +364,19 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         value={formData.buttonText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
+                    </div> 
+                    <div className="space-y-2">
+                      <Label htmlFor="buttonText">Video button text </Label>
+                      <Input
+                        id="buttonText"
+                        value={formData.buttonText}
+                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="buttonTextcolor">Background color of submit text</Label>
+                      <Label htmlFor="buttonTextcolor">
+                        Background color of submit text
+                      </Label>
                       <Input
                         id="buttonText"
                         value={formData.buttonColor}
@@ -302,13 +384,15 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="buttonText">Text Color of submit text</Label>
+                      <Label htmlFor="buttonText">
+                        Text Color of submit text
+                      </Label>
                       <Input
                         id="buttonText"
                         value={formData.buttonTextColor}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
-                    </div> 
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="buttonTextcolor">Question Label</Label>
                       <Input
