@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Inbox, Video, MessageSquare, Heart, Archive, AlertTriangle, Boxes, Lock } from "lucide-react";
 import { useState } from "react"; 
 import { cn } from "@/lib/utils";
+import { TestimonialCard } from "@/components/testimonial.Card";
 
 export default function page() {
   const [activeSection, setActiveSection] = useState("all");
@@ -75,8 +76,11 @@ export default function page() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6">
-          <Tabs defaultValue="all" className="w-full">
+        <main className="flex-1 p-6"> 
+         <div className="max-w-4xl">
+         <TestimonialCard type="Text" rating={5} content="HELLO EVERYone" name="Rishang" date="15 jan 2024"/>
+         </div>
+          {/* <Tabs defaultValue="all" className="w-full">
             <TabsList className="bg-background border">
               <TabsTrigger 
                 value="all"
@@ -116,7 +120,7 @@ export default function page() {
                 <p className="text-muted-foreground ">No good testimonials yet</p>
               </div>
             </TabsContent>
-          </Tabs>
+          </Tabs> */}
         </main>
       </div>
     </div>

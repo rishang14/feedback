@@ -64,37 +64,37 @@ export function TestimonialCard({ type, rating, content, name, date }: Testimoni
       </div>
 
       {isExpanded && (
-        <div className="flex items-center space-x-4 pt-2">
+        <div className="flex items-center justify-end  pt-2">
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Tag className="w-4 h-4 mr-2" />
+            <Tag className="w-4 h-4 " />
             Tags
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Gift className="w-4 h-4 mr-2" />
+            <Gift className="w-4 h-4 " />
             Incentivize
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Share className="w-4 h-4 mr-2" />
+            <Share className="w-4 h-4 " />
             Share
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Download className="w-4 h-4 mr-2" />
+            <Download className="w-4 h-4 " />
             Download
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Edit className="w-4 h-4 mr-2" />
+            <Edit className="w-4 h-4 " />
             Edit
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Wand2 className="w-4 h-4 mr-2" />
+            <Wand2 className="w-4 h-4 " />
             AI
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <Trash2 className="w-4 h-4 mr-2" />
+            <Trash2 className="w-4 h-4 " />
             Delete
           </Button>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-            <MoreHorizontal className="w-4 h-4 mr-2" />
+            <MoreHorizontal className="w-4 h-4 " />
             More
           </Button>
         </div>
