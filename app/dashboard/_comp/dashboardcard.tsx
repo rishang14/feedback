@@ -19,7 +19,7 @@ import { Ellipsis} from "lucide-react";
 import { useRouter } from 'next/navigation';
 
 
-const Dashboardcard = () => {
+const Dashboardcard = () => { 
   return (
    <Card  className='bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm" '>
     <CardContent className=' '>
@@ -45,7 +45,8 @@ export default Dashboardcard;
     <CardContent className='max-w-[250px] flex justify-between items-center '>
         <div className='w-[200px]  flex justify-between  '>
           <p className='text-white text-xl font-medium ' onClick={()=>handleClick(123)}> Hello</p> 
-          <DropdownMenuDemo/>
+          <DropdownMenuDemo/> 
+        
         </div>
     </CardContent> 
     <CardDescription>
