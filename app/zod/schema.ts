@@ -15,7 +15,7 @@ export  const signupFormSchema = z.object({
     .email(),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" })
+    .min(5, { message: "Password must be at least 5 characters long" })
     .refine(
       (value) => {
         const regex =

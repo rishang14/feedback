@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import localFont from 'next/font/local';
+import localFont from 'next/font/local'; 
+import { Toaster } from "sonner";
 import "./globals.css";
 import Nav from "@/components/LandingPageComp/Nav"; 
 
@@ -31,7 +32,8 @@ export default function RootLayout({
         className={`${popppins.variable} antialiased`}
       > 
          <Nav /> 
-        {children}
+        {children} 
+          <Toaster/>
       </body>
     </html>
   );

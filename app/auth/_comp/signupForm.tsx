@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"; 
-
+import { useRouter } from 'next/navigation';
 import * as z from "zod";  
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -12,13 +12,15 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"; 
+  CardTitle, 
+} from "@/components/ui/card";  
+import { toast } from "sonner";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 // import { Label } from "@/components/ui/label"; 
 import { signupFormSchema } from "@/app/zod/schema";
+import { useState } from "react";
 
 
 type formType = z.infer<typeof signupFormSchema>; 
@@ -27,32 +29,46 @@ type formType = z.infer<typeof signupFormSchema>;
 export function SignupForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) { 
+}: React.ComponentPropsWithoutRef<"div">) {  
+
+  const [loading,setLoading]=useState(false); 
+  const router=useRouter();
   
   const form = useForm<formType>({
     resolver: zodResolver(signupFormSchema),
     defaultValues:{
-      username:"john doe", 
-      email:"@gmail.com"
-    },
+      username:"",
+      password:"",
+      email:""
+    }
   }); 
  
   const {control, handleSubmit, formState: { errors }} =form
 
   const onSubmit=async(data:formType)=>{
-   try {
+   try {  
+    setLoading((prev)=> !prev)
     const res= await axios.post("/api/auth/signup",{
       username:data.username, 
       email:data.email, 
       password:data.password
      }) 
    
-     console.log( res.data ) 
+     console.log( res.data )  
+     toast("Sign up is completed please login",{
+      duration:2000
+     }); 
+     router.push("/auth/signin");
+     setLoading((prev)=> !prev) 
     
    } catch (error) {
-     console.log(error)
+     console.log(error)  
+     setLoading(false)
+     toast(`error while signup -${error}`);
    }
-  }
+  } 
+
+  if(loading) return <div className="text-white text-4xl">loading</div>
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -106,7 +122,7 @@ export function SignupForm({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} id="password" type="password" />
+                      <Input {...field} id="password" type="password"  />
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
