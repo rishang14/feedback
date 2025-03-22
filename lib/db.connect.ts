@@ -6,7 +6,7 @@ const connectDB = async (): Promise<void> => {
       dbName:"Review-vault"
     }); 
 
-    // console.log('MongoDB connected successfully',data.modelNames()); 
+    console.log('MongoDB connected successfully',data.modelNames()); 
     //@ts-ignore
   //  const dummy=  await mongoose.connection.db.collection("testCollection").insertOne({ test: "data" }); 
     // console.log(dummy,"i have created successfully ")
