@@ -28,3 +28,27 @@ export  const signupFormSchema = z.object({
       }
     ),
 });
+
+
+export const loginSchema=z.object({ 
+  email: z
+  .string({
+    required_error: "Email is required",
+    invalid_type_error: "Correct the format",
+  })
+  .email(),
+password: z
+  .string()
+  .min(5, { message: "Password must be at least 5 characters long" })
+  .refine(
+    (value) => {
+      const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+      return regex.test(value);
+    },
+    {
+      message:
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+    },
+  )
+})
