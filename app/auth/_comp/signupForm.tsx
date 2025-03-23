@@ -1,8 +1,8 @@
-"use client"
-
-import { zodResolver } from "@hookform/resolvers/zod"; 
-import { useRouter } from 'next/navigation';
-import * as z from "zod";  
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import * as z from "zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -12,63 +12,74 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle, 
-} from "@/components/ui/card";  
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "sonner";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-// import { Label } from "@/components/ui/label"; 
 import { signupFormSchema } from "@/app/zod/schema";
-import { useState } from "react";
 
-
-type formType = z.infer<typeof signupFormSchema>; 
-
+type formType = z.infer<typeof signupFormSchema>;
 
 export function SignupForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {  
+}: React.ComponentPropsWithoutRef<"div">) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const [loading,setLoading]=useState(false); 
-  const router=useRouter();
-  
   const form = useForm<formType>({
     resolver: zodResolver(signupFormSchema),
-    defaultValues:{
-      username:"",
-      password:"",
-      email:""
+    defaultValues: {
+      username: "",
+      password: "",
+      email: "",
+    },
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
+  const onSubmit = async (data: formType) => {
+    try {
+      setLoading((prev) => !prev);
+      const res = await axios.post("/api/auth/signup", {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+
+      console.log(res.data);
+      toast(` Thankyou for signUp ${data.username}`, {
+        duration: 2000,
+      });
+      router.push("/auth/signin");
+      setLoading((prev) => !prev); 
+    } catch (error) {  
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Error response:", error.response.data); 
+        const errorMessage = error.response.data.message || "Something went wrong!";
+        toast(errorMessage);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
     }
-  }); 
- 
-  const {control, handleSubmit, formState: { errors }} =form
+  };
 
-  const onSubmit=async(data:formType)=>{
-   try {  
-    setLoading((prev)=> !prev)
-    const res= await axios.post("/api/auth/signup",{
-      username:data.username, 
-      email:data.email, 
-      password:data.password
-     }) 
-   
-     console.log( res.data )  
-     toast("Sign up is completed please login",{
-      duration:2000
-     }); 
-     router.push("/auth/signin");
-     setLoading((prev)=> !prev) 
-    
-   } catch (error) {
-     console.log(error)  
-     setLoading(false)
-     toast(`error while signup -${error}`);
-   }
-  } 
-
-  if(loading) return <div className="text-white text-4xl">loading</div>
+  if (loading) return <div className="text-white text-4xl">loading</div>;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -79,15 +90,16 @@ export function SignupForm({
             Welcome to Reviewvault
           </CardDescription>
         </CardHeader>
-        <CardContent> 
-    
-        <Form {...form} >
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-              
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-6"
+            >
               {/* Name Field */}
-              <FormField 
-                control={control} 
-                name="username" 
+              <FormField
+                control={control}
+                name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Enter Your Name</FormLabel>
@@ -100,14 +112,19 @@ export function SignupForm({
               />
 
               {/* Email Field */}
-              <FormField 
-                control={control} 
-                name="email" 
+              <FormField
+                control={control}
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} id="email" type="email" placeholder="@gmail.com" />
+                      <Input
+                        {...field}
+                        id="email"
+                        type="email"
+                        placeholder="@gmail.com"
+                      />
                     </FormControl>
                     <FormMessage>{errors.email?.message}</FormMessage>
                   </FormItem>
@@ -115,14 +132,14 @@ export function SignupForm({
               />
 
               {/* Password Field */}
-              <FormField 
-                control={control} 
-                name="password" 
+              <FormField
+                control={control}
+                name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} id="password" type="password"  />
+                      <Input {...field} id="password" type="password" />
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
@@ -130,12 +147,17 @@ export function SignupForm({
               />
 
               {/* Submit Button */}
-              <Button type="submit" className="w-full">Sign Up</Button>
+              <Button type="submit" className="w-full">
+                Sign Up
+              </Button>
 
               {/* Already have an account? */}
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link href="/auth/signin" className="underline underline-offset-4">
+                <Link
+                  href="/auth/signin"
+                  className="underline underline-offset-4"
+                >
                   Sign In
                 </Link>
               </div>
