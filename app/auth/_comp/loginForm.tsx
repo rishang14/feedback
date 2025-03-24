@@ -1,10 +1,11 @@
-'use client'
+"use client";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -31,6 +32,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const router = useRouter();
   const form = useForm<formType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -51,8 +53,11 @@ export function LoginForm({
       const response = await signIn("credentials", {
         email,
         password,
+        redirect: false,
       });
-      console.log(response);
+      if (response?.ok) {
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.log(error);
     }

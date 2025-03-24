@@ -8,13 +8,16 @@ import {
   DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogDescription, 
-} from "@/components/ui/dialog";
+  DialogDescription,  
+} from "@/components/ui/dialog"; 
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import Spaceform from "../spaceForm/spaceform";
 const page = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); 
+  const session=useSession(); 
+  console.log(session);
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
       <div className="flex items-center space-x-5 md:flex-row flex-col">
