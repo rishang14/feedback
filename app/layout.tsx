@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import Nav from "@/components/LandingPageComp/Nav";  
 import { SessionProvider } from "next-auth/react"
+import { Providers } from "./provider";
 
 const popppins = localFont({
   display: 'swap',
@@ -33,12 +34,11 @@ export default function RootLayout({
       suppressHydrationWarning={true}
         className={`${popppins.variable} antialiased`}
       > 
-         <SessionProvider>
+      <Providers>
          <Nav />  
-
         {children} 
-          <Toaster/>
-         </SessionProvider>
+          <Toaster/> 
+         </Providers>
       </body>
     </html>
   );
