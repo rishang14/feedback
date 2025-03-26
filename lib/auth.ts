@@ -1,16 +1,20 @@
-import { Session } from "inspector/promises";
 import connectDB from "./db.connect";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/mongoose/user.schema";
-import { NextAuthOptions } from "next-auth";
-import { sign } from "crypto";
-import { error } from "console";
+import type  { NextAuthOptions } from "next-auth"; 
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next"
+import  { getServerSession } from "next-auth"
+
 
 connectDB();
 
 const bcrypt = require("bcrypt");
 
-export const authOptions = {
+export const config = {
   session: {
     strategy: "jwt",
   },
@@ -18,7 +22,6 @@ export const authOptions = {
   pages: {
     signIn: "/auth/signin",
   },
-
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -48,5 +51,15 @@ export const authOptions = {
       },
     }),
   ],
-  //@ts-ignore
-};
+}satisfies NextAuthOptions ; 
+
+
+export function auth(
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) {
+  return getServerSession(...args, config)
+}
+

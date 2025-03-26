@@ -186,7 +186,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       </Label>
                       <Input
                         id="title"
-                        value={formData.spaceName}
+                        // value={formData.spaceName}
                         //   onChange={(e) => updateFormData('title', e.target.value)}
                       />
                     </div>
@@ -196,7 +196,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       </Label>
                       <Input
                         id="headerTitle"
-                        value={formData.header}
+                        // value={formData.header}
                         //   onChange={(e) => updateFormData('description', e.target.value)}
                       />
                     </div>
@@ -206,7 +206,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       </Label>
                       <Textarea
                         id="description"
-                        value={formData.customDescription}
+                        // value={formData.customDescription}
                         //   onChange={(e) => updateFormData('description', e.target.value)}
                       />
                     </div>
@@ -232,7 +232,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           <div className=" flex gap-2 " key={item.id}>
                             <Input
                               id="emailLabel"
-                              placeholder={item.questions}
+                              // placeholder={item.questions}
                               //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
                             />
                             <Button
@@ -296,7 +296,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Label htmlFor="thankYouTitle">Thank You Title</Label>
                       <Input
                         id="thankYouTitle"
-                        value={formData.thankYouTitle}
+                        // value={formData.thankYouTitle}
                         //   onChange={(e) => updateFormData('thankYouTitle', e.target.value)}
                       />
                     </div>
@@ -304,7 +304,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Label htmlFor="thankYouMessage">Thank You Message</Label>
                       <Textarea
                         id="thankYouMessage"
-                        value={formData.thankYouMessage}
+                        // value={formData.thankYouMessage}
                         //   onChange={(e) => updateFormData('thankYouMessage', e.target.value)}
                       />
                     </div>
@@ -315,7 +315,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Input
                         id="redirectUrl"
                         placeholder="https://example.com/thank-you"
-                        value={formData.redirectUrl}
+                        // value={formData.redirectUrl}
                         //   onChange={(e) => updateFormData('redirectUrl', e.target.value)}
                       />
                     </div>
@@ -361,7 +361,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Label htmlFor="buttonText">Submit Button Text</Label>
                       <Input
                         id="buttonText"
-                        value={formData.buttonText}
+                        // value={formData.buttonText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div> 
@@ -369,7 +369,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Label htmlFor="buttonText">Video button text </Label>
                       <Input
                         id="buttonText"
-                        value={formData.buttonText}
+                        // value={formData.buttonText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
@@ -379,7 +379,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       </Label>
                       <Input
                         id="buttonText"
-                        value={formData.buttonColor}
+                        // value={formData.buttonColor}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
@@ -389,7 +389,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       </Label>
                       <Input
                         id="buttonText"
-                        value={formData.buttonTextColor}
+                        // value={formData.buttonTextColor}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
@@ -397,7 +397,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                       <Label htmlFor="buttonTextcolor">Question Label</Label>
                       <Input
                         id="buttonText"
-                        value={formData.questionlabel}
+                        // value={formData.questionlabel}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>

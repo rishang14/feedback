@@ -13,9 +13,8 @@ import {
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
-import Spaceform from "../spaceForm/spaceform";
-const page = () => {
-  const [open, setOpen] = useState(false); 
+import dynamic from "next/dynamic";
+const Page = () => {
   const session=useSession(); 
   console.log(session);
   return (
@@ -49,7 +48,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
 
 const Emptyspace = () => {
   return (
@@ -70,7 +69,11 @@ const Emptyspace = () => {
 };
 
 const CreateSpaceButton = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);  
+
+  const SpaceForm=dynamic(()=>import("../spaceForm/spaceform"),{
+    ssr:false
+  })
   return (
     <Dialog  open={open} onOpenChange={setOpen} modal={true}  >
       {/* Button to open modal */}
@@ -92,7 +95,7 @@ const CreateSpaceButton = () => {
           </p>
         </DialogDescription>
       </DialogHeader>
-        <Spaceform closeModal={() => setOpen(false)} /> 
+        <SpaceForm closeModal={() => setOpen(false)} /> 
       </DialogContent>
     </Dialog>
   );

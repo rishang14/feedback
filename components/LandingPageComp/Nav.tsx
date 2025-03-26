@@ -4,9 +4,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import {
-  MoreVerticalIcon,
+import { Avatar, AvatarFallback,  } from "@radix-ui/react-avatar";
+import { 
   LogOutIcon,
   UserCircleIcon,
   Pencil,
@@ -18,14 +17,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-  DropdownMenuGroup,
 } from "@radix-ui/react-dropdown-menu";
 
 const Nav = () => {
   const session = useSession();
 
-  if (session.status === "loading")
-    return <p className="text-7xl text-white">Loading</p>;
+  
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
@@ -59,13 +56,6 @@ const Nav = () => {
                 <Link href="/auth/signin" className=" text-white">
                   Sign-in
                 </Link>
-              </Button>
-              <Button
-                className="font-medium text-md  bg-blue-500"
-                variant={"default"}
-                onClick={() => signOut()}
-              >
-                Sign-Out
               </Button>
             </>
           )}
@@ -113,7 +103,7 @@ const AvatarWithMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer    text-red-600 hover:border-none">
-          <div className="flex gap-1  items-center ">
+          <div className="flex gap-1  items-center " onClick={() => signOut()}>
             <LogOutIcon className="mr-2  w-4 group-hover:text-red-700" />
             Sign out
           </div>
