@@ -1,7 +1,10 @@
 
 import React from 'react'
 import { SignupForm } from '../_comp/signupForm'
+import { getToken } from 'next-auth/jwt'
+ 
 
+console.log(getToken,"token")
 const page = () => {
   return (
      <div className="flex h-svh w-full items-center justify-center p-6 md:p-10"> 

@@ -2,10 +2,9 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { signupFormSchema } from "@/app/zod/schema";
 import User from "@/mongoose/user.schema";
-import { create } from "domain";
-import { UserMinus } from "lucide-react";
 
 connectDB(); //db connect is done
+
 
 const bcrypt = require("bcrypt");
 
