@@ -1,6 +1,6 @@
 import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
-import { signupFormSchema } from "@/app/zod/schema";
+import { signupFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
 
 connectDB(); //db connect is done

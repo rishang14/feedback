@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { SignupForm } from '../_comp/signupForm'
+import { SignupForm } from '@/components/ui/signupForm'
 import { getToken } from 'next-auth/jwt'
  
 

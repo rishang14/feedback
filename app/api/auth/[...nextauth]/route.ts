@@ -1,8 +1,8 @@
 import NextAuth from "next-auth" 
-import { config } from "@/lib/auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
  // @ts-ignore
-const handler=NextAuth(config); 
+const handler=NextAuth(authOptions); 
 
 
 export {handler as GET ,handler as POST

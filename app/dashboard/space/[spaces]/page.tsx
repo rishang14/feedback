@@ -1,23 +1,51 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Inbox, Video, MessageSquare, Heart, Archive, AlertTriangle, Boxes, Lock } from "lucide-react";
-import { useState } from "react"; 
+import {
+  Inbox,
+  Video,
+  MessageSquare,
+  Heart,
+  Archive,
+  AlertTriangle,
+  Boxes,
+  Lock,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { TestimonialCard } from "@/components/testimonial.Card";
+import { toast } from "sonner";
+import Loading from "@/app/loading";
 
 export default function page() {
   const [activeSection, setActiveSection] = useState("all");
+  const session = useSession();
+  const router = useRouter();
 
-  const sidebarButton = (icon: React.ReactNode, label: string, value: string) => (
+  
+  // if (session.status === "loading") return <Loading />;
+  // if (session.status !== "authenticated") {
+  //   router.push("/auth/signin");
+  //   toast("Pls sign In to access this routes"); 
+  //   return
+  // }
+ 
+  const sidebarButton = (
+    icon: React.ReactNode,
+    label: string,
+    value: string
+  ) => (
     <Button
       variant="sidebutton"
-      className={cn(`w-full justify-start transition-colors ${
-        activeSection === value 
-          ? "bg-blue-500 text-white hover:bg-blue-500" 
-          : " text-white"
-      }`)}
+      className={cn(
+        `w-full justify-start transition-colors ${
+          activeSection === value
+            ? "bg-blue-500 text-white hover:bg-blue-500"
+            : " text-white"
+        }`
+      )}
       onClick={() => setActiveSection(value)}
     >
       {icon}
@@ -42,7 +70,7 @@ export default function page() {
               <span className="text-white">Text credits</span>
               <span className="text-muted-foreground">10</span>
             </div>
-            <Button  className="text-white">Edit space</Button>
+            <Button className="text-white">Edit space</Button>
           </div>
         </div>
       </header>
@@ -53,33 +81,79 @@ export default function page() {
         <aside className="w-64 border-r h-[calc(100vh-4rem)] p-4">
           <h2 className="text-lg font-semibold mb-4 text-white ">Inbox</h2>
           <div className="space-y-2">
-            {sidebarButton(<Inbox className="mr-2 h-4 w-4 text-white" />, "All", "all")}
-            {sidebarButton(<Video className="mr-2 h-4 w-4 text-white" />, "Video", "video")}
-            {sidebarButton(<MessageSquare className="mr-2 h-4 w-4 text-white " />, "Text", "text")}
-            {sidebarButton(<Heart className="mr-2 h-4 w-4 text-white" />, "Liked", "liked")}
-            {sidebarButton(<Archive className="mr-2 h-4 w-4 text-white" />, "Archived", "archived")}
-            {sidebarButton(<AlertTriangle className="mr-2 h-4 w-4 text-white" />, "Spam", "spam")}
+            {sidebarButton(
+              <Inbox className="mr-2 h-4 w-4 text-white" />,
+              "All",
+              "all"
+            )}
+            {sidebarButton(
+              <Video className="mr-2 h-4 w-4 text-white" />,
+              "Video",
+              "video"
+            )}
+            {sidebarButton(
+              <MessageSquare className="mr-2 h-4 w-4 text-white " />,
+              "Text",
+              "text"
+            )}
+            {sidebarButton(
+              <Heart className="mr-2 h-4 w-4 text-white" />,
+              "Liked",
+              "liked"
+            )}
+            {sidebarButton(
+              <Archive className="mr-2 h-4 w-4 text-white" />,
+              "Archived",
+              "archived"
+            )}
+            {sidebarButton(
+              <AlertTriangle className="mr-2 h-4 w-4 text-white" />,
+              "Spam",
+              "spam"
+            )}
           </div>
 
           <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4 text-white">Integrations</h2>
-            {sidebarButton(<Boxes className="mr-2 h-4 w-4 text-white" />, "View integrations", "integrations")}
+            <h2 className="text-lg font-semibold mb-4 text-white">
+              Integrations
+            </h2>
+            {sidebarButton(
+              <Boxes className="mr-2 h-4 w-4 text-white" />,
+              "View integrations",
+              "integrations"
+            )}
           </div>
 
           <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4 text-white">Embed widgets</h2>
+            <h2 className="text-lg font-semibold mb-4 text-white">
+              Embed widgets
+            </h2>
             <div className="space-y-2">
-              {sidebarButton(<Heart className="mr-2 h-4 w-4 text-white" />, "Wall of Love", "wall-of-love")}
-              {sidebarButton(<MessageSquare className="mr-2 h-4 w-4 text-white" />, "Single testimonial", "single-testimonial")}
+              {sidebarButton(
+                <Heart className="mr-2 h-4 w-4 text-white" />,
+                "Wall of Love",
+                "wall-of-love"
+              )}
+              {sidebarButton(
+                <MessageSquare className="mr-2 h-4 w-4 text-white" />,
+                "Single testimonial",
+                "single-testimonial"
+              )}
             </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6"> 
-         <div className="max-w-4xl">
-         <TestimonialCard type="Text" rating={5} content="HELLO EVERYone" name="Rishang" date="15 jan 2024"/>
-         </div>
+        <main className="flex-1 p-6">
+          <div className="max-w-4xl">
+            <TestimonialCard
+              type="Text"
+              rating={5}
+              content="HELLO EVERYone"
+              name="Rishang"
+              date="15 jan 2024"
+            />
+          </div>
           {/* <Tabs defaultValue="all" className="w-full">
             <TabsList className="bg-background border">
               <TabsTrigger 

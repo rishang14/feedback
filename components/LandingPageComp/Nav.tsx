@@ -20,7 +20,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 
 const Nav = () => {
-  const session = useSession();
+  const session = useSession(); 
+
+  console.log(session)
 
   
   return (
@@ -43,7 +45,7 @@ const Nav = () => {
                 Features
               </Link>
               <Link
-                href="/auth/signup"
+                href="/signup"
                 className="font-medium hover:text-blue-300 text-white text-md"
               >
                 Sign-up
@@ -53,7 +55,7 @@ const Nav = () => {
                 asChild={true}
                 variant={"default"}
               >
-                <Link href="/auth/signin" className=" text-white">
+                <Link href="/signin" className=" text-white">
                   Sign-in
                 </Link>
               </Button>

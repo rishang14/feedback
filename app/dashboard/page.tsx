@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
 import {
   DialogContent,
@@ -12,11 +12,24 @@ import {
 } from "@/components/ui/dialog"; 
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button";
-import { FolderPlus } from "lucide-react";
+import { FolderPlus } from "lucide-react"; 
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
+import Loading from "../loading";
 const Page = () => {
   const session=useSession(); 
-  console.log(session);
+  const router=useRouter()   
+
+  console.log(session)
+     
+  // if(session.status==="loading") return <Loading/> 
+
+  // if(session.status !=="authenticated"){
+  //   router.push('/auth/signin') 
+  //   return
+  // };
+
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
       <div className="flex items-center space-x-5 md:flex-row flex-col">

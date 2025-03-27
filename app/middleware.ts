@@ -1,31 +1,39 @@
-import { NextRequestWithAuth } from 'next-auth/middleware';
+import { NextRequestWithAuth} from 'next-auth/middleware';
 import { NextResponse, NextRequest } from 'next/server';  
 import { getToken } from 'next-auth/jwt';
 
-
-export const config={
-    matcher: ['/dashboard/space/:path*','/dashboard' ], 
-  
-} 
-
-
-export const withAuth=async (req:NextRequestWithAuth)=>{
+// export const withAuth=async (req:NextRequestWithAuth)=>{
  
-    const token = await getToken({req});   
-    console.log(token,"token")
+//     const token = await getToken({req});   
+//     console.log(token,"token")
 
-    if (!token) { 
-        NextResponse.redirect("/auth/login");
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
-      }  
+//     if (!token) { 
+//         return NextResponse.redirect(new URL('/auth/login', req.url));
+//       }  
 
-      return NextResponse.next();
-}
+//       return NextResponse.next();
+// }
   
-export async function middleware(req: NextRequestWithAuth) {
-    return await withAuth(req);
+export async function middleware(request: NextRequestWithAuth) { 
+    const token =  await getToken({req : request});  
+    const url=request.nextUrl; 
+
+    if(token && 
+     (
+        url.pathname.startsWith("/signin")
+     )
+    ){
+        return NextResponse.redirect(new URL('/dashboard',request.url))
+    }
+
+    return ;
   }
   
 
-  export default withAuth;
+  export const config={
+    matcher: ['/signin','/dashboard/space/:path*','/dashboard' ], 
+  
+} 
+
+ 
 

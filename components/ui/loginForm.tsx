@@ -15,9 +15,8 @@ import {
 } from "@/components/ui/card";
 import { signIn } from "next-auth/react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { loginSchema } from "@/app/zod/schema";
+import { loginSchema } from "@/app/types/schema";
 import {
   Form,
   FormControl,
@@ -26,13 +25,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Loading from "@/app/loading";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type formType = z.infer<typeof loginSchema>;
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const router = useRouter();
+  const router = useRouter(); 
+  const [loading,setloading]=useState(false)
   const form = useForm<formType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -47,21 +50,20 @@ export function LoginForm({
     formState: { errors },
   } = form;
 
-  const onSubmit = async (data: formType) => {
-    const { email, password } = data;
+  const onSubmit = async (data: formType) => {  
     try {
-      const response = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-      if (response?.ok) {
-        router.push("/dashboard");
-      }
+      const res=await signIn("credentials",{ 
+      redirect:false,
+      email:data.email,
+      password:data.password,
+      }) 
+      console.log(res)
     } catch (error) {
-      console.log(error);
+      console.log(error);  
     }
   };
+  
+  if(loading) return <Loading/>
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -118,7 +120,7 @@ export function LoginForm({
               <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}
                 <Link
-                  href={"/auth/signup"}
+                  href={"/signup"}
                   className="underline underline-offset-4"
                 >
                   Sign up

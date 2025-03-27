@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { signupFormSchema } from "@/app/zod/schema";
+import { signupFormSchema } from "@/app/types/schema";
 
 type formType = z.infer<typeof signupFormSchema>;
 
@@ -155,7 +155,7 @@ export function SignupForm({
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
                 <Link
-                  href="/auth/signin"
+                  href="/signin"
                   className="underline underline-offset-4"
                 >
                   Sign In
