@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
@@ -21,7 +20,6 @@ import Loading from "@/app/loading";
 
 export default function page() {
   const [activeSection, setActiveSection] = useState("all");
-  const session = useSession();
   const router = useRouter();
 
   

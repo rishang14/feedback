@@ -1,6 +1,6 @@
-import { NextRequestWithAuth} from 'next-auth/middleware';
+// import { NextRequestWithAuth} from 'next-auth/middleware';
 import { NextResponse, NextRequest } from 'next/server';  
-import { getToken } from 'next-auth/jwt';
+// import { getToken } from 'next-auth/jwt';
 
 // export const withAuth=async (req:NextRequestWithAuth)=>{
  
@@ -14,26 +14,26 @@ import { getToken } from 'next-auth/jwt';
 //       return NextResponse.next();
 // }
   
-export async function middleware(request: NextRequestWithAuth) { 
-    const token =  await getToken({req : request});  
-    const url=request.nextUrl; 
+// export async function middleware(request: NextRequestWithAuth) { 
+//     // const token =  await getToken({req : request});  
+//     const url=request.nextUrl; 
 
-    if(token && 
-     (
-        url.pathname.startsWith("/signin")
-     )
-    ){
-        return NextResponse.redirect(new URL('/dashboard',request.url))
-    }
+//     if(token && 
+//      (
+//         url.pathname.startsWith("/signin")
+//      )
+//     ){
+//         return NextResponse.redirect(new URL('/dashboard',request.url))
+//     }
 
-    return ;
-  }
+//     return ;
+//   }
   
 
-  export const config={
-    matcher: ['/signin','/dashboard/space/:path*','/dashboard' ], 
+//   export const config={
+//     matcher: ['/signin','/dashboard/space/:path*','/dashboard' ], 
   
-} 
+// } 
 
  
 

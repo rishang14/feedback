@@ -13,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { loginSchema } from "@/app/types/schema";
