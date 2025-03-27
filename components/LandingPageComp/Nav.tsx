@@ -20,9 +20,11 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 
 const Nav = () => {
-  const session = useSession(); 
+  const session = {
+    status:"authenticated" 
+  }
 
-  console.log(session)
+  // console.log(session)
 
   
   return (

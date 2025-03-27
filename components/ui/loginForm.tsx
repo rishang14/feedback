@@ -51,16 +51,16 @@ export function LoginForm({
   } = form;
 
   const onSubmit = async (data: formType) => {  
-    try {
-      const res=await signIn("credentials",{ 
-      redirect:false,
-      email:data.email,
-      password:data.password,
-      }) 
-      console.log(res)
-    } catch (error) {
-      console.log(error);  
-    }
+    // try {
+    //   const res=await signIn("credentials",{ 
+    //   redirect:false,
+    //   email:data.email,
+    //   password:data.password,
+    //   }) 
+    //   console.log(res)
+    // } catch (error) {
+    //   console.log(error);  
+    // }
   };
   
   if(loading) return <Loading/>
@@ -106,7 +106,7 @@ export function LoginForm({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} id="password" type="password" />
+                      <Input  {...field} id="password" type="password" />
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
