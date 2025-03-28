@@ -13,6 +13,7 @@ const getUserByEmail = async (email: string) => {
     return user;
 }
 
+// await connectDB()
 export default {
     providers: [
         credentials({

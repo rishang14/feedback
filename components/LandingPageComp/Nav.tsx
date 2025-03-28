@@ -17,7 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from "@radix-ui/react-dropdown-menu";
+} from "@radix-ui/react-dropdown-menu"; 
+import { signOut } from "next-auth/react";
 
 const Nav = () => {
   const session = {
@@ -107,7 +108,7 @@ const AvatarWithMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer    text-red-600 hover:border-none">
-          <div className="flex gap-1  items-center " >
+          <div className="flex gap-1  items-center " onClick={()=>signOut()} >
             <LogOutIcon className="mr-2  w-4 group-hover:text-red-700" />
             Sign out
           </div>
