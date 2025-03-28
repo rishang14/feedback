@@ -39,7 +39,7 @@ export function LoginForm({
   // csrftoken
 }: LoginFormProps) { 
 
-  const [csrfToken, setCsrfToken] = useState("");
+  // const [csrfToken, setCsrfToken] = useState("");
 
   // useEffect(() => {
   //   async function fetchToken() {
@@ -71,7 +71,8 @@ export function LoginForm({
       //   email:data.email,
       //   password: data.password, 
       //   }) 
-      const res=await  signIn("credentials",{
+      const res=await  signIn("credentials",{ 
+        redirect:false,
         email:data.email, 
         password:data.password
       })
@@ -96,7 +97,7 @@ export function LoginForm({
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-6"
             > 
-            <input type="hidden" name="csrfToken" value={csrfToken} />
+            {/* <input type="hidden" name="csrfToken" value={csrfToken} /> */}
               {/* Name Field */}
               <FormField
                 control={control}

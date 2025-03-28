@@ -64,7 +64,7 @@ export function SignupForm({
       toast(` Thankyou for signUp ${data.username}`, {
         duration: 2000,
       });
-      router.push("/auth/signin");
+      router.push("/signin");
       setLoading((prev) => !prev); 
     } catch (error) {  
       if (axios.isAxiosError(error) && error.response) {
