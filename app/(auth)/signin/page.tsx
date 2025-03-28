@@ -1,6 +1,5 @@
 import React from 'react'
-import { LoginForm } from '@/components/ui/loginForm' 
-import { cookies,  } from "next/headers";
+import { LoginForm } from '@/components/ui/loginForm';
 
 // async function  getcsrf(){
 //   const token=await cookies(); 
