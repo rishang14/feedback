@@ -50,5 +50,6 @@ password: z
       message:
         "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
     },
-  )
+  ) ,
+  csrftoken:z.string().optional()
 })

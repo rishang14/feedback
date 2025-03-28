@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogDescription,  
 } from "@/components/ui/dialog"; 
-import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react"; 
 import { useRouter } from "next/navigation";
@@ -18,10 +17,7 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import Loading from "../loading";
 const Page = () => {
-  const session=useSession(); 
   const router=useRouter()   
-
-  console.log(session)
      
   // if(session.status==="loading") return <Loading/> 
 

@@ -1,11 +1,13 @@
 "use client";
-
-import { cn } from "@/lib/utils";
+import { useState,useEffect } from "react";
+import { cn } from "@/lib/utils"; 
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
+import { signIn,getCsrfToken } from "next-auth/react"
 import {
   Card,
   CardContent,
@@ -25,14 +27,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Loading from "@/app/loading";
-import { useState } from "react";
 import { toast } from "sonner";
+import { sign } from "crypto";
 
+interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
+  // csrftoken: string;
+}
 type formType = z.infer<typeof loginSchema>;
 export function LoginForm({
   className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+  // csrftoken
+}: LoginFormProps) { 
+
+  const [csrfToken, setCsrfToken] = useState("");
+
+  // useEffect(() => {
+  //   async function fetchToken() {
+  //     const token = await getCsrfToken();
+  //     setCsrfToken(token || ""); // Avoid undefined values
+  //   }
+  //   fetchToken();
+  // }, []);
   const router = useRouter(); 
   const [loading,setloading]=useState(false)
   const form = useForm<formType>({
@@ -49,23 +64,27 @@ export function LoginForm({
     formState: { errors },
   } = form;
 
-  const onSubmit = async (data: formType) => {  
-    // try {
-    //   const res=await signIn("credentials",{ 
-    //   redirect:false,
-    //   email:data.email,
-    //   password:data.password,
-    //   }) 
-    //   console.log(res)
-    // } catch (error) {
-    //   console.log(error);  
-    // }
+  const onSubmit = async (data: formType) => {   
+    try {
+      // const res  = await axios.post("/api/auth/callback/credentials", {
+      //   csrfToken, // ✅ Include CSRF Token
+      //   email:data.email,
+      //   password: data.password, 
+      //   }) 
+      const res=await  signIn("credentials",{
+        email:data.email, 
+        password:data.password
+      })
+      console.log(res);
+    } catch (error) {
+      console.log(error);  
+    }
   };
   
   if(loading) return <Loading/>
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6", className)} >
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -76,7 +95,8 @@ export function LoginForm({
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-6"
-            >
+            > 
+            <input type="hidden" name="csrfToken" value={csrfToken} />
               {/* Name Field */}
               <FormField
                 control={control}
