@@ -57,7 +57,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
     redirectUrl: "",
-  });
+  }); 
+
+const addquestionBox=()=>{ 
+  //@ts-ignore
+  setFormData((item)=>(
+    {
+      ...item, 
+      questions:[
+       ...item.questions, 
+       {id:String(item.questions.length + 1), questions: ""}
+      ]
+    }
+  ))
+}
 
   return (
     <main className=" p-6">
@@ -101,10 +114,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           </li>
                         ))}
                       </div>
-                      {/* <div className="space-y-2">
-                        <Label>{ formData.messageLabel}</Label>
-                        <Textarea placeholder="Share your experience..." />
-                      </div> */}
+                  
                       <Button className={`w-full   text-black bg-gray-400  `}>
                         {formData.buttonText}
                       </Button>
@@ -232,8 +242,8 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           <div className=" flex gap-2 " key={item.id}>
                             <Input
                               id="emailLabel"
-                              // placeholder={item.questions}
-                              //   onChange={(e) => updateFormData('emailLabel', e.target.value)}
+                              placeholder={item.questions}
+                                // onChange={(e) => updateFormData('emailLabel', e.target.value)}
                             />
                             <Button
                               className=" text-lg cursor-pointer bg-white hover:text-gray-400"
@@ -247,7 +257,8 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
 
                       <Button
                         className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
-                        variant={"ghost"}
+                        variant={"ghost"} 
+                        onClick={addquestionBox}
                       >
                         <CirclePlus color="black" /> Add more{" "}
                       </Button>

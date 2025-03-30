@@ -82,7 +82,7 @@ const Emptyspace = () => {
 const CreateSpaceButton = () => {
   const [open, setOpen] = useState(false);  
 
-  const SpaceForm=dynamic(()=>import("../spaceForm/spaceform"),{
+  const SpaceForm=dynamic(()=>import("../../components/spaceform"),{
     ssr:false
   })
   return (
@@ -96,14 +96,14 @@ const CreateSpaceButton = () => {
       <DialogContent className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white " onInteractOutside={(e)=> e.preventDefault()}> 
       <DialogHeader>
         <DialogTitle className=" ">
-          <h1 className="text-4xl font-bold tracking-tight mb-2 text-center ">
+          <p className="text-4xl font-bold tracking-tight mb-2 text-center ">
             Customize Your Testimonial Form
-          </h1> 
+          </p> 
         </DialogTitle>
         <DialogDescription className="">
-          <p className="text-muted-foreground text-lg text-center">
+          <span className="text-muted-foreground text-lg text-center">
             Design the perfect testimonial collection experience
-          </p>
+          </span>
         </DialogDescription>
       </DialogHeader>
         <SpaceForm closeModal={() => setOpen(false)} /> 

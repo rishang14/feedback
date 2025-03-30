@@ -1,10 +1,5 @@
 import NextAuth, { User as NextAuthUser } from "next-auth";
-import Credentials from "next-auth/providers/credentials"
 import User from "@/mongoose/user.schema"
-import connectDB from "./lib/db.connect";
-import { loginSchema } from "@/app/types/schema";
-import { ZodError } from "zod";
-import bcrypt from "bcryptjs";
 import authConfig from "./lib/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
