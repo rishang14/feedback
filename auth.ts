@@ -20,7 +20,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) token.user = user; // Attach user info to token
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token ,user}) { 
+          if(token){ 
+            console.log(token,"token")  
+            //@ts-ignore
+            session.user.name=token.user.username;  
+            // @ts-ignore
+            session.user.userId=token.user._id
+          }
       return session;
     },
     async signIn({ user }) {

@@ -23,16 +23,21 @@ export default {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials): Promise<UserType | null> {
+            async authorize(credentials): Promise<UserType | null > {
                 await connectDB();
-                const user = await getUserByEmail(credentials.email as string);
-                if (!user) throw new Error("User not found");
-                const isValid = await bcrypt.compare(
-                    credentials.password as string,
-                    user.password as string
-                );
-                if (!isValid) throw new Error("Invalid credentials");
-                return user as UserType;
+                 try {
+                    const user = await getUserByEmail(credentials.email as string);
+                    if (!user) throw new Error("User not found");
+                    const isValid = await bcrypt.compare(
+                        credentials.password as string,
+                        user.password as string
+                    );
+                    if (!isValid) throw new Error("Invalid credentials");
+                    return user as UserType ;
+                 } catch (error) { 
+                    //@ts-ignore
+                    throw new Error(error)
+                 }
             },
         }),
     ],

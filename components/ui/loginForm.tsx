@@ -1,13 +1,14 @@
 "use client";
 import { useState,useEffect } from "react";
 import { cn } from "@/lib/utils"; 
-import axios from "axios";
+// import axios from "axios"; 
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation"; 
-import { signIn,getCsrfToken } from "next-auth/react"
+import { signIn, } from "next-auth/react"
 import {
   Card,
   CardContent,
@@ -27,8 +28,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Loading from "@/app/loading";
-import { toast } from "sonner";
-import { sign } from "crypto";
+import { toast } from "sonner";  
+
 
 interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
   // csrftoken: string;
@@ -36,28 +37,26 @@ interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
 type formType = z.infer<typeof loginSchema>;
 export function LoginForm({
   className,
-  // csrftoken
 }: LoginFormProps) { 
 
-  // const [csrfToken, setCsrfToken] = useState("");
-
-  // useEffect(() => {
-  //   async function fetchToken() {
-  //     const token = await getCsrfToken();
-  //     setCsrfToken(token || ""); // Avoid undefined values
-  //   }
-  //   fetchToken();
-  // }, []);
-  const router = useRouter(); 
-  const [loading,setloading]=useState(false)
+  const router = useRouter();  
+  const {status} =useSession(); 
+  // console.log(status); 
+  // console.log(data)
+  const [loading,setLoading]=useState(false)
   const form = useForm<formType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-  });
+  });  
 
+  useEffect(()=>{
+   if(status==="authenticated")router.push("/dashboard")
+  },[router,status])
+
+ 
   const {
     control,
     handleSubmit,
@@ -65,24 +64,36 @@ export function LoginForm({
   } = form;
 
   const onSubmit = async (data: formType) => {   
-    try {
-      // const res  = await axios.post("/api/auth/callback/credentials", {
-      //   csrfToken, // ✅ Include CSRF Token
-      //   email:data.email,
-      //   password: data.password, 
-      //   }) 
+    setLoading(true) 
+    try { 
       const res=await  signIn("credentials",{ 
         redirect:false,
         email:data.email, 
         password:data.password
       })
-      console.log(res);
+      if(res?.error){ 
+        console.log(res)
+        toast(res?.error)
+      } 
+      if(res?.ok){ 
+
+        toast("welcome again")
+        router.push("/dashboard"); 
+
+      }
     } catch (error) {
-      console.log(error);  
+      if(error){ 
+        //@ts-ignore
+        toast(error?.message + "error")
+      }
+    }finally{
+      setLoading(false)
     }
   };
   
-  if(loading) return <Loading/>
+  if(loading) return <Loading/> 
+
+  if(status==="authenticated")return;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} >

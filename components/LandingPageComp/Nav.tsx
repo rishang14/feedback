@@ -4,12 +4,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 // import { signOut } from "next-auth/react";
 // import { useSession } from "next-auth/react";
-import { Avatar, AvatarFallback,  } from "@radix-ui/react-avatar";
-import { 
-  LogOutIcon,
-  UserCircleIcon,
-  Pencil,
-} from "lucide-react";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import { LogOutIcon, UserCircleIcon, Pencil } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,54 +13,55 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from "@radix-ui/react-dropdown-menu"; 
+} from "@radix-ui/react-dropdown-menu";
+import { useSession } from "next-auth/react"; 
 import { signOut } from "next-auth/react";
 
 const Nav = () => {
-  const session = {
-    status:"authenticated" 
-  }
+  const { status, data } = useSession(); 
+  // console.log(data,"data")
 
   // console.log(session)
 
-  
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
         <Link href="/" className="md:text-2xl text-lg text-white font-bold  ">
           ReviewVault
         </Link>
-        <div className="flex  items-center md:space-x-6 space-x-2">
-          {session.status === "authenticated" ? (
-            <div className="">
-              <AvatarWithMenu />
-            </div>
-          ) : (
-            <>
-              <Link
-                href="/"
-                className="font-medium hover:text-blue-300 text-white text-md"
-              >
-                Features
-              </Link>
-              <Link
-                href="/signup"
-                className="font-medium hover:text-blue-300 text-white text-md"
-              >
-                Sign-up
-              </Link>
-              <Button
-                className="font-medium text-md  bg-blue-500"
-                asChild={true}
-                variant={"default"}
-              >
-                <Link href="/signin" className=" text-white">
-                  Sign-in
+        {status !== "loading" ? (
+          <div className="flex  items-center md:space-x-6 space-x-2">
+            {status === "authenticated" ? (
+              <div className="">
+                <AvatarWithMenu data={data} />
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/"
+                  className="font-medium hover:text-blue-300 text-white text-md"
+                >
+                  Features
                 </Link>
-              </Button>
-            </>
-          )}
-        </div>
+                <Link
+                  href="/signup"
+                  className="font-medium hover:text-blue-300 text-white text-md"
+                >
+                  Sign-up
+                </Link>
+                <Button
+                  className="font-medium text-md  bg-blue-500"
+                  asChild={true}
+                  variant={"default"}
+                >
+                  <Link href="/signin" className=" text-white">
+                    Sign-in
+                  </Link>
+                </Button>
+              </>
+            )}
+          </div>
+        ) : null}
       </nav>
     </header>
   );
@@ -72,7 +69,7 @@ const Nav = () => {
 
 export default Nav;
 
-const AvatarWithMenu = () => {
+const AvatarWithMenu = ({ data }: any) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="">
@@ -92,10 +89,10 @@ const AvatarWithMenu = () => {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none text-black">
-              John Doe
+              {data?.user?.name}
             </p>
             <p className="text-xs leading-none   text-muted-foreground">
-              john.doe@example.com
+              {data?.user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -108,7 +105,7 @@ const AvatarWithMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer    text-red-600 hover:border-none">
-          <div className="flex gap-1  items-center " >
+          <div className="flex gap-1  items-center " onClick={()=>signOut({callbackUrl:"/"})} >
             <LogOutIcon className="mr-2  w-4 group-hover:text-red-700" />
             Sign out
           </div>

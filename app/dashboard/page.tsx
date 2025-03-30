@@ -16,15 +16,17 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import Loading from "../loading";
+import { useSession } from "next-auth/react";
 const Page = () => {
   const router=useRouter()   
+  const {status}=useSession() 
      
-  // if(session.status==="loading") return <Loading/> 
+  useEffect(()=>{
+    // if(status=== "authenticated") router.push("/dashboard"); 
+   if(status==="unauthenticated" ) router.push("/signin")
+  },[status,router])  
 
-  // if(session.status !=="authenticated"){
-  //   router.push('/auth/signin') 
-  //   return
-  // };
+  if(status==="loading") return <Loading/>
 
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
