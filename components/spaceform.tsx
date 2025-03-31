@@ -63,6 +63,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     theme: "light",
     Thankyouimg: false,
   });
+  console.log(dynamicData.Thankyouimg, "img");
 
   const addquestionBox = () => {
     setDynamicData((item) => ({
@@ -90,19 +91,21 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
       | string,
     keys: string
   ) => {
-    setDynamicData((prev) => ({
-      ...prev,
-      [keys]:
-        typeof e === "boolean"
-          ? e
-          : typeof e === "string"
-          ? e
-          : (e.target as HTMLInputElement).type === "checkbox"
-          ? (e.target as HTMLInputElement).checked
-          : e.target.value,
-    }));
+    let value: string | boolean;
+
+    if (typeof e === "boolean" || typeof e === "string") {
+      value = e;
+    } else if (e.target.type === "checkbox") {
+      value = (e.target as HTMLInputElement).checked;
+    } else {
+      value = e.target.value;
+    }
+    setDynamicData((prev) => ({ ...prev, [keys]: value }));
   };
 
+  const handlesubmit = (e: any) => {
+    e.preventDefault();
+  };
   return (
     <main className=" p-6">
       <div className=" ">
@@ -115,9 +118,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
             {activeTab !== "thankyou" ? (
               <Card
                 className={`border-2 ${
-                  dynamicData.theme === "dark"
-                    ? "bg-zinc-900"
-                    : "bg-white"
+                  dynamicData.theme === "dark" ? "bg-zinc-900" : "bg-white"
                 } mt-2 min-w-[390px] p-4`}
               >
                 <CardContent className="pt-6">
@@ -162,18 +163,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <Card className="border-2 border-dashed">
                 <CardContent className="pt-6">
                   <div className="space-y-4">
-                    <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
-                      <Image
-                        src={
-                          "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjRxcjIxbXJobjVoNzVwempua2twZ2dmbzVjeDZzaDZweHluMnQwaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26gsjCZpPolPr3sBy/giphy.gif"
-                        }
-                        alt="thankyou"
-                        objectPosition="center"
-                        className="w-full h-[250px]"
-                        width={100}
-                        height={100}
-                      />
-                    </div>
+                    {dynamicData.Thankyouimg === false ? (
+                      <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
+                        <Image
+                          src={
+                            "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjRxcjIxbXJobjVoNzVwempua2twZ2dmbzVjeDZzaDZweHluMnQwaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26gsjCZpPolPr3sBy/giphy.gif"
+                          }
+                          alt="thankyou"
+                          objectPosition="center"
+                          className="w-full h-[250px]"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    ) : null}
                     <div className="space-y-2">
                       <h1 className="text-4xl text-center font-bold text-gray-600">
                         {dynamicData.thankYouTitle}
@@ -220,7 +223,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                 </TabsTrigger>
               </TabsList>
               {/* form section */}
-              <form>
+              <form onSubmit={handlesubmit}>
                 <TabsContent value="basic" className="space-y-6 mt-6">
                   <Card>
                     <CardContent className="pt-6 space-y-6">
