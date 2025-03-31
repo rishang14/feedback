@@ -60,7 +60,6 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   }); 
 
 const addquestionBox=()=>{ 
-  //@ts-ignore
   setFormData((item)=>(
     {
       ...item, 
@@ -70,6 +69,14 @@ const addquestionBox=()=>{
       ]
     }
   ))
+} 
+
+const deletQuestionBox=(id:string)=>{
+    // const data=formData.questions.filter(item => item.id !== id);  
+    setFormData((prev)=>({
+      ...prev, 
+      questions:prev.questions.filter((item) => item.id !== id)
+    }))
 }
 
   return (
@@ -247,7 +254,8 @@ const addquestionBox=()=>{
                             />
                             <Button
                               className=" text-lg cursor-pointer bg-white hover:text-gray-400"
-                              variant={"link"}
+                              variant={"link"} 
+                              onClick={()=>deletQuestionBox(item.id)}
                             >
                               <Trash2 color="black" />
                             </Button>
