@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,16 +26,27 @@ import {
   Trash2,
   CirclePlus,
 } from "lucide-react";
+import { stat } from "fs";
 
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
-  const [activeTab, setactiveTab] = useState("basic");
-  const [formData, setFormData] = useState({
+  const [activeTab, setactiveTab] = useState("basic"); 
+  const staticData=useRef({
+    spaceName: "", 
+    theme: "light",
+    redirectUrl: "",  
+    videoReviewWEnabled:false,  
+    ratingEnabled: true,
+    takingConsent:true,  
+    videotime:"30"
+  }) 
+
+  const [dynamicData, setDynamicData] = useState({
     spaceName: "",
     header: "header goes here",
     customDescription: "We would love to hear your feedback!",
-    messageLabel: "Your Message",
-    ratingEnabled: true,
-    buttonText: "Submit Testimonial",
+    messageLabel: "Your Message", 
+    textbuttonText: "Submit text testimonial", 
+    videoButtonnText:"Submit Video testimonials",
     questions: [
       {
         id: "1",
@@ -56,11 +67,10 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     thankYouTitle: "Thank You!",
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
-    redirectUrl: "",
   }); 
 
 const addquestionBox=()=>{ 
-  setFormData((item)=>(
+ setDynamicData((item)=>(
     {
       ...item, 
       questions:[
@@ -72,8 +82,9 @@ const addquestionBox=()=>{
 } 
 
 const deletQuestionBox=(id:string)=>{
-    // const data=formData.questions.filter(item => item.id !== id);  
-    setFormData((prev)=>({
+    // const data=formData.questions.filter(item => item.id !== id);   
+    setDynamicData(
+    (prev)=>({
       ...prev, 
       questions:prev.questions.filter((item) => item.id !== id)
     }))
@@ -91,7 +102,7 @@ const deletQuestionBox=(id:string)=>{
             {activeTab !== "thankyou" ? (
               <Card
                 className={`border-2 ${
-                  formData.theme === "dark" ? "bg-zinc-900" : "bg-white"
+                  staticData.current.theme === "dark" ? "bg-zinc-900" : "bg-white"
                 } mt-2 min-w-[390px] p-4`}
               >
                 <CardContent className="pt-6">
@@ -103,19 +114,19 @@ const deletQuestionBox=(id:string)=>{
                     </div>
                     <div className="space-y-2 p-2">
                       <h1 className="text-2xl text-center font-bold">
-                        {formData.header}
+                        {dynamicData.header}
                       </h1>
                       <p className="text-muted-foreground text-center">
-                        {formData.customDescription}
+                        {dynamicData.customDescription}
                       </p>
                     </div>
                     <div className="space-y-4">
                       <div className="space-y-2 flex flex-col gap-2 ">
                         <h3 className="p-2 text-lg  text-black ">
                           {" "}
-                          {formData.questionlabel}
+                          {dynamicData.questionlabel}
                         </h3>
-                        {formData.questions.map((items) => (
+                        {dynamicData.questions.map((items) => (
                           <li className="text-gray-500 " key={items.id}>
                             {items.questions}
                           </li>
@@ -123,10 +134,10 @@ const deletQuestionBox=(id:string)=>{
                       </div>
                   
                       <Button className={`w-full   text-black bg-gray-400  `}>
-                        {formData.buttonText}
+                        {dynamicData.textbuttonText}
                       </Button>
                       <Button className={`w-full   text-black bg-blue-500  `}>
-                        video testimonial
+                        {dynamicData.videoButtonnText}
                       </Button>
                     </div>
                   </div>
@@ -150,10 +161,10 @@ const deletQuestionBox=(id:string)=>{
                     </div>
                     <div className="space-y-2">
                       <h1 className="text-4xl text-center font-bold text-gray-600">
-                        {formData.thankYouTitle}
+                        {dynamicData.thankYouTitle}
                       </h1>
                       <p className="text-muted-foreground">
-                        {formData.thankYouMessage}
+                        {dynamicData.thankYouMessage}
                       </p>
                     </div>
                   </div>
@@ -203,7 +214,8 @@ const deletQuestionBox=(id:string)=>{
                       </Label>
                       <Input
                         id="title"
-                        // value={formData.spaceName}
+                        value={staticData.current.spaceName}  
+                        placeholder="Enter Space Name"
                         //   onChange={(e) => updateFormData('title', e.target.value)}
                       />
                     </div>
@@ -212,8 +224,9 @@ const deletQuestionBox=(id:string)=>{
                         Header Title
                       </Label>
                       <Input
-                        id="headerTitle"
-                        // value={formData.header}
+                        id="headerTitle" 
+                        value={dynamicData.header} 
+                        placeholder={dynamicData.header}
                         //   onChange={(e) => updateFormData('description', e.target.value)}
                       />
                     </div>
@@ -223,7 +236,8 @@ const deletQuestionBox=(id:string)=>{
                       </Label>
                       <Textarea
                         id="description"
-                        // value={formData.customDescription}
+                        value={dynamicData.customDescription} 
+                        placeholder={dynamicData.customDescription}
                         //   onChange={(e) => updateFormData('description', e.target.value)}
                       />
                     </div>
@@ -244,11 +258,11 @@ const deletQuestionBox=(id:string)=>{
                       />
                     </div> */}
                     <div className="flex  space-y-2  flex-col">
-                      {formData.questions.map((item) => {
+                      {dynamicData.questions.map((item) => {
                         return (
                           <div className=" flex gap-2 " key={item.id}>
                             <Input
-                              id="emailLabel"
+                              id="questionlabel"
                               placeholder={item.questions}
                                 // onChange={(e) => updateFormData('emailLabel', e.target.value)}
                             />
@@ -276,7 +290,7 @@ const deletQuestionBox=(id:string)=>{
                       <Label htmlFor="rating">Enable Rating</Label>
                       <Switch
                         id="rating"
-                        checked={formData.ratingEnabled}
+                        checked={staticData.current.ratingEnabled}
                         //   onCheckedChange={(checked) => updateFormData('ratingEnabled', checked)}
                       />
                     </div>
@@ -302,20 +316,12 @@ const deletQuestionBox=(id:string)=>{
                       </label>
                       <Checkbox id="Thankyouimg" className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  " />
                       </div>
-                     
-                      <Input
-                        id="Thankyouimg"
-                        type="file"
-                        placeholder="Change"
-                        className="w-[65px] cursor-pointer  text-center"
-                        //   onChange={(e) => updateFormData('thankYouTitle', e.target.value)}
-                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="thankYouTitle">Thank You Title</Label>
                       <Input
                         id="thankYouTitle"
-                        // value={formData.thankYouTitle}
+                        value={dynamicData.thankYouTitle}
                         //   onChange={(e) => updateFormData('thankYouTitle', e.target.value)}
                       />
                     </div>
@@ -323,7 +329,7 @@ const deletQuestionBox=(id:string)=>{
                       <Label htmlFor="thankYouMessage">Thank You Message</Label>
                       <Textarea
                         id="thankYouMessage"
-                        // value={formData.thankYouMessage}
+                        value={dynamicData.thankYouMessage}
                         //   onChange={(e) => updateFormData('thankYouMessage', e.target.value)}
                       />
                     </div>
@@ -334,7 +340,7 @@ const deletQuestionBox=(id:string)=>{
                       <Input
                         id="redirectUrl"
                         placeholder="https://example.com/thank-you"
-                        // value={formData.redirectUrl}
+                        value={staticData.current.redirectUrl}
                         //   onChange={(e) => updateFormData('redirectUrl', e.target.value)}
                       />
                     </div>
@@ -348,7 +354,8 @@ const deletQuestionBox=(id:string)=>{
                   <div className="space-y-2">
                       <Label htmlFor="theme">Maximum Video duration</Label>
                       <Select
-                      // value={formData.theme} onValueChange={(value) => updateFormData('theme', value)} 
+                      value={staticData.current.videotime}
+                      //  onValueChange={(value) => updateFormData('theme', value)} 
                       
                       >
                         <SelectTrigger className="p-3 ">
@@ -362,9 +369,10 @@ const deletQuestionBox=(id:string)=>{
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="theme">Form Theme</Label>
+                      <Label htmlFor="theme">Review Form Theme</Label>
                       <Select
-                      // value={formData.theme} onValueChange={(value) => updateFormData('theme', value)}
+                      value={staticData.current.theme}
+                      //  onValueChange={(value) => updateFormData('theme', value)}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -380,7 +388,7 @@ const deletQuestionBox=(id:string)=>{
                       <Label htmlFor="buttonText">Submit Button Text</Label>
                       <Input
                         id="buttonText"
-                        // value={formData.buttonText}
+                        value={dynamicData.textbuttonText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div> 
@@ -388,27 +396,7 @@ const deletQuestionBox=(id:string)=>{
                       <Label htmlFor="buttonText">Video button text </Label>
                       <Input
                         id="buttonText"
-                        // value={formData.buttonText}
-                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="buttonTextcolor">
-                        Background color of submit text
-                      </Label>
-                      <Input
-                        id="buttonText"
-                        // value={formData.buttonColor}
-                        //   onChange={(e) => updateFormData('buttonText', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="buttonText">
-                        Text Color of submit text
-                      </Label>
-                      <Input
-                        id="buttonText"
-                        // value={formData.buttonTextColor}
+                        value={dynamicData.videoButtonnText}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
@@ -416,7 +404,7 @@ const deletQuestionBox=(id:string)=>{
                       <Label htmlFor="buttonTextcolor">Question Label</Label>
                       <Input
                         id="buttonText"
-                        // value={formData.questionlabel}
+                        value={dynamicData.questionlabel}
                         //   onChange={(e) => updateFormData('buttonText', e.target.value)}
                       />
                     </div>
