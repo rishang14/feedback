@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -38,6 +37,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { FormProvider } from "react-hook-form";
 type Question = {
   id: string;
   questions: string;
@@ -53,7 +53,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     customDescription: "We would love to hear your feedback!",
     messageLabel: "Your Message",
     textbuttonText: "Submit text testimonial",
-    videoButtonnText: "Submit Video testimonials",
+    videoButtonText: "Submit Video testimonials",
     questions: [
       {
         id: "1",
@@ -74,13 +74,13 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     thankYouTitle: "Thank You!",
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
-    Thankyouimg: false,
-    vdeoreviewEnabled: false,
+    thankyouimg: false,
+    videoreviewEnabled: false,
     videotime: "30",
   });
-
   const formController = useForm<spaceformtype>({
-    resolver: zodResolver(spaceFormSchema),
+    resolver: zodResolver(spaceFormSchema), 
+    shouldUnregister: true,
   });
 
   const {
@@ -107,28 +107,22 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const handleDynamicChange = (
-    e:
-      | React.ChangeEvent<
-          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >
-      | boolean
-      | string,
-    keys: string
+    fieldName: keyof spaceformtype,
+    value: any,
+    onChange: (value: any) => void
   ) => {
-    let value: string | boolean;
-
-    if (typeof e === "boolean" || typeof e === "string") {
-      value = e;
-    } else if (e.target.type === "checkbox") {
-      value = (e.target as HTMLInputElement).checked;
-    } else {
-      value = e.target.value;
-    }
-    setDynamicData((prev) => ({ ...prev, [keys]: value }));
+    console.log("i am triggeerd");
+    onChange(value);
+    setDynamicData((prev) => ({ ...prev, [fieldName]: value }));
+    formController.setValue(fieldName as any, value, { shouldValidate: true });
   };
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
+  const onsubmit = (e: spaceformtype) => {
+    console.log(e, "form is triggered");
+    try {
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <main className=" p-6">
@@ -177,7 +171,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         {dynamicData.textbuttonText}
                       </Button>
                       <Button className={`w-full   text-black bg-blue-500  `}>
-                        {dynamicData.videoButtonnText}
+                        {dynamicData.videoButtonText}
                       </Button>
                     </div>
                   </div>
@@ -187,7 +181,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               <Card className="border-2 border-dashed">
                 <CardContent className="pt-6">
                   <div className="space-y-4">
-                    {dynamicData.Thankyouimg === false ? (
+                    {dynamicData.thankyouimg === false ? (
                       <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
                         <Image
                           src={
@@ -247,8 +241,13 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                 </TabsTrigger>
               </TabsList>
               {/* form section */}
-              <Form {...formController}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+              <FormProvider {...formController}>
+                <form
+                  onSubmit={handleSubmit((data) => {
+                    console.log("Form submitted!");
+                    console.log(data);
+                  })}
+                >
                   <TabsContent value="basic" className="space-y-6 mt-6">
                     <Card>
                       <CardContent className="pt-6 space-y-6">
@@ -262,10 +261,14 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Input
                                     {...field}
-                                    value={dynamicData.spaceName}
+                                    // value={dynamicData.spaceName}
                                     placeholder="Enter Space Name"
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "spaceName")
+                                      handleDynamicChange(
+                                        "spaceName",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
@@ -286,10 +289,14 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Input
                                     {...field}
-                                    value={dynamicData.header}
+                                    // value={dynamicData.header}
                                     placeholder="Review form Header Title"
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "header")
+                                      handleDynamicChange(
+                                        "header",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
@@ -310,12 +317,13 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Textarea
                                     {...field}
-                                    value={dynamicData.customDescription}
+                                    // value={dynamicData.customDescription}
                                     placeholder={dynamicData.customDescription}
                                     onChange={(e) =>
                                       handleDynamicChange(
-                                        e,
-                                        "customDescription"
+                                        "customDescription",
+                                        e.target.value,
+                                        field.onChange
                                       )
                                     }
                                   />
@@ -345,12 +353,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                             <Input
                                               {...field}
                                               className="min-w-[600px]"
-                                              value={
-                                                dynamicData.questions[ind]
-                                                  .questions
-                                              }
                                               placeholder={item.questions}
                                               onChange={(e) => {
+                                                field.onChange(e.target.value);
                                                 setDynamicData((prev) => {
                                                   const updatedQuestions = [
                                                     ...prev.questions,
@@ -364,7 +369,6 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                                     questions: updatedQuestions,
                                                   };
                                                 });
-                                                field.onChange(e.target.value);
                                               }}
                                             />
                                           </FormControl>
@@ -372,6 +376,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                           <Button
                                             className="text-lg cursor-pointer bg-white hover:text-gray-400"
                                             variant="link"
+                                            type="button"
                                             onClick={() =>
                                               deletQuestionBox(item.id)
                                             }
@@ -397,6 +402,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                             className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
                             variant={"ghost"}
                             onClick={addquestionBox}
+                            type="button"
                           >
                             <CirclePlus color="black" /> Add more{" "}
                           </Button>
@@ -412,36 +418,42 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Switch
                                     checked={field.value}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked);
+                                    onCheckedChange={(checked) =>
                                       handleDynamicChange(
+                                        "ratingEnabled",
                                         checked,
-                                        "ratingEnabled"
-                                      );
-                                    }}
+                                        field.onChange
+                                      )
+                                    }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.ratingEnabled?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
                           <FormField
                             control={control}
-                            name="vdeoreviewEnabled"
+                            name="videoreviewEnabled"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Video Review</FormLabel>
                                 <FormControl>
                                   <Switch
                                     checked={field.value}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked);
+                                    onCheckedChange={(checked) =>
                                       handleDynamicChange(
+                                        "videoreviewEnabled",
                                         checked,
-                                        "vdeoreviewEnabled"
-                                      );
-                                    }}
+                                        field.onChange
+                                      )
+                                    }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.videoreviewEnabled?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -473,16 +485,19 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                     <Checkbox
                                       checked={field.value}
                                       className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
-                                      onCheckedChange={(checked) => {
-                                        field.onChange(checked);
+                                      onCheckedChange={(checked) =>
                                         handleDynamicChange(
+                                          "thankyouimg",
                                           checked,
-                                          "Thankyouimg"
-                                        );
-                                      }}
+                                          field.onChange
+                                        )
+                                      }
                                     />
                                   </FormControl>
                                 </div>
+                                <FormMessage>
+                                  {errors.thankyouimg?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -497,13 +512,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Textarea
                                     {...field}
-                                    value={dynamicData.thankYouTitle}
+                                    // value={dynamicData.thankYouTitle}
                                     placeholder={dynamicData.thankYouTitle}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "thankYouTitle")
+                                      handleDynamicChange(
+                                        "thankYouTitle",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.thankYouTitle?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -518,13 +540,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Textarea
                                     {...field}
-                                    value={dynamicData.thankYouMessage}
+                                    // value={dynamicData.thankYouMessage}
                                     placeholder={dynamicData.thankYouMessage}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "thankYouMessage")
+                                      handleDynamicChange(
+                                        "thankYouMessage",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.thankYouMessage?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -542,10 +571,17 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                     value={dynamicData.redirectUrl}
                                     placeholder={dynamicData.redirectUrl}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "redirectUrl")
+                                      handleDynamicChange(
+                                        "redirectUrl",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.redirectUrl?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -556,7 +592,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                   <TabsContent value="settings" className="space-y-6 mt-6">
                     <Card>
                       <CardContent className="pt-6 space-y-6">
-                        {dynamicData.vdeoreviewEnabled === true ? (
+                        {dynamicData.videoreviewEnabled === true ? (
                           <div className="space-y-2">
                             <FormField
                               control={control}
@@ -566,9 +602,13 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                   <FormLabel> Maximum Video duration</FormLabel>
                                   <FormControl>
                                     <Select
-                                      onValueChange={(value) => {
-                                        field.onChange(value);
-                                      }}
+                                      onValueChange={(value) =>
+                                        handleDynamicChange(
+                                          "videotime",
+                                          value,
+                                          field.onChange
+                                        )
+                                      }
                                       defaultValue={dynamicData.videotime}
                                     >
                                       <SelectTrigger className="p-3 ">
@@ -587,6 +627,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                       </SelectContent>
                                     </Select>
                                   </FormControl>
+                                  <FormMessage>
+                                    {errors.redirectUrl?.message}
+                                  </FormMessage>
                                 </FormItem>
                               )}
                             />
@@ -601,9 +644,13 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormLabel>Review Form Theme</FormLabel>
                                 <FormControl>
                                   <Select
-                                    onValueChange={(value) =>
-                                      field.onChange(value)
-                                    }
+                                    onValueChange={(value) => {
+                                      handleDynamicChange(
+                                        "theme",
+                                        value,
+                                        field.onChange
+                                      );
+                                    }}
                                     defaultValue={dynamicData.theme}
                                   >
                                     <SelectTrigger>
@@ -634,13 +681,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Input
                                     {...field}
-                                    value={dynamicData.textbuttonText}
+                                    // value={dynamicData.textbuttonText}
                                     placeholder={dynamicData.textbuttonText}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "textbuttonText")
+                                      handleDynamicChange(
+                                        "textbuttonText",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.textbuttonText?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -648,20 +702,27 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                         <div className="space-y-2">
                           <FormField
                             control={control}
-                            name="videoButtonnText"
+                            name="videoButtonText"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Review Video button text</FormLabel>
                                 <FormControl>
                                   <Input
                                     {...field}
-                                    value={dynamicData.videoButtonnText}
-                                    placeholder={dynamicData.videoButtonnText}
+                                    // value={dynamicData.videoButtonText}
+                                    placeholder={dynamicData.videoButtonText}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "videoButtonnText")
+                                      handleDynamicChange(
+                                        "videoButtonText",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
                                 </FormControl>
+                                <FormMessage>
+                                  {errors.videoButtonText?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -676,14 +737,20 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <FormControl>
                                   <Input
                                     {...field}
-                                    value={dynamicData.questionlabel}
+                                    // value={dynamicData.questionlabel}
                                     placeholder={dynamicData.questionlabel}
                                     onChange={(e) =>
-                                      handleDynamicChange(e, "questionlabel")
+                                      handleDynamicChange(
+                                        "questionlabel",
+                                        e.target.value,
+                                        field.onChange
+                                      )
                                     }
                                   />
-                                </FormControl> 
-                                <FormMessage>{errors.questionlabel?.message}</FormMessage>
+                                </FormControl>
+                                <FormMessage>
+                                  {errors.questionlabel?.message}
+                                </FormMessage>
                               </FormItem>
                             )}
                           />
@@ -692,7 +759,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                     </Card>
                   </TabsContent>
                 </form>
-              </Form>
+              </FormProvider>
             </Tabs>
           </div>
         </div>

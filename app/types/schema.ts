@@ -70,33 +70,35 @@ export const spaceFormSchema = z.object({
     required_error: "Message Label is required",
     invalid_type_error: "Correct the format",
   }),
-  textbuttonText: z.string().default("Submit Review"),
-  videoButtonnText: z.string().default("Start Recording"),
+
+  textbuttonText: z.string().default("Submit Review"), 
+  videoButtonText: z.string().default("Start Recording"),
+
   questions: z.array(
     z.object({
-      id: z.string(),
+      id: z.string(), 
       questions: z
         .string({
           required_error: "Question is required",
           invalid_type_error: "Correct the format",
         })
-        .max(100),
+        .max(100), 
     })
-  ),
-  questionlabel: z
-    .string({
-      required_error: "Question Label is required",
-      invalid_type_error: "Correct the format",
-    })
-    .min(5),
-  thankYouTitle: z.string().optional().default("Thank you"),
-  thankYouMessage: z.string().optional(),
-  theme: z.enum(["light", "dark"]).default("light"),
-  thankyouimg: z.boolean().default(false),
-  vdeoreviewEnabled: z.boolean().default(false), 
-  ratingEnabled:z.boolean().default(false),  
-  redirectUrl:z.string({
-    invalid_type_error: "Please provide correct the url",
-  }).url().optional() , 
-  videotime:z.string().default("30")
+  ).default([]),
+
+  questionlabel: z.string().min(5, {
+    message: "Question Label must be at least 5 characters",
+  }).default("Questions"),
+
+  thankYouTitle: z.string().default("Thank You"), 
+  thankYouMessage: z.string().default(""), 
+  theme: z.enum(["light", "dark"]).default("light"), 
+
+  thankyouimg: z.boolean().default(false), 
+  videoreviewEnabled: z.boolean().default(false), 
+  ratingEnabled: z.boolean().default(false),
+
+  redirectUrl: z.string().url().optional(), 
+
+  videotime: z.string().default("30"), 
 });
