@@ -8,25 +8,25 @@ import {
   DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogDescription,  
-} from "@/components/ui/dialog"; 
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { FolderPlus } from "lucide-react"; 
+import { FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 const Page = () => {
-  const router=useRouter()   
-  const {status}=useSession() 
-     
-  useEffect(()=>{
-    // if(status=== "authenticated") router.push("/dashboard"); 
-   if(status==="unauthenticated" ) router.push("/signin")
-  },[status,router])  
+  const router = useRouter();
+  const { status } = useSession();
 
-  if(status==="loading") return <Loading/>
+  useEffect(() => {
+    // if(status=== "authenticated") router.push("/dashboard");
+    if (status === "unauthenticated") router.push("/signin");
+  }, [status, router]);
+
+  if (status === "loading") return <Loading />;
 
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
@@ -71,42 +71,39 @@ const Emptyspace = () => {
           {" "}
           Create your first space to start collecting review .
         </p>
-        <Button className="text-white bg-blue-600 text-lg cursor-pointer">
-          + Create a new Space
-        </Button>
+        <CreateSpaceButton/>
       </div>
     </div>
   );
 };
 
 const CreateSpaceButton = () => {
-  const [open, setOpen] = useState(false);  
+  const [open, setOpen] = useState(false);
 
-  const SpaceForm=dynamic(()=>import("../../components/spaceform"),{
-    ssr:false
-  })
+  const SpaceForm = dynamic(() => import("../../components/spaceform"), {
+    ssr: false,
+  });
   return (
-    <Dialog  open={open} onOpenChange={setOpen} modal={true}  >
+    <Dialog open={open} onOpenChange={setOpen} modal={true}>
       {/* Button to open modal */}
       <DialogTrigger asChild>
         <Button className="text-white bg-blue-600 text-lg cursor-pointer">
           + Create a new Space
         </Button>
       </DialogTrigger>
-      <DialogContent className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white " onInteractOutside={(e)=> e.preventDefault()}> 
-      <DialogHeader>
-        <DialogTitle className=" ">
-          <p className="text-4xl font-bold tracking-tight mb-2 text-center ">
-            Customize Your Testimonial Form
-          </p> 
-        </DialogTitle>
-        <DialogDescription className="">
-          <span className="text-muted-foreground text-lg text-center">
+      <DialogContent
+        className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
+        onInteractOutside={(e) => e.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center"> 
+              Customize Your Testimonial Form
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground text-lg text-center">
             Design the perfect testimonial collection experience
-          </span>
-        </DialogDescription>
-      </DialogHeader>
-        <SpaceForm closeModal={() => setOpen(false)} /> 
+          </DialogDescription>
+        </DialogHeader>
+        <SpaceForm closeModal={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

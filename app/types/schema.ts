@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export  const signupFormSchema = z.object({
+export const signupFormSchema = z.object({
   username: z
     .string({
       required_error: "Name is required",
@@ -29,32 +29,29 @@ export  const signupFormSchema = z.object({
     ),
 });
 
-
-export const loginSchema=z.object({ 
+export const loginSchema = z.object({
   email: z
-  .string({
-    required_error: "Email is required",
-    invalid_type_error: "Correct the format",
-  })
-  .email(),
-password: z
-  .string()
-  .min(5, { message: "Password must be at least 5 characters long" })
-  .refine(
-    (value) => {
-      const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
-      return regex.test(value);
-    },
-    {
-      message:
-        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
-    },
-  ) ,
-  csrftoken:z.string().optional()
-}) 
-
-
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Correct the format",
+    })
+    .email(),
+  password: z
+    .string()
+    .min(5, { message: "Password must be at least 5 characters long" })
+    .refine(
+      (value) => {
+        const regex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+        return regex.test(value);
+      },
+      {
+        message:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+      }
+    ),
+  csrftoken: z.string().optional(),
+});
 
 export const spaceFormSchema = z.object({
   spaceName: z.string({
@@ -73,37 +70,33 @@ export const spaceFormSchema = z.object({
     required_error: "Message Label is required",
     invalid_type_error: "Correct the format",
   }),
-  textbuttonText: z.string({
-    required_error: "Text Button Text is required",
-    invalid_type_error: "Correct the format",
-  }),
-  videoButtonnText: z.string({
-    required_error: "Video Button Text is required",
-    invalid_type_error: "Correct the format",
-  }),
+  textbuttonText: z.string().default("Submit Review"),
+  videoButtonnText: z.string().default("Start Recording"),
   questions: z.array(
     z.object({
       id: z.string(),
-      questions: z.string({
-        required_error: "Question is required",
-        invalid_type_error: "Correct the format",
-      }),
+      questions: z
+        .string({
+          required_error: "Question is required",
+          invalid_type_error: "Correct the format",
+        })
+        .max(100),
     })
   ),
-  questionlabel: z.string({
-    required_error: "Question Label is required",
-    invalid_type_error: "Correct the format",
-  }),
-  buttonColor: z.string({
-    required_error: "Button Color is required",
-    invalid_type_error: "Correct the format",
-  }),
-  buttonTextColor: z.string({
-    required_error: "Button Text Color is required",
-    invalid_type_error: "Correct the format",
-  }),
+  questionlabel: z
+    .string({
+      required_error: "Question Label is required",
+      invalid_type_error: "Correct the format",
+    })
+    .min(5),
   thankYouTitle: z.string().optional().default("Thank you"),
   thankYouMessage: z.string().optional(),
   theme: z.enum(["light", "dark"]).default("light"),
-  Thankyouimg: z.boolean().default(false),
+  thankyouimg: z.boolean().default(false),
+  vdeoreviewEnabled: z.boolean().default(false), 
+  ratingEnabled:z.boolean().default(false),  
+  redirectUrl:z.string({
+    invalid_type_error: "Please provide correct the url",
+  }).url().optional() , 
+  videotime:z.string().default("30")
 });

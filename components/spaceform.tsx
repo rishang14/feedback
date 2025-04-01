@@ -1,5 +1,8 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,16 +24,26 @@ import {
   Layout,
   MessageSquare,
   Settings,
-  Star,
   ThumbsUp,
   Trash2,
   CirclePlus,
 } from "lucide-react";
 import { boolean } from "zod";
+import { spaceFormSchema } from "@/app/types/schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 type Question = {
   id: string;
   questions: string;
 };
+
+type spaceformtype = z.infer<typeof spaceFormSchema>;
 
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   const [activeTab, setactiveTab] = useState("basic");
@@ -62,8 +75,19 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     thankYouMessage: "Your testimonial has been submitted successfully.",
     theme: "light",
     Thankyouimg: false,
+    vdeoreviewEnabled: false,
+    videotime: "30",
   });
-  console.log(dynamicData.Thankyouimg, "img");
+
+  const formController = useForm<spaceformtype>({
+    resolver: zodResolver(spaceFormSchema),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = formController;
 
   const addquestionBox = () => {
     setDynamicData((item) => ({
@@ -103,7 +127,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     setDynamicData((prev) => ({ ...prev, [keys]: value }));
   };
 
-  const handlesubmit = (e: any) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
   };
   return (
@@ -223,249 +247,452 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                 </TabsTrigger>
               </TabsList>
               {/* form section */}
-              <form onSubmit={handlesubmit}>
-                <TabsContent value="basic" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="title" className=" text-gray-700">
-                          Space Name
-                        </Label>
-                        <Input
-                          id="title"
-                          value={dynamicData.spaceName}
-                          placeholder="Enter Space Name"
-                          onChange={(e) => handleDynamicChange(e, "spaceName")}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="header" className=" text-gray-700">
-                          Header Title
-                        </Label>
-                        <Input
-                          id="headerTitle"
-                          value={dynamicData.header}
-                          placeholder={dynamicData.header}
-                          onChange={(e) => handleDynamicChange(e, "header")}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="description" className=" text-gray-700">
-                          Form Description
-                        </Label>
-                        <Textarea
-                          id="description"
-                          value={dynamicData.customDescription}
-                          placeholder={dynamicData.customDescription}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "customDescription")
-                          }
-                        />
-                      </div>
-                      <div className="flex  space-y-2  flex-col">
-                        {dynamicData.questions.map(
-                          (item: Question, ind: any) => {
-                            return (
-                              <div className=" flex gap-2 " key={item.id}>
-                                <Input
-                                  id="questionlabel"
-                                  placeholder={item.questions}
-                                  onChange={(e) =>
-                                    setDynamicData((prev) => {
-                                      const updatedQuestions = [
-                                        ...prev.questions,
-                                      ];
-                                      updatedQuestions[ind] = {
-                                        ...updatedQuestions[ind],
-                                        questions: e.target.value,
-                                      };
-                                      return {
-                                        ...prev,
-                                        questions: updatedQuestions,
-                                      };
-                                    })
-                                  }
-                                />
-                                <Button
-                                  className=" text-lg cursor-pointer bg-white hover:text-gray-400"
-                                  variant={"link"}
-                                  onClick={() => deletQuestionBox(item.id)}
-                                >
-                                  <Trash2 color="black" />
-                                </Button>
-                              </div>
-                            );
-                          }
-                        )}
-
-                        <Button
-                          className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
-                          variant={"ghost"}
-                          onClick={addquestionBox}
-                        >
-                          <CirclePlus color="black" /> Add more{" "}
-                        </Button>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="rating">Enable Rating</Label>
-                        <Switch
-                          id="rating"
-                          checked={dynamicData.ratingEnabled}
-                          onCheckedChange={(checked) =>
-                            handleDynamicChange(checked, "ratingEnabled")
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Button
-                          className="bg-blue-500 text-white p-2  w-full text-center"
-                          type="submit"
-                        >
-                          Create Space
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="thankyou" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 sapce-x-2">
-                          <label
-                            htmlFor="Thankyouimg"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          >
-                            Hide this img ?
-                          </label>
-                          <Checkbox
-                            id="Thankyouimg"
-                            className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
-                            checked={dynamicData.Thankyouimg}
-                            onCheckedChange={(e) =>
-                              handleDynamicChange(e, "Thankyouimg")
-                            }
+              <Form {...formController}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <TabsContent value="basic" className="space-y-6 mt-6">
+                    <Card>
+                      <CardContent className="pt-6 space-y-6">
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="spaceName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Space Name</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.spaceName}
+                                    placeholder="Enter Space Name"
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "spaceName")
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage>
+                                  {errors.spaceName?.message}
+                                </FormMessage>
+                              </FormItem>
+                            )}
                           />
                         </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="thankYouTitle">Thank You Title</Label>
-                        <Input
-                          id="thankYouTitle"
-                          value={dynamicData.thankYouTitle}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "thankYouTitle")
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="thankYouMessage">
-                          Thank You Message
-                        </Label>
-                        <Textarea
-                          id="thankYouMessage"
-                          value={dynamicData.thankYouMessage}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "thankYouMessage")
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="redirectUrl">
-                          Redirect URL (Optional)
-                        </Label>
-                        <Input
-                          id="redirectUrl"
-                          placeholder="https://example.com/thank-you"
-                          value={dynamicData.redirectUrl}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "redirectUrl")
-                          }
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="settings" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="theme">Maximum Video duration</Label>
-                        <Select
-                          value={dynamicData.videotime}
-                          onValueChange={(value) =>
-                            handleDynamicChange(value, "videotime")
-                          }
-                          defaultValue="30"
-                        >
-                          <SelectTrigger className="p-3 ">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className=" ">
-                            <SelectItem value="30">30 sec</SelectItem>
-                            <SelectItem value="45">45 sec</SelectItem>
-                            <SelectItem value="90">90 sec</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="theme">Review Form Theme</Label>
-                        <Select
-                          value={dynamicData.theme}
-                          onValueChange={(value) =>
-                            handleDynamicChange(value, "theme")
-                          }
-                          defaultValue="light"
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="light">Light</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                            <SelectItem value="system">System</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="buttonText">Submit Button Text</Label>
-                        <Input
-                          id="buttonText"
-                          value={dynamicData.textbuttonText}
-                          placeholder={dynamicData.textbuttonText}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "textbuttonText")
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="buttonText">Video button text </Label>
-                        <Input
-                          id="buttonText"
-                          value={dynamicData.videoButtonnText}
-                          placeholder={dynamicData.videoButtonnText}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "videoButtonnText")
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="buttonTextcolor">Question Label</Label>
-                        <Input
-                          id="buttonText"
-                          value={dynamicData.questionlabel}
-                          placeholder={dynamicData.questionlabel}
-                          onChange={(e) =>
-                            handleDynamicChange(e, "questionlabel")
-                          }
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </form>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="header"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel> Header Title</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.header}
+                                    placeholder="Review form Header Title"
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "header")
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage>
+                                  {errors.header?.message}
+                                </FormMessage>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="customDescription"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel> Review Form Description</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    value={dynamicData.customDescription}
+                                    placeholder={dynamicData.customDescription}
+                                    onChange={(e) =>
+                                      handleDynamicChange(
+                                        e,
+                                        "customDescription"
+                                      )
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage>
+                                  {errors.customDescription?.message}
+                                </FormMessage>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="flex  space-y-2  flex-col">
+                          {dynamicData.questions.map(
+                            (item: Question, ind: any) => {
+                              return (
+                                <div
+                                  className=" flex gap-2 items-center w-full "
+                                  key={item.id}
+                                >
+                                  <FormField
+                                    control={control}
+                                    name={`questions.${ind}.questions`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <div className="flex items-center gap-2 w-full">
+                                          <FormControl className="flex-grow">
+                                            <Input
+                                              {...field}
+                                              className="min-w-[600px]"
+                                              value={
+                                                dynamicData.questions[ind]
+                                                  .questions
+                                              }
+                                              placeholder={item.questions}
+                                              onChange={(e) => {
+                                                setDynamicData((prev) => {
+                                                  const updatedQuestions = [
+                                                    ...prev.questions,
+                                                  ];
+                                                  updatedQuestions[ind] = {
+                                                    ...updatedQuestions[ind],
+                                                    questions: e.target.value,
+                                                  };
+                                                  return {
+                                                    ...prev,
+                                                    questions: updatedQuestions,
+                                                  };
+                                                });
+                                                field.onChange(e.target.value);
+                                              }}
+                                            />
+                                          </FormControl>
+
+                                          <Button
+                                            className="text-lg cursor-pointer bg-white hover:text-gray-400"
+                                            variant="link"
+                                            onClick={() =>
+                                              deletQuestionBox(item.id)
+                                            }
+                                          >
+                                            <Trash2 color="black" />
+                                          </Button>
+                                        </div>
+                                        <FormMessage>
+                                          {
+                                            errors.questions?.[ind]?.questions
+                                              ?.message
+                                          }
+                                        </FormMessage>
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+                              );
+                            }
+                          )}
+
+                          <Button
+                            className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
+                            variant={"ghost"}
+                            onClick={addquestionBox}
+                          >
+                            <CirclePlus color="black" /> Add more{" "}
+                          </Button>
+                        </div>
+
+                        <div className="flex items-center justify-center space-x-10 ">
+                          <FormField
+                            control={control}
+                            name="ratingEnabled"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Enable Rating</FormLabel>
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={(checked) => {
+                                      field.onChange(checked);
+                                      handleDynamicChange(
+                                        checked,
+                                        "ratingEnabled"
+                                      );
+                                    }}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={control}
+                            name="vdeoreviewEnabled"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Video Review</FormLabel>
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={(checked) => {
+                                      field.onChange(checked);
+                                      handleDynamicChange(
+                                        checked,
+                                        "vdeoreviewEnabled"
+                                      );
+                                    }}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Button
+                            className="bg-blue-500 text-white p-2  w-full text-center"
+                            type="submit"
+                          >
+                            Create Space
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="thankyou" className="space-y-6 mt-6">
+                    <Card>
+                      <CardContent className="pt-6 space-y-6">
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="thankyouimg"
+                            render={({ field }) => (
+                              <FormItem>
+                                <div className="flex items-center gap-2 sapce-x-2">
+                                  <FormLabel> Hide this img ?</FormLabel>
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
+                                      onCheckedChange={(checked) => {
+                                        field.onChange(checked);
+                                        handleDynamicChange(
+                                          checked,
+                                          "Thankyouimg"
+                                        );
+                                      }}
+                                    />
+                                  </FormControl>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="thankYouTitle"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Thank You Title</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    value={dynamicData.thankYouTitle}
+                                    placeholder={dynamicData.thankYouTitle}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "thankYouTitle")
+                                    }
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="thankYouMessage"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Thank You Message</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    value={dynamicData.thankYouMessage}
+                                    placeholder={dynamicData.thankYouMessage}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "thankYouMessage")
+                                    }
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="redirectUrl"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel> Redirect URL (Optional)</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.redirectUrl}
+                                    placeholder={dynamicData.redirectUrl}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "redirectUrl")
+                                    }
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  <TabsContent value="settings" className="space-y-6 mt-6">
+                    <Card>
+                      <CardContent className="pt-6 space-y-6">
+                        {dynamicData.vdeoreviewEnabled === true ? (
+                          <div className="space-y-2">
+                            <FormField
+                              control={control}
+                              name="videotime"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel> Maximum Video duration</FormLabel>
+                                  <FormControl>
+                                    <Select
+                                      onValueChange={(value) => {
+                                        field.onChange(value);
+                                      }}
+                                      defaultValue={dynamicData.videotime}
+                                    >
+                                      <SelectTrigger className="p-3 ">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent className=" ">
+                                        <SelectItem value="30">
+                                          30 sec
+                                        </SelectItem>
+                                        <SelectItem value="45">
+                                          45 sec
+                                        </SelectItem>
+                                        <SelectItem value="90">
+                                          90 sec
+                                        </SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        ) : null}
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="theme"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Review Form Theme</FormLabel>
+                                <FormControl>
+                                  <Select
+                                    onValueChange={(value) =>
+                                      field.onChange(value)
+                                    }
+                                    defaultValue={dynamicData.theme}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select a theme" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="light">
+                                        Light
+                                      </SelectItem>
+                                      <SelectItem value="dark">Dark</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage>
+                                  {errors.theme?.message}
+                                </FormMessage>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="textbuttonText"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Review Submit Button Text</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.textbuttonText}
+                                    placeholder={dynamicData.textbuttonText}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "textbuttonText")
+                                    }
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="videoButtonnText"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Review Video button text</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.videoButtonnText}
+                                    placeholder={dynamicData.videoButtonnText}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "videoButtonnText")
+                                    }
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <FormField
+                            control={control}
+                            name="questionlabel"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel> Question Label</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    value={dynamicData.questionlabel}
+                                    placeholder={dynamicData.questionlabel}
+                                    onChange={(e) =>
+                                      handleDynamicChange(e, "questionlabel")
+                                    }
+                                  />
+                                </FormControl> 
+                                <FormMessage>{errors.questionlabel?.message}</FormMessage>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </form>
+              </Form>
             </Tabs>
           </div>
         </div>
