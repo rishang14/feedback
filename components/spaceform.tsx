@@ -241,7 +241,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                 </TabsTrigger>
               </TabsList>
               {/* form section */}
-              <FormProvider {...formController}>
+              <Form {...formController}>
                 <form
                   onSubmit={handleSubmit(onsubmit)}
                 >
@@ -756,7 +756,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                     </Card>
                   </TabsContent>
                 </form>
-              </FormProvider>
+              </Form>
             </Tabs>
           </div>
         </div>
