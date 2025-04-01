@@ -243,10 +243,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               {/* form section */}
               <FormProvider {...formController}>
                 <form
-                  onSubmit={handleSubmit((data) => {
-                    console.log("Form submitted!");
-                    console.log(data);
-                  })}
+                  onSubmit={handleSubmit(onsubmit)}
                 >
                   <TabsContent value="basic" className="space-y-6 mt-6">
                     <Card>
