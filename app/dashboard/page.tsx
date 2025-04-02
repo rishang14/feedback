@@ -22,7 +22,6 @@ const Page = () => {
   const { status } = useSession();
 
   useEffect(() => {
-    // if(status=== "authenticated") router.push("/dashboard");
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
 

@@ -5,7 +5,8 @@ interface SpacecDocument{
     _id: Types.ObjectId; 
     userId: Types.ObjectId 
     spacename:string, 
-    reviewFormLink: string;
+    reviewFormLink: string; 
+    tags:Array<string>;
     createdAt: Date;
     updatedAt: Date;
   }
@@ -21,7 +22,8 @@ interface SpacecDocument{
       },
       reviewFormLink: {
         type: String,
-      },
+      }, 
+      tags:[{ type: String }],
     },
     {
       timestamps: true,

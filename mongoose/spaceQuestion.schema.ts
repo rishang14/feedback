@@ -1,7 +1,5 @@
-import { url } from "inspector";
 import mongoose, { Schema, Types, model } from "mongoose";
-import { Url } from "next/dist/shared/lib/router/router";
-import { boolean, string } from "zod";
+
 
 interface Question {
   id: string;
@@ -24,12 +22,13 @@ interface SpaceQuestionDocument {
   videoreviewEnabled: boolean;
   videotime: string;
   ratingEnabled: boolean;
-  redirectUrl: string;
+  redirectUrl: string; 
+  tags:Array<string>
 }
 
 const QuestionSchema = new Schema({
-  id: { type: String, required: true }, // Unique ID for each question
-  question: { type: String, required: true }, // Question text
+  id: { type: String, required: true }, 
+  question: { type: String, required: true },
 });
 
 const SpaceQuestionSchema = new Schema<SpaceQuestionDocument>({
@@ -66,7 +65,7 @@ const SpaceQuestionSchema = new Schema<SpaceQuestionDocument>({
   thankYouMessage: {
     type: String,
     default: "Your testimonial has been submitted successfully.",
-  },
+  },tags:[{ type: String }],
   theme: {
     type: String,
     default: "light",
