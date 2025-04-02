@@ -38,6 +38,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { FormProvider } from "react-hook-form";
+import { redirect } from "next/dist/server/api-utils";
 type Question = {
   id: string;
   questions: string;
@@ -45,49 +46,98 @@ type Question = {
 
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 
-const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
-  const [activeTab, setactiveTab] = useState("basic");
-  const [dynamicData, setDynamicData] = useState<Record<string, any>>({
-    spaceName: "",
-    header: "header goes here",
-    customDescription: "We would love to hear your feedback!",
-    messageLabel: "Your Message",
-    textbuttonText: "Submit text testimonial",
-    videoButtonText: "Submit Video testimonials",
-    questions: [
-      {
-        id: "1",
-        questions: "demo question",
-      },
-      {
-        id: "2",
-        questions: "demo question 2",
-      },
-      {
-        id: "3",
-        questions: "demo question 3",
-      },
-    ],
-    questionlabel: "Questions",
-    buttonColor: "black",
-    buttonTextColor: "white",
-    thankYouTitle: "Thank You!",
-    thankYouMessage: "Your testimonial has been submitted successfully.",
-    theme: "light",
-    thankyouimg: false,
-    videoreviewEnabled: false,
-    videotime: "30",
-  });
-  const formController = useForm<spaceformtype>({
-    resolver: zodResolver(spaceFormSchema), 
-    shouldUnregister: true,
-  });
+const defaultSpaceValues = {
+  spaceName: "",
+  header: "",
+  customDescription: "",
+  textbuttonText: "Submit Review",
+  videoButtonText: "Start Recording",
+  questions: [{ id: "1", questions: "" }],
+  questionlabel: "Questions",
+  thankYouTitle: "Thank You",
+  thankYouMessage: "",
+  theme: "light",
+  thankyouimg: false,
+  videoreviewEnabled: false,
+  videotime: "30",
+  ratingEnabled: false,
+  redirectUrl: "",
+};
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = formController;
+const inputValues = {
+  spaceName: "",
+  header: "header goes here",
+  customDescription: "We would love to hear your feedback!",
+  textbuttonText: "Submit text testimonial",
+  videoButtonText: "Submit Video testimonials",
+  questions: [
+    {
+      id: "1",
+      questions: "whats your thoughts on our product ? ",
+    },
+    {
+      id: "2",
+      questions: "Pls Share ur expreience",
+    },
+    {
+      id: "3",
+      questions: "Anything you want us to improve",
+    },
+  ],
+  questionlabel: "Questions",
+  thankYouTitle: "Thank You!",
+  thankYouMessage: "Your testimonial has been submitted successfully.",
+  theme: "light",
+  thankyouimg: false,
+  videoreviewEnabled: false,
+  videotime: "30",
+  ratingEnabled: false,
+  redirectUrl: "",
+};
+
+const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
+  const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
+  const [activeTab, setactiveTab] = useState("basic");
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
+
+  const validateErrors = () => {
+    const result = spaceFormSchema.safeParse(dynamicData);
+
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+
+      result.error.errors.forEach((err) => {
+        formattedErrors[err.path.join(".")] = err.message;
+      });
+
+      return formattedErrors;
+    }
+
+    return null;
+  };
+
+  const handleDynamicChange = (fieldName: keyof spaceformtype, value: any) => {
+    setDynamicData((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
+  const spaceFormsubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(e, "form is triggered");
+    const errors = validateErrors();
+    if (errors) {
+      setValidationErrors(errors);
+      return;
+    }
+    try {
+      console.log(dynamicData, "all form data is here ");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log("form end successfully");
+    }
+  };
 
   const addquestionBox = () => {
     setDynamicData((item) => ({
@@ -104,25 +154,6 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
       ...prev,
       questions: prev.questions.filter((item: any) => item.id !== id),
     }));
-  };
-
-  const handleDynamicChange = (
-    fieldName: keyof spaceformtype,
-    value: any,
-    onChange: (value: any) => void
-  ) => {
-    console.log("i am triggeerd");
-    onChange(value);
-    setDynamicData((prev) => ({ ...prev, [fieldName]: value }));
-    formController.setValue(fieldName as any, value, { shouldValidate: true });
-  };
-
-  const onsubmit = (e: spaceformtype) => {
-    console.log(e, "form is triggered");
-    try {
-    } catch (e) {
-      console.log(e);
-    }
   };
   return (
     <main className=" p-6">
@@ -148,30 +179,46 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                     </div>
                     <div className="space-y-2 p-2">
                       <h1 className="text-2xl text-center font-bold">
-                        {dynamicData.header}
+                        {dynamicData.header
+                          ? dynamicData.header
+                          : inputValues.header}
                       </h1>
                       <p className="text-muted-foreground text-center">
-                        {dynamicData.customDescription}
+                        {dynamicData.customDescription
+                          ? dynamicData.customDescription
+                          : inputValues.customDescription}
                       </p>
                     </div>
                     <div className="space-y-4">
                       <div className="space-y-2 flex flex-col gap-2 ">
                         <h3 className="p-2 text-lg  text-black ">
                           {" "}
-                          {dynamicData.questionlabel}
+                          {dynamicData.questionlabel
+                            ? dynamicData.questionlabel
+                            : inputValues.questionlabel}
                         </h3>
-                        {dynamicData.questions.map((items: Question) => (
-                          <li className="text-gray-500 " key={items.id}>
-                            {items.questions}
-                          </li>
-                        ))}
+                        {dynamicData.questions[0].questions != ""
+                          ? dynamicData.questions.map((items: Question) => (
+                              <li className="text-gray-500" key={items.id}>
+                                {items.questions}
+                              </li>
+                            ))
+                          : inputValues.questions.map((items: Question) => (
+                              <li className="text-gray-500" key={items.id}>
+                                {items.questions}
+                              </li>
+                            ))}
                       </div>
 
                       <Button className={`w-full   text-black bg-gray-400  `}>
-                        {dynamicData.textbuttonText}
+                        {dynamicData.textbuttonText
+                          ? dynamicData.textbuttonText
+                          : inputValues.textbuttonText}
                       </Button>
                       <Button className={`w-full   text-black bg-blue-500  `}>
-                        {dynamicData.videoButtonText}
+                        {dynamicData.videoButtonText
+                          ? dynamicData.videoButtonText
+                          : inputValues.videoButtonText}
                       </Button>
                     </div>
                   </div>
@@ -197,10 +244,11 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                     ) : null}
                     <div className="space-y-2">
                       <h1 className="text-4xl text-center font-bold text-gray-600">
-                        {dynamicData.thankYouTitle}
+                        {dynamicData.thankYouTitle ?? inputValues.thankYouTitle}
                       </h1>
                       <p className="text-muted-foreground">
-                        {dynamicData.thankYouMessage}
+                        {dynamicData.thankYouMessage ??
+                          inputValues.thankYouMessage}
                       </p>
                     </div>
                   </div>
@@ -241,522 +289,309 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                 </TabsTrigger>
               </TabsList>
               {/* form section */}
-              <Form {...formController}>
-                <form
-                  onSubmit={handleSubmit(onsubmit)}
-                >
-                  <TabsContent value="basic" className="space-y-6 mt-6">
-                    <Card>
-                      <CardContent className="pt-6 space-y-6">
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="spaceName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Space Name</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    // value={dynamicData.spaceName}
-                                    placeholder="Enter Space Name"
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "spaceName",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.spaceName?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="header"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel> Header Title</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    // value={dynamicData.header}
-                                    placeholder="Review form Header Title"
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "header",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.header?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="customDescription"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel> Review Form Description</FormLabel>
-                                <FormControl>
-                                  <Textarea
-                                    {...field}
-                                    // value={dynamicData.customDescription}
-                                    placeholder={dynamicData.customDescription}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "customDescription",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.customDescription?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="flex  space-y-2  flex-col">
-                          {dynamicData.questions.map(
-                            (item: Question, ind: any) => {
-                              return (
-                                <div
-                                  className=" flex gap-2 items-center w-full "
-                                  key={item.id}
+              <form onSubmit={spaceFormsubmit}>
+                <TabsContent value="basic" className="space-y-6 mt-6">
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      <div className="space-y-2">
+                        <label htmlFor="space Name">Space Name</label>
+                        <Input
+                          value={dynamicData.spaceName}
+                          placeholder="Enter Space Name"
+                          onChange={(e) =>
+                            handleDynamicChange("spaceName", e.target.value)
+                          }
+                        />
+                        {validationErrors["spaceName"] && (
+                          <p className="text-red-500">
+                            {validationErrors["spaceName"]}
+                          </p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="header"> Header Title</label>
+                        <Input
+                          value={dynamicData.header}
+                          placeholder="Review form Header Title"
+                          onChange={(e) => {
+                            handleDynamicChange("header", e.target.value);
+                          }}
+                        />
+                        {validationErrors["header"] && (
+                          <p className="text-red-500">
+                            {validationErrors["header"]}
+                          </p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="customDescription">
+                          {" "}
+                          Review Form Description
+                        </label>
+                        <Textarea
+                          value={dynamicData.customDescription}
+                          placeholder={inputValues.customDescription}
+                          onChange={(e) =>
+                            handleDynamicChange(
+                              "customDescription",
+                              e.target.value
+                            )
+                          }
+                        />
+                        {validationErrors["customDescription"] && (
+                          <p className="text-red-500">
+                            {validationErrors["customDescription"]}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex  space-y-2  flex-col">
+                        <label htmlFor="Review Form question">
+                          Review Form question
+                        </label>
+                        {dynamicData.questions.map(
+                          (item: Question, ind: any) => {
+                            return (
+                              <div
+                                className=" flex gap-2 flex-col items-center w-full "
+                                key={item.id}
+                              > 
+                             <div className="flex gap-2 items-center w-full">
+                                <Input
+                                  className=""
+                                  value={item.questions}
+                                  placeholder={"write ur questions here"}
+                                  onChange={(e) => {
+                                    setDynamicData((prev) => {
+                                      const updatedQuestions = [
+                                        ...prev.questions,
+                                      ];
+                                      updatedQuestions[ind] = {
+                                        ...updatedQuestions[ind],
+                                        questions: e.target.value,
+                                      };
+                                      return {
+                                        ...prev,
+                                        questions: updatedQuestions,
+                                      };
+                                    });
+                                  }}
+                                />
+
+                                <Button
+                                  className="text-lg cursor-pointer bg-white hover:text-gray-400"
+                                  variant="link"
+                                  type="button"
+                                  onClick={() => deletQuestionBox(item.id)}
                                 >
-                                  <FormField
-                                    control={control}
-                                    name={`questions.${ind}.questions`}
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <div className="flex items-center gap-2 w-full">
-                                          <FormControl className="flex-grow">
-                                            <Input
-                                              {...field}
-                                              className="min-w-[600px]"
-                                              placeholder={item.questions}
-                                              onChange={(e) => {
-                                                field.onChange(e.target.value);
-                                                setDynamicData((prev) => {
-                                                  const updatedQuestions = [
-                                                    ...prev.questions,
-                                                  ];
-                                                  updatedQuestions[ind] = {
-                                                    ...updatedQuestions[ind],
-                                                    questions: e.target.value,
-                                                  };
-                                                  return {
-                                                    ...prev,
-                                                    questions: updatedQuestions,
-                                                  };
-                                                });
-                                              }}
-                                            />
-                                          </FormControl>
-
-                                          <Button
-                                            className="text-lg cursor-pointer bg-white hover:text-gray-400"
-                                            variant="link"
-                                            type="button"
-                                            onClick={() =>
-                                              deletQuestionBox(item.id)
-                                            }
-                                          >
-                                            <Trash2 color="black" />
-                                          </Button>
-                                        </div>
-                                        <FormMessage>
-                                          {
-                                            errors.questions?.[ind]?.questions
-                                              ?.message
-                                          }
-                                        </FormMessage>
-                                      </FormItem>
-                                    )}
-                                  />
+                                  <Trash2 color="black" />
+                                </Button> 
                                 </div>
-                              );
+                                  {validationErrors[
+                                    `questions.${ind}.questions`
+                                  ] && (
+                                    <p className="text-red-500 text-start">
+                                      {
+                                        validationErrors[
+                                          `questions.${ind}.questions`
+                                        ]
+                                      }
+                                    </p>
+                                  )}
+                              </div>
+                            );
+                          }
+                        )}
+
+                        <Button
+                          className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
+                          variant={"ghost"}
+                          onClick={addquestionBox}
+                          type="button"
+                        >
+                          <CirclePlus color="black" /> Add more{" "}
+                        </Button>
+                      </div>
+
+                      <div className="flex items-center justify-center space-x-10 ">
+                        <label htmlFor="Enable Rating">Enable Rating</label>
+
+                        <Switch
+                          checked={dynamicData.ratingEnabled}
+                          onCheckedChange={(checked) =>
+                            handleDynamicChange("ratingEnabled", checked)
+                          }
+                        />
+                        <label htmlFor="Video Review">Video Review</label>
+
+                        <Switch
+                          checked={dynamicData.videoreviewEnabled}
+                          onCheckedChange={(checked) =>
+                            handleDynamicChange("videoreviewEnabled", checked)
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Button
+                          className="bg-blue-500 text-white p-2  w-full text-center"
+                          type="submit"
+                        >
+                          Create Space
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="thankyou" className="space-y-6 mt-6">
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 sapce-x-2">
+                          <label htmlFor="thankyou img ">
+                            {" "}
+                            Hide this img ?
+                          </label>
+                          <Checkbox
+                            checked={dynamicData.thankyouimg}
+                            className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
+                            onCheckedChange={(checked) =>
+                              handleDynamicChange("thankyouimg", checked)
                             }
-                          )}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="thankyoutitle">Thank You Title</label>
 
-                          <Button
-                            className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
-                            variant={"ghost"}
-                            onClick={addquestionBox}
-                            type="button"
+                        <Textarea
+                          value={dynamicData.thankYouTitle}
+                          placeholder={inputValues.thankYouTitle}
+                          onChange={(e) =>
+                            handleDynamicChange("thankYouTitle", e.target.value)
+                          }
+                        /> 
+                        {validationErrors["thankYouTitle"] && <p className="text-red-500">{validationErrors["thankYouTitle"]}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="thankyouMsg">Thank You Message</label>
+
+                        <Textarea
+                          value={dynamicData.thankYouMessage}
+                          placeholder={inputValues.thankYouMessage}
+                          onChange={(e) =>
+                            handleDynamicChange(
+                              "thankYouMessage",
+                              e.target.value
+                            )
+                          }
+                        /> 
+                        {validationErrors["thankYouMessage"] && <p className="text-red-500">{validationErrors["thankYouMessage"]}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="redirecturl">
+                          {" "}
+                          Redirect URL (Optional)
+                        </label>
+                        <Input
+                          placeholder={inputValues.redirectUrl}
+                          onChange={(e) =>
+                            handleDynamicChange("redirectUrl", e.target.value)
+                          }
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="settings" className="space-y-6 mt-6">
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      {dynamicData.videoreviewEnabled === true ? (
+                        <div className="space-y-2">
+                          <label htmlFor="maximum video">
+                            {" "}
+                            Maximum Video duration
+                          </label>
+                          <Select
+                            onValueChange={(value) =>
+                              handleDynamicChange("videotime", value)
+                            }
+                            defaultValue={dynamicData.videotime}
                           >
-                            <CirclePlus color="black" /> Add more{" "}
-                          </Button>
+                            <SelectTrigger className="p-3 ">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className=" ">
+                              <SelectItem value="30">30 sec</SelectItem>
+                              <SelectItem value="45">45 sec</SelectItem>
+                              <SelectItem value="90">90 sec</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-
-                        <div className="flex items-center justify-center space-x-10 ">
-                          <FormField
-                            control={control}
-                            name="ratingEnabled"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Enable Rating</FormLabel>
-                                <FormControl>
-                                  <Switch
-                                    checked={field.value}
-                                    onCheckedChange={(checked) =>
-                                      handleDynamicChange(
-                                        "ratingEnabled",
-                                        checked,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.ratingEnabled?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={control}
-                            name="videoreviewEnabled"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Video Review</FormLabel>
-                                <FormControl>
-                                  <Switch
-                                    checked={field.value}
-                                    onCheckedChange={(checked) =>
-                                      handleDynamicChange(
-                                        "videoreviewEnabled",
-                                        checked,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.videoreviewEnabled?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Button
-                            className="bg-blue-500 text-white p-2  w-full text-center"
-                            type="submit"
-                          >
-                            Create Space
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="thankyou" className="space-y-6 mt-6">
-                    <Card>
-                      <CardContent className="pt-6 space-y-6">
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="thankyouimg"
-                            render={({ field }) => (
-                              <FormItem>
-                                <div className="flex items-center gap-2 sapce-x-2">
-                                  <FormLabel> Hide this img ?</FormLabel>
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value}
-                                      className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
-                                      onCheckedChange={(checked) =>
-                                        handleDynamicChange(
-                                          "thankyouimg",
-                                          checked,
-                                          field.onChange
-                                        )
-                                      }
-                                    />
-                                  </FormControl>
-                                </div>
-                                <FormMessage>
-                                  {errors.thankyouimg?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="thankYouTitle"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Thank You Title</FormLabel>
-                                <FormControl>
-                                  <Textarea
-                                    {...field}
-                                    // value={dynamicData.thankYouTitle}
-                                    placeholder={dynamicData.thankYouTitle}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "thankYouTitle",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.thankYouTitle?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="thankYouMessage"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Thank You Message</FormLabel>
-                                <FormControl>
-                                  <Textarea
-                                    {...field}
-                                    // value={dynamicData.thankYouMessage}
-                                    placeholder={dynamicData.thankYouMessage}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "thankYouMessage",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.thankYouMessage?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="redirectUrl"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel> Redirect URL (Optional)</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    value={dynamicData.redirectUrl}
-                                    placeholder={dynamicData.redirectUrl}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "redirectUrl",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.redirectUrl?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                  <TabsContent value="settings" className="space-y-6 mt-6">
-                    <Card>
-                      <CardContent className="pt-6 space-y-6">
-                        {dynamicData.videoreviewEnabled === true ? (
-                          <div className="space-y-2">
-                            <FormField
-                              control={control}
-                              name="videotime"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel> Maximum Video duration</FormLabel>
-                                  <FormControl>
-                                    <Select
-                                      onValueChange={(value) =>
-                                        handleDynamicChange(
-                                          "videotime",
-                                          value,
-                                          field.onChange
-                                        )
-                                      }
-                                      defaultValue={dynamicData.videotime}
-                                    >
-                                      <SelectTrigger className="p-3 ">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent className=" ">
-                                        <SelectItem value="30">
-                                          30 sec
-                                        </SelectItem>
-                                        <SelectItem value="45">
-                                          45 sec
-                                        </SelectItem>
-                                        <SelectItem value="90">
-                                          90 sec
-                                        </SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </FormControl>
-                                  <FormMessage>
-                                    {errors.redirectUrl?.message}
-                                  </FormMessage>
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        ) : null}
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="theme"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Review Form Theme</FormLabel>
-                                <FormControl>
-                                  <Select
-                                    onValueChange={(value) => {
-                                      handleDynamicChange(
-                                        "theme",
-                                        value,
-                                        field.onChange
-                                      );
-                                    }}
-                                    defaultValue={dynamicData.theme}
-                                  >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select a theme" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="light">
-                                        Light
-                                      </SelectItem>
-                                      <SelectItem value="dark">Dark</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.theme?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="textbuttonText"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Review Submit Button Text</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    // value={dynamicData.textbuttonText}
-                                    placeholder={dynamicData.textbuttonText}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "textbuttonText",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.textbuttonText?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="videoButtonText"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Review Video button text</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    // value={dynamicData.videoButtonText}
-                                    placeholder={dynamicData.videoButtonText}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "videoButtonText",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.videoButtonText?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <FormField
-                            control={control}
-                            name="questionlabel"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel> Question Label</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    // value={dynamicData.questionlabel}
-                                    placeholder={dynamicData.questionlabel}
-                                    onChange={(e) =>
-                                      handleDynamicChange(
-                                        "questionlabel",
-                                        e.target.value,
-                                        field.onChange
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage>
-                                  {errors.questionlabel?.message}
-                                </FormMessage>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </form>
-              </Form>
+                      ) : null}
+                      <div className="space-y-2">
+                        <label htmlFor="review">Review Form Theme</label>
+                        <Select
+                          onValueChange={(value) => {
+                            handleDynamicChange("theme", value);
+                          }}
+                          defaultValue={dynamicData.theme}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a theme" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="review form text">
+                          Review Submit Button Text
+                        </label>
+                        <Input
+                          value={dynamicData.textbuttonText}
+                          placeholder={inputValues.textbuttonText}
+                          onChange={(e) =>
+                            handleDynamicChange(
+                              "textbuttonText",
+                              e.target.value
+                            )
+                          }
+                        /> 
+                         {validationErrors["textbuttonText"] && <p className="text-red-500">{validationErrors["textbuttonText"]}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="videoButtonText">
+                          Review Video button text
+                        </label>
+                        <Input
+                          value={dynamicData.videoButtonText}
+                          placeholder={inputValues.videoButtonText}
+                          onChange={(e) =>
+                            handleDynamicChange(
+                              "videoButtonText",
+                              e.target.value
+                            )
+                          }
+                        />
+                         {validationErrors["textbuttonText"] && <p className="text-red-500">{validationErrors["textbuttonText"]}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="questionlabel"> Question Label</label>
+                        <Input
+                          value={dynamicData.questionlabel}
+                          placeholder={inputValues.questionlabel}
+                          onChange={(e) =>
+                            handleDynamicChange("questionlabel", e.target.value)
+                          }
+                        />
+                         {validationErrors["questionlabel"] && <p className="text-red-500">{validationErrors["questionlabel"]}</p>}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </form>
             </Tabs>
           </div>
         </div>
