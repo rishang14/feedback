@@ -1,7 +1,7 @@
-import  mongoose, { Schema, model } from  "mongoose";  
+import  mongoose, { Schema, Types, model } from  "mongoose";  
 
 interface UserDocument{
-    _id: string;
+    _id: Types.ObjectId;
     email: string;
     password: string;
     username: string;

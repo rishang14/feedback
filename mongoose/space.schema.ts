@@ -17,7 +17,7 @@ interface SpacecDocument{
       },
       spacename: {
         type: String,
-        required: [true, "Name is required"]
+        required: [true, "spacename is required"]
       },
       reviewFormLink: {
         type: String,
@@ -28,7 +28,7 @@ interface SpacecDocument{
     }
   ); 
   
-  const  Space  =  mongoose.models?.User  ||  model<SpacecDocument>('Space', SpaceSchema);
+  const  Space  =  mongoose.models?.Space  ||  model<SpacecDocument>('Space', SpaceSchema);
   
   export  default  Space;
 
