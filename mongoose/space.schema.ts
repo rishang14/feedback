@@ -1,0 +1,37 @@
+
+import  mongoose, { Schema, model ,Types } from  "mongoose";  
+
+interface SpacecDocument{
+    _id: Types.ObjectId; 
+    userId: Types.ObjectId 
+    spacename:string, 
+    reviewFormLink: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }
+ 
+  const SpaceSchema = new Schema<SpacecDocument>({
+      userId: {
+        type: Schema.Types.ObjectId, 
+        ref:"User"
+      },
+      spacename: {
+        type: String,
+        required: [true, "Name is required"]
+      },
+      reviewFormLink: {
+        type: String,
+      },
+    },
+    {
+      timestamps: true,
+    }
+  ); 
+  
+  const  Space  =  mongoose.models?.User  ||  model<SpacecDocument>('Space', SpaceSchema);
+  
+  export  default  Space;
+
+
+
+

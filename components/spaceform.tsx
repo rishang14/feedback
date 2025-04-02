@@ -354,49 +354,49 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                               <div
                                 className=" flex gap-2 flex-col items-center w-full "
                                 key={item.id}
-                              > 
-                             <div className="flex gap-2 items-center w-full">
-                                <Input
-                                  className=""
-                                  value={item.questions}
-                                  placeholder={"write ur questions here"}
-                                  onChange={(e) => {
-                                    setDynamicData((prev) => {
-                                      const updatedQuestions = [
-                                        ...prev.questions,
-                                      ];
-                                      updatedQuestions[ind] = {
-                                        ...updatedQuestions[ind],
-                                        questions: e.target.value,
-                                      };
-                                      return {
-                                        ...prev,
-                                        questions: updatedQuestions,
-                                      };
-                                    });
-                                  }}
-                                />
+                              >
+                                <div className="flex gap-2 items-center w-full">
+                                  <Input
+                                    className=""
+                                    value={item.questions}
+                                    placeholder={"write ur questions here"}
+                                    onChange={(e) => {
+                                      setDynamicData((prev) => {
+                                        const updatedQuestions = [
+                                          ...prev.questions,
+                                        ];
+                                        updatedQuestions[ind] = {
+                                          ...updatedQuestions[ind],
+                                          questions: e.target.value,
+                                        };
+                                        return {
+                                          ...prev,
+                                          questions: updatedQuestions,
+                                        };
+                                      });
+                                    }}
+                                  />
 
-                                <Button
-                                  className="text-lg cursor-pointer bg-white hover:text-gray-400"
-                                  variant="link"
-                                  type="button"
-                                  onClick={() => deletQuestionBox(item.id)}
-                                >
-                                  <Trash2 color="black" />
-                                </Button> 
+                                  <Button
+                                    className="text-lg cursor-pointer bg-white hover:text-gray-400"
+                                    variant="link"
+                                    type="button"
+                                    onClick={() => deletQuestionBox(item.id)}
+                                  >
+                                    <Trash2 color="black" />
+                                  </Button>
                                 </div>
-                                  {validationErrors[
-                                    `questions.${ind}.questions`
-                                  ] && (
-                                    <p className="text-red-500 text-start">
-                                      {
-                                        validationErrors[
-                                          `questions.${ind}.questions`
-                                        ]
-                                      }
-                                    </p>
-                                  )}
+                                {validationErrors[
+                                  `questions.${ind}.questions`
+                                ] && (
+                                  <p className="text-red-500 text-start">
+                                    {
+                                      validationErrors[
+                                        `questions.${ind}.questions`
+                                      ]
+                                    }
+                                  </p>
+                                )}
                               </div>
                             );
                           }
@@ -469,8 +469,12 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                           onChange={(e) =>
                             handleDynamicChange("thankYouTitle", e.target.value)
                           }
-                        /> 
-                        {validationErrors["thankYouTitle"] && <p className="text-red-500">{validationErrors["thankYouTitle"]}</p>}
+                        />
+                        {validationErrors["thankYouTitle"] && (
+                          <p className="text-red-500">
+                            {validationErrors["thankYouTitle"]}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="thankyouMsg">Thank You Message</label>
@@ -484,8 +488,12 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                               e.target.value
                             )
                           }
-                        /> 
-                        {validationErrors["thankYouMessage"] && <p className="text-red-500">{validationErrors["thankYouMessage"]}</p>}
+                        />
+                        {validationErrors["thankYouMessage"] && (
+                          <p className="text-red-500">
+                            {validationErrors["thankYouMessage"]}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="redirecturl">
@@ -558,8 +566,12 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                               e.target.value
                             )
                           }
-                        /> 
-                         {validationErrors["textbuttonText"] && <p className="text-red-500">{validationErrors["textbuttonText"]}</p>}
+                        />
+                        {validationErrors["textbuttonText"] && (
+                          <p className="text-red-500">
+                            {validationErrors["textbuttonText"]}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="videoButtonText">
@@ -575,7 +587,11 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                             )
                           }
                         />
-                         {validationErrors["textbuttonText"] && <p className="text-red-500">{validationErrors["textbuttonText"]}</p>}
+                        {validationErrors["textbuttonText"] && (
+                          <p className="text-red-500">
+                            {validationErrors["textbuttonText"]}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="questionlabel"> Question Label</label>
@@ -586,7 +602,11 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                             handleDynamicChange("questionlabel", e.target.value)
                           }
                         />
-                         {validationErrors["questionlabel"] && <p className="text-red-500">{validationErrors["questionlabel"]}</p>}
+                        {validationErrors["questionlabel"] && (
+                          <p className="text-red-500">
+                            {validationErrors["questionlabel"]}
+                          </p>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
