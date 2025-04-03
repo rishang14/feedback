@@ -29,8 +29,6 @@ export default auth(async function middleware(req: NextRequest) {
   }
  
   return NextResponse.next()
-
-    console.log(session,"session")
   }) 
 
 

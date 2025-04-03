@@ -39,6 +39,9 @@ import {
 } from "./ui/form";
 import { FormProvider } from "react-hook-form";
 import { redirect } from "next/dist/server/api-utils";
+import axios from "axios";
+import { json } from "stream/consumers";
+import { useSession } from "next-auth/react";
 type Question = {
   id: string;
   questions: string;
@@ -97,7 +100,9 @@ const inputValues = {
 
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
-  const [activeTab, setactiveTab] = useState("basic");
+  const [activeTab, setactiveTab] = useState("basic"); 
+   const {data} =useSession(); 
+   console.log(data)
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
@@ -122,16 +127,21 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
     setDynamicData((prev) => ({ ...prev, [fieldName]: value }));
   };
 
-  const spaceFormsubmit = (e: React.FormEvent) => {
+  const spaceFormsubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(e, "form is triggered");
     const errors = validateErrors();
     if (errors) {
       setValidationErrors(errors);
       return;
     }
     try {
-      console.log(dynamicData, "all form data is here ");
+      const response = await axios.post(
+        "/api/createspace",
+        JSON.stringify(dynamicData),
+        { withCredentials: true }
+      );
+
+      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -197,7 +207,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                             ? dynamicData.questionlabel
                             : inputValues.questionlabel}
                         </h3>
-                        {dynamicData.questions[0].questions != ""
+                        {dynamicData?.questions[0]?.questions != ""
                           ? dynamicData.questions.map((items: Question) => (
                               <li className="text-gray-500" key={items.id}>
                                 {items.questions}

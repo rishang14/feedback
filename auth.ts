@@ -17,7 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token ,user}) { 
           if(token){ 
-            console.log(token,"token")  
+          
             //@ts-ignore
             session.user.name=token.user.username;  
             // @ts-ignore
