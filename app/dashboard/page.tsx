@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 const Page = () => {
   const { status, data } = useSession();
+  const [spaces, setSpaces] = useState();
   const router = useRouter();
   //@ts-ignore
   const Uerrid = data?.user?.userId;
@@ -30,19 +31,18 @@ const Page = () => {
   }, [status, router]);
 
   if (status === "loading") return <Loading />;
+  const getspace = async () => {
+    try {
+      const res = await axios.get("/api/getspace", {
+        withCredentials: true,
+      });
+      // setSpaces(res.data.spaces);
+    } catch (err) {
+      console.error("Error fetching spaces:", err);
+    }
+  };  
 
-  // useEffect(()=>{
-  // getspace()
-  // },[status,data])
-
-  async function getspace() {
-    const getspaces = await axios.get("/api/getspace", {
-      withCredentials: true,
-    });
-    console.log(getspaces);
-  }
-
-getspace()
+  getspace();
 
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">

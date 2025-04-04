@@ -19,9 +19,11 @@ export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const email = session?.user?.email;
-    const user = await User.findOne({ email });
+    const userId = await User.findOne({ email }).select("_id"); 
+    console.log(userId,"id")
 
-    const spaces = await Space.find({ userId: user._id });
+    const spaces = await Space.find({ userId }).select("_id spacename"); 
+    console.log(spaces,"spaces")
 
     if (spaces) {
       return NextResponse.json(
