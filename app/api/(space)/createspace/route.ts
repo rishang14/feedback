@@ -6,19 +6,19 @@ import Space from "@/mongoose/space.schema";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 
 import { spaceFormSchema } from "@/app/types/schema";
+import User from "@/mongoose/user.schema";
 
 const { auth } = NextAuth(authConfig);
 
 export async function POST(req: NextRequest) {
-  const session = await auth(); 
-
+  const session = await auth();
 
   if (!session?.user?.email)
     return NextResponse.json(
       { error: "You are not allowed to access this api route" },
-      { status: 401 }
+      { status: 400 }
     );
- 
+
   await connectDB();
   try {
     const body = await req.json();
@@ -32,18 +32,53 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
+    const user = await User.findOne({ email: session?.user.email });
+    console.log(user, "user");
 
-    console.log(validatedData.data, "data received");
+    const createSpace = await Space.create({
+      userId: user._id,
+      spacename: validatedData.data.spaceName,
+      reviewFormLink: validatedData.data.spaceName,
+    });
 
+    console.log(createSpace, "space created");
+    if (!createSpace) {
+      return NextResponse.json(
+        { error: "Something went wrong with server" },
+        { status: 500 }
+      );
+    }
+
+    const spaceQuestion = await SpaceQuestion.create({
+      spaceId: createSpace._id,
+      header: validatedData.data.header,
+      customDescription: validatedData.data.customDescription,
+      textbuttonText: validatedData.data.textbuttonText,
+      videoButtonText: validatedData.data.videoButtonText,
+      questions: validatedData.data.questions,
+      questionlabel: validatedData.data.questionlabel,
+      thankYouTitle: validatedData.data.thankYouTitle,
+      thankYouMessage: validatedData.data.thankYouMessage,
+      theme: validatedData.data.theme,
+      thankyouimg: validatedData.data.thankyouimg,
+      videoreviewEnabled: validatedData.data.videoreviewEnabled,
+      videotime: validatedData.data.videotime,
+      ratingEnabled: validatedData.data.ratingEnabled,
+      redirectUrl: validatedData.data.redirectUrl,
+    });
+
+    if (spaceQuestion) {
+      return NextResponse.json(
+        { message: "Your Space is created " },
+        { status: 200 }
+      );
+    }
+
+  } catch (error) { 
+
+    console.log(error)
     return NextResponse.json(
-      {
-        message: "Received the data ",
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Interval Server while creating space" },
+      { error: "Interval Server while creating space", },
       { status: 500 }
     );
   }

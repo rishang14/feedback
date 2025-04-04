@@ -17,15 +17,32 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 const Page = () => {
+  const { status, data } = useSession();
   const router = useRouter();
-  const { status } = useSession();
+  //@ts-ignore
+  const Uerrid = data?.user?.userId;
+  console.log(data);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
 
   if (status === "loading") return <Loading />;
+
+  // useEffect(()=>{
+  // getspace()
+  // },[status,data])
+
+  async function getspace() {
+    const getspaces = await axios.get("/api/getspace", {
+      withCredentials: true,
+    });
+    console.log(getspaces);
+  }
+
+getspace()
 
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">
@@ -70,7 +87,7 @@ const Emptyspace = () => {
           {" "}
           Create your first space to start collecting review .
         </p>
-        <CreateSpaceButton/>
+        <CreateSpaceButton />
       </div>
     </div>
   );
@@ -95,8 +112,8 @@ const CreateSpaceButton = () => {
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center"> 
-              Customize Your Testimonial Form
+          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center">
+            Customize Your Testimonial Form
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-lg text-center">
             Design the perfect testimonial collection experience

@@ -23,7 +23,6 @@ interface SpaceQuestionDocument {
   videotime: string;
   ratingEnabled: boolean;
   redirectUrl: string; 
-  tags:Array<string>
 }
 
 const QuestionSchema = new Schema({
@@ -65,7 +64,7 @@ const SpaceQuestionSchema = new Schema<SpaceQuestionDocument>({
   thankYouMessage: {
     type: String,
     default: "Your testimonial has been submitted successfully.",
-  },tags:[{ type: String }],
+  },
   theme: {
     type: String,
     default: "light",
@@ -88,7 +87,6 @@ const SpaceQuestionSchema = new Schema<SpaceQuestionDocument>({
   },
   redirectUrl: {
     type: String,
-    required: false,
   },
 });
 

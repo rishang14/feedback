@@ -29,22 +29,12 @@ import {
 } from "lucide-react";
 import { boolean } from "zod";
 import { spaceFormSchema } from "@/app/types/schema";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
-import { FormProvider } from "react-hook-form";
-import { redirect } from "next/dist/server/api-utils";
+
 import axios from "axios";
-import { json } from "stream/consumers";
 import { useSession } from "next-auth/react";
 type Question = {
   id: string;
-  questions: string;
+  question: string;
 };
 
 type spaceformtype = z.infer<typeof spaceFormSchema>;
@@ -55,7 +45,7 @@ const defaultSpaceValues = {
   customDescription: "",
   textbuttonText: "Submit Review",
   videoButtonText: "Start Recording",
-  questions: [{ id: "1", questions: "" }],
+  questions: [{ id: "1", question: "" }],
   questionlabel: "Questions",
   thankYouTitle: "Thank You",
   thankYouMessage: "",
@@ -76,15 +66,15 @@ const inputValues = {
   questions: [
     {
       id: "1",
-      questions: "whats your thoughts on our product ? ",
+      question: "whats your thoughts on our product ? ",
     },
     {
       id: "2",
-      questions: "Pls Share ur expreience",
+      question: "Pls Share ur expreience",
     },
     {
       id: "3",
-      questions: "Anything you want us to improve",
+      question: "Anything you want us to improve",
     },
   ],
   questionlabel: "Questions",
@@ -101,8 +91,6 @@ const inputValues = {
 const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
   const [activeTab, setactiveTab] = useState("basic"); 
-   const {data} =useSession(); 
-   console.log(data)
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
@@ -141,7 +129,6 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
         { withCredentials: true }
       );
 
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -154,7 +141,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
       ...item,
       questions: [
         ...item.questions,
-        { id: String(item.questions.length + 1), questions: "" },
+        { id: String(item.questions.length + 1), question: "" },
       ],
     }));
   };
@@ -207,15 +194,15 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                             ? dynamicData.questionlabel
                             : inputValues.questionlabel}
                         </h3>
-                        {dynamicData?.questions[0]?.questions != ""
+                        {dynamicData?.questions[0]?.question != ""
                           ? dynamicData.questions.map((items: Question) => (
                               <li className="text-gray-500" key={items.id}>
-                                {items.questions}
+                                {items.question}
                               </li>
                             ))
                           : inputValues.questions.map((items: Question) => (
                               <li className="text-gray-500" key={items.id}>
-                                {items.questions}
+                                {items.question}
                               </li>
                             ))}
                       </div>
@@ -368,7 +355,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                 <div className="flex gap-2 items-center w-full">
                                   <Input
                                     className=""
-                                    value={item.questions}
+                                    value={item.question}
                                     placeholder={"write ur questions here"}
                                     onChange={(e) => {
                                       setDynamicData((prev) => {
@@ -377,7 +364,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
                                         ];
                                         updatedQuestions[ind] = {
                                           ...updatedQuestions[ind],
-                                          questions: e.target.value,
+                                          question: e.target.value,
                                         };
                                         return {
                                           ...prev,

@@ -62,7 +62,7 @@ export const spaceFormSchema = z.object({
   questions: z.array(
     z.object({
       id: z.string(),
-      questions: z
+      question: z
         .string({
           required_error: "Question is required",
           invalid_type_error: "Correct the format",
