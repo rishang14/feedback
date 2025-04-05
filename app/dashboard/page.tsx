@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
 import {
@@ -14,13 +13,15 @@ import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useGetSpace } from "@/store/getSpace";
 import { toast } from "sonner";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 const Page = () => {
   const { status, data } = useSession();
-  const [spaces, setSpaces] = useState();
+  //@ts-ignore
+  const { getspace } = useGetSpace();
   const router = useRouter();
   //@ts-ignore
   const Uerrid = data?.user?.userId;
@@ -29,20 +30,11 @@ const Page = () => {
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
+  useEffect(() => {
+    getspace();
+  }, []);
 
   if (status === "loading") return <Loading />;
-  const getspace = async () => {
-    try {
-      const res = await axios.get("/api/getspace", {
-        withCredentials: true,
-      });
-      // setSpaces(res.data.spaces);
-    } catch (err) {
-      console.error("Error fetching spaces:", err);
-    }
-  };  
-
-  getspace();
 
   return (
     <div className="w-full mt-20 max-w-[1080] flex flex-col items-center p-5  md:mx-auto ">

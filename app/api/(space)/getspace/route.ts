@@ -15,15 +15,15 @@ export async function GET(req: NextRequest) {
       { error: "You are not allowed to access this api route" },
       { status: 400 }
     );
-  }
+  } 
   await connectDB();
   try {
     const email = session?.user?.email;
-    const userId = await User.findOne({ email }).select("_id"); 
-    console.log(userId,"id")
+    const userId = await User.findOne({ email }).select("_id");
+    // console.log(userId,"id")
 
-    const spaces = await Space.find({ userId }).select("_id spacename"); 
-    console.log(spaces,"spaces")
+    const spaces = await Space.find({ userId }).select("_id spacename");
+    // console.log(spaces,"spaces")
 
     if (spaces) {
       return NextResponse.json(

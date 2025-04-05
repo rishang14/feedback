@@ -4,7 +4,6 @@ import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import Space from "@/mongoose/space.schema";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
-
 import { spaceFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
 
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const user = await User.findOne({ email: session?.user.email });
-    console.log(user, "user");
+    // console.log(user, "user");
 
     const createSpace = await Space.create({
       userId: user._id,
@@ -41,7 +40,8 @@ export async function POST(req: NextRequest) {
       reviewFormLink: validatedData.data.spaceName,
     });
 
-    console.log(createSpace, "space created");
+    // console.log(createSpace, "space created");
+
     if (!createSpace) {
       return NextResponse.json(
         { error: "Something went wrong with server" },
@@ -73,12 +73,10 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
-
-  } catch (error) { 
-
-    console.log(error)
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(
-      { error: "Interval Server while creating space", },
+      { error: "Interval Server while creating space" },
       { status: 500 }
     );
   }
