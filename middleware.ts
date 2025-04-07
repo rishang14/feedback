@@ -6,7 +6,7 @@ import { NextRequest ,NextResponse} from "next/server";
 
 const { auth } = NextAuth(authConfig);  
 
-const protectedRoutes = ['/dashboard','/dashboard/:path*','dashborad/space/:path*']
+const protectedRoutes = ['/dashboard','/dashboard/:path*','dashboard/space/:path*']
 const publicRoutes = ['/', '/signin,signup','/']
 
 export default auth(async function middleware(req: NextRequest) {

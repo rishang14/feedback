@@ -17,18 +17,19 @@ import { useRouter } from "next/navigation";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
+import { useSession } from "next-auth/react";
 
 export default function page() {
   const [activeSection, setActiveSection] = useState("all");
   const router = useRouter();
-
+  const {status} =useSession()
   
-  // if (session.status === "loading") return <Loading />;
-  // if (session.status !== "authenticated") {
-  //   router.push("/auth/signin");
-  //   toast("Pls sign In to access this routes"); 
-  //   return
-  // }
+  if (status === "loading") return <Loading />;
+  if (status !== "authenticated") {
+    router.push("/auth/signin");
+    toast("Pls sign In to access this routes"); 
+    return
+  }
  
   const sidebarButton = (
     icon: React.ReactNode,

@@ -23,9 +23,7 @@ const Page = () => {
   //@ts-ignore
   const { getspace } = useGetSpace();
   const router = useRouter();
-  //@ts-ignore
-  const Uerrid = data?.user?.userId;
-  console.log(data);
+
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");

@@ -35,8 +35,8 @@ export const DashboardCardWithMenu = () => {
   const { spaces } = useGetSpace(); 
   console.log(spaces,"")
   const router = useRouter();
-  const handleClick = (id: any) => {
-    router.push(`/dashboard/space/${id}`);
+  const handleClick = (spaces: any) => {
+    router.push(`/dashboard/space/${spaces}`);
   };
   return (
     <Card className="bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm">
@@ -45,7 +45,7 @@ export const DashboardCardWithMenu = () => {
           {spaces.map((item: any ) => (
             <p
               className="text-white text-xl font-medium "
-              onClick={() => handleClick(123)} 
+              onClick={() => handleClick(item._id)} 
               key={item._id}
             >
               {" "}
