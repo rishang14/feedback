@@ -6,7 +6,6 @@ export const useGetSpace = create((set) => ({
   getspace: async () => {
     try {
       const res = await axios.get("/api/getspace", { withCredentials: true });
-      console.log(res);
       const data = res.data.spaces;
       set({ spaces: data });
     } catch (error) {

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
-import { ObjectId } from "mongodb";
 import connectDB from "@/lib/db.connect";
 import Space from "@/mongoose/space.schema";
 import User from "@/mongoose/user.schema";

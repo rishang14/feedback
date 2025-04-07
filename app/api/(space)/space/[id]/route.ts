@@ -1,0 +1,41 @@
+import { NextRequest, NextResponse } from "next/server";
+import authConfig from "@/lib/auth.config";
+import NextAuth from "next-auth";
+import connectDB from "@/lib/db.connect";
+import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
+import { string } from "zod";
+
+const { auth } = NextAuth(authConfig);
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return NextResponse.json(
+      { error: "You are not allowed to access this api route" },
+      { status: 400 }
+    );
+  }
+
+  await connectDB();
+  try {
+    const { id } = await params;
+    const Questions = await SpaceQuestion.find({ spaceId: id }).select(
+      "-spaceId"
+    );
+
+    if (Questions) {
+      return NextResponse.json(
+        { Questions },
+        { status: 200 }
+      );
+    } 
+
+    return NextResponse.json({message:"space id is Invalid"})
+  } catch (error) {
+    console.log(error); 
+    return NextResponse.json({error:"Internal Server Error"})
+  }
+}
