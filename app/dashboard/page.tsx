@@ -1,30 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
-import {
-  DialogContent,
-  Dialog,
-  DialogTrigger,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import { useGetSpace } from "@/store/getSpace";
-import { toast } from "sonner";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
-import axios from "axios";
+import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 const Page = () => {
   const { status, data } = useSession();
   //@ts-ignore
   const { getspace } = useGetSpace();
   const router = useRouter();
-
-
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
@@ -53,7 +40,7 @@ const Page = () => {
           <h1 className=" md:text-4xl text-2xl font-bold   text-white ">
             Active Spaces
           </h1>
-          <CreateSpaceButton />
+          <OpenSpaceFormButton edit={false} />
         </div>
         {/* space body section  */}
         <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center justify-start  space-x-10 gap-y-6 flex-wrap  bg-gray-800 rounded-lg border   border-gray-700 shadow-sm">
@@ -77,40 +64,8 @@ const Emptyspace = () => {
           {" "}
           Create your first space to start collecting review .
         </p>
-        <CreateSpaceButton />
+        <OpenSpaceFormButton edit={false} />
       </div>
     </div>
-  );
-};
-
-const CreateSpaceButton = () => {
-  const [open, setOpen] = useState(false);
-
-  const SpaceForm = dynamic(() => import("../../components/spaceform"), {
-    ssr: false,
-  });
-  return (
-    <Dialog open={open} onOpenChange={setOpen} modal={true}>
-      {/* Button to open modal */}
-      <DialogTrigger asChild>
-        <Button className="text-white bg-blue-600 text-lg cursor-pointer">
-          + Create a new Space
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
-        onInteractOutside={(e) => e.preventDefault()}
-      >
-        <DialogHeader>
-          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center">
-            Customize Your Testimonial Form
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-lg text-center">
-            Design the perfect testimonial collection experience.
-          </DialogDescription>
-        </DialogHeader>
-        <SpaceForm closeModal={() => setOpen(false)}  edit={false} />
-      </DialogContent>
-    </Dialog>
   );
 };

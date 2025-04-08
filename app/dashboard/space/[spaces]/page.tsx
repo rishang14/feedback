@@ -9,17 +9,20 @@ import {
   Archive,
   AlertTriangle,
   Boxes,
+  Lock,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
+import { useSession } from "next-auth/react"; 
+import { useParams } from "next/navigation"; 
 import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
+import { useSpaceDetails } from "@/store/spaceDetails";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
-import { useSession } from "next-auth/react";
-import { useSpaceDetails } from "@/store/spaceDetails";
+import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 
-export default function Page() {
+export default function Page() { 
   const [activeSection, setActiveSection] = useState("all");
   const { spaces } = useParams();
   // @ts-ignore
@@ -77,7 +80,7 @@ export default function Page() {
               <span className="text-white">Text credits</span>
               <span className="text-muted-foreground">10</span>
             </div>
-            <Button className="text-white">Edit space</Button>
+            <OpenSpaceFormButton edit={true} />
           </div>
         </div>
       </header>

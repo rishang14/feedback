@@ -153,7 +153,7 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
             {activeTab !== "thankyou" ? (
               <Card
                 className={`border-2 ${
-                  dynamicData.theme === "dark" ? "bg-zinc-900" : "bg-white"
+                  dynamicData?.theme === "dark" ? "bg-zinc-900" : "bg-white"
                 } mt-2 min-w-[390px] p-4`}
               >
                 <CardContent className="pt-6">
@@ -165,21 +165,21 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
                     </div>
                     <div className="space-y-2 p-2">
                       <h1 className="text-2xl text-center font-bold">
-                        {dynamicData.header
+                        {dynamicData?.header
                           ? dynamicData.header
                           : inputValues.header}
                       </h1>
                       <p className="text-muted-foreground text-center">
-                        {dynamicData.customDescription
-                          ? dynamicData.customDescription
-                          : inputValues.customDescription}
+                        {dynamicData?.customDescription
+                          ? dynamicData?.customDescription
+                          : inputValues?.customDescription}
                       </p>
                     </div>
                     <div className="space-y-4">
                       <div className="space-y-2 flex flex-col gap-2 ">
                         <h3 className="p-2 text-lg  text-black ">
                           {" "}
-                          {dynamicData.questionlabel
+                          {dynamicData?.questionlabel
                             ? dynamicData.questionlabel
                             : inputValues.questionlabel}
                         </h3>
@@ -197,12 +197,12 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
                       </div>
 
                       <Button className={`w-full   text-black bg-gray-400  `}>
-                        {dynamicData.textbuttonText
+                        {dynamicData?.textbuttonText
                           ? dynamicData.textbuttonText
                           : inputValues.textbuttonText}
                       </Button>
                       <Button className={`w-full   text-black bg-blue-500  `}>
-                        {dynamicData.videoButtonText
+                        {dynamicData?.videoButtonText
                           ? dynamicData.videoButtonText
                           : inputValues.videoButtonText}
                       </Button>
@@ -214,7 +214,7 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
               <Card className="border-2 border-dashed">
                 <CardContent className="pt-6">
                   <div className="space-y-4">
-                    {dynamicData.thankyouimg === false ? (
+                    {dynamicData?.thankyouimg === false ? (
                       <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
                         <Image
                           src={
