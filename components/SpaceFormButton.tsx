@@ -11,8 +11,8 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 
-export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => { 
-  console.log(edit ,"editvalue")
+export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => {
+  console.log(edit, "editvalue");
   const [open, setOpen] = useState(false);
 
   const SpaceForm = dynamic(() => import("./spaceform"), {
@@ -23,7 +23,7 @@ export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => {
       {/* Button to open modal */}
       <DialogTrigger asChild>
         <Button className="text-white bg-blue-600 text-lg cursor-pointer">
-          + Create a new Space
+          {edit ? " Edit Space" : "+ Create a new Space"}
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -32,10 +32,10 @@ export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => {
       >
         <DialogHeader>
           <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center">
-            Customize Your Testimonial Form
+            {edit ? " Edit Your Review Form" : " Customize Your Review Form"}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-lg text-center">
-            Design the perfect testimonial collection experience.
+            Design the perfect Review collection experience.
           </DialogDescription>
         </DialogHeader>
         <SpaceForm closeModal={() => setOpen(false)} edit={edit} />
