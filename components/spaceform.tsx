@@ -3,35 +3,20 @@ import React, { useState } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSpaceDetails } from "@/store/spaceDetails";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Image from "next/image";
 import {
-  ShipWheel as ColorWheel,
   Layout,
   MessageSquare,
   Settings,
   ThumbsUp,
-  Trash2,
-  CirclePlus,
 } from "lucide-react";
 import { spaceFormSchema } from "@/app/types/schema";
 import axios from "axios";
 import BasicTab from "./BasicTab";
 import ThankyouTab from "./ThankYouTab";
 import SettingTab from "./SettingTab";
-// import { useSession } from "next-auth/react";
 type Question = {
   id: string;
   question: string;
@@ -43,7 +28,6 @@ type SpaceFormProps = {
   closeModal: () => void;
   edit: boolean;
 };
-
 const initialSpaceValues = {
   spaceName: "",
   header: "",
@@ -96,9 +80,7 @@ const inputValues = {
 const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
   // @ts-ignore
   const { questions } = useSpaceDetails();
-  console.log(edit);
-  console.log(questions, "space form");
-  let defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
+  const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
   const [activeTab, setactiveTab] = useState("basic");
   const [validationErrors, setValidationErrors] = useState<

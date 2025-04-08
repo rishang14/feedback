@@ -4,7 +4,6 @@ import localFont from 'next/font/local';
 import { Toaster } from "sonner";
 import "./globals.css";
 import Nav from "@/components/LandingPageComp/Nav";  
-import { SessionProvider } from "next-auth/react"
 import { Providers } from "./provider";
 
 const popppins = localFont({
