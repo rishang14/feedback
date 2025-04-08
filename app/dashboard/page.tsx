@@ -106,7 +106,7 @@ const CreateSpaceButton = () => {
             Customize Your Testimonial Form
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-lg text-center">
-            Design the perfect testimonial collection experience
+            Design the perfect testimonial collection experience.
           </DialogDescription>
         </DialogHeader>
         <SpaceForm closeModal={() => setOpen(false)}  edit={false} />
