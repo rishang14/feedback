@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useGetSpace } from "@/store/getSpace";
-import { useSpaceDetails } from "@/store/spaceDetails";
+// import { useSpaceDetails } from "@/store/spaceDetails";
 
 const Dashboardcard = () => {
   return (
@@ -35,11 +35,10 @@ export const DashboardCardWithMenu = () => {
   // @ts-ignore
   const { spaces } = useGetSpace();
   // @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails();
+  // const { getSpaceDetails } = useSpaceDetails();
   const router = useRouter();
   const handleClick = async (spaces: any) => {
     router.push(`/dashboard/space/${spaces}`);
-    await getSpaceDetails(spaces);
   };
   return (
     <Card className="bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm">

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSpaceDetails } from "@/store/spaceDetails";
 import {
   Select,
   SelectContent,
@@ -27,11 +26,12 @@ import {
   Trash2,
   CirclePlus,
 } from "lucide-react";
-import { boolean } from "zod";
 import { spaceFormSchema } from "@/app/types/schema";
-
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import BasicTab from "./BasicTab";
+import ThankyouTab from "./ThankYouTab";
+import SettingTab from "./SettingTab";
+// import { useSession } from "next-auth/react";
 type Question = {
   id: string;
   question: string;
@@ -39,7 +39,12 @@ type Question = {
 
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 
-const defaultSpaceValues = {
+type SpaceFormProps = {
+  closeModal: () => void;
+  edit: boolean;
+};
+
+const initialSpaceValues = {
   spaceName: "",
   header: "",
   customDescription: "",
@@ -78,7 +83,7 @@ const inputValues = {
     },
   ],
   questionlabel: "Questions",
-  thankYouTitle: "Thank You!",
+  thankYouTitle: " ThankYou!",
   thankYouMessage: "Your testimonial has been submitted successfully.",
   theme: "light",
   thankyouimg: false,
@@ -88,9 +93,14 @@ const inputValues = {
   redirectUrl: "",
 };
 
-const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
+const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
+  // @ts-ignore
+  const { questions } = useSpaceDetails();
+  console.log(edit);
+  console.log(questions, "space form");
+  let defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
-  const [activeTab, setactiveTab] = useState("basic"); 
+  const [activeTab, setactiveTab] = useState("basic");
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
@@ -112,7 +122,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const handleDynamicChange = (fieldName: keyof spaceformtype, value: any) => {
-    setDynamicData((prev) => ({ ...prev, [fieldName]: value }));
+    setDynamicData((prev: any) => ({ ...prev, [fieldName]: value }));
   };
 
   const spaceFormsubmit = async (e: React.FormEvent) => {
@@ -123,12 +133,9 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
       return;
     }
     try {
-      const response = await axios.post(
-        "/api/createspace",
-        JSON.stringify(dynamicData),
-        { withCredentials: true }
-      );
-
+      await axios.post("/api/createspace", JSON.stringify(dynamicData), {
+        withCredentials: true,
+      });
     } catch (e) {
       console.log(e);
     } finally {
@@ -137,7 +144,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const addquestionBox = () => {
-    setDynamicData((item) => ({
+    setDynamicData((item: any) => ({
       ...item,
       questions: [
         ...item.questions,
@@ -147,7 +154,7 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const deletQuestionBox = (id: string) => {
-    setDynamicData((prev) => ({
+    setDynamicData((prev: any) => ({
       ...prev,
       questions: prev.questions.filter((item: any) => item.id !== id),
     }));
@@ -287,327 +294,24 @@ const Spaceform = ({ closeModal }: { closeModal: () => void }) => {
               </TabsList>
               {/* form section */}
               <form onSubmit={spaceFormsubmit}>
-                <TabsContent value="basic" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      <div className="space-y-2">
-                        <label htmlFor="space Name">Space Name</label>
-                        <Input
-                          value={dynamicData.spaceName}
-                          placeholder="Enter Space Name"
-                          onChange={(e) =>
-                            handleDynamicChange("spaceName", e.target.value)
-                          }
-                        />
-                        {validationErrors["spaceName"] && (
-                          <p className="text-red-500">
-                            {validationErrors["spaceName"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="header"> Header Title</label>
-                        <Input
-                          value={dynamicData.header}
-                          placeholder="Review form Header Title"
-                          onChange={(e) => {
-                            handleDynamicChange("header", e.target.value);
-                          }}
-                        />
-                        {validationErrors["header"] && (
-                          <p className="text-red-500">
-                            {validationErrors["header"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="customDescription">
-                          {" "}
-                          Review Form Description
-                        </label>
-                        <Textarea
-                          value={dynamicData.customDescription}
-                          placeholder={inputValues.customDescription}
-                          onChange={(e) =>
-                            handleDynamicChange(
-                              "customDescription",
-                              e.target.value
-                            )
-                          }
-                        />
-                        {validationErrors["customDescription"] && (
-                          <p className="text-red-500">
-                            {validationErrors["customDescription"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex  space-y-2  flex-col">
-                        <label htmlFor="Review Form question">
-                          Review Form question
-                        </label>
-                        {dynamicData.questions.map(
-                          (item: Question, ind: any) => {
-                            return (
-                              <div
-                                className=" flex gap-2 flex-col items-center w-full "
-                                key={item.id}
-                              >
-                                <div className="flex gap-2 items-center w-full">
-                                  <Input
-                                    className=""
-                                    value={item.question}
-                                    placeholder={"write ur questions here"}
-                                    onChange={(e) => {
-                                      setDynamicData((prev) => {
-                                        const updatedQuestions = [
-                                          ...prev.questions,
-                                        ];
-                                        updatedQuestions[ind] = {
-                                          ...updatedQuestions[ind],
-                                          question: e.target.value,
-                                        };
-                                        return {
-                                          ...prev,
-                                          questions: updatedQuestions,
-                                        };
-                                      });
-                                    }}
-                                  />
-
-                                  <Button
-                                    className="text-lg cursor-pointer bg-white hover:text-gray-400"
-                                    variant="link"
-                                    type="button"
-                                    onClick={() => deletQuestionBox(item.id)}
-                                  >
-                                    <Trash2 color="black" />
-                                  </Button>
-                                </div>
-                                {validationErrors[
-                                  `questions.${ind}.questions`
-                                ] && (
-                                  <p className="text-red-500 text-start">
-                                    {
-                                      validationErrors[
-                                        `questions.${ind}.questions`
-                                      ]
-                                    }
-                                  </p>
-                                )}
-                              </div>
-                            );
-                          }
-                        )}
-
-                        <Button
-                          className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
-                          variant={"ghost"}
-                          onClick={addquestionBox}
-                          type="button"
-                        >
-                          <CirclePlus color="black" /> Add more{" "}
-                        </Button>
-                      </div>
-
-                      <div className="flex items-center justify-center space-x-10 ">
-                        <label htmlFor="Enable Rating">Enable Rating</label>
-
-                        <Switch
-                          checked={dynamicData.ratingEnabled}
-                          onCheckedChange={(checked) =>
-                            handleDynamicChange("ratingEnabled", checked)
-                          }
-                        />
-                        <label htmlFor="Video Review">Video Review</label>
-
-                        <Switch
-                          checked={dynamicData.videoreviewEnabled}
-                          onCheckedChange={(checked) =>
-                            handleDynamicChange("videoreviewEnabled", checked)
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Button
-                          className="bg-blue-500 text-white p-2  w-full text-center"
-                          type="submit"
-                        >
-                          Create Space
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="thankyou" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 sapce-x-2">
-                          <label htmlFor="thankyou img ">
-                            {" "}
-                            Hide this img ?
-                          </label>
-                          <Checkbox
-                            checked={dynamicData.thankyouimg}
-                            className="  data-[state==checked]:bg-blue-500 border-1 border-gray-600  "
-                            onCheckedChange={(checked) =>
-                              handleDynamicChange("thankyouimg", checked)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="thankyoutitle">Thank You Title</label>
-
-                        <Textarea
-                          value={dynamicData.thankYouTitle}
-                          placeholder={inputValues.thankYouTitle}
-                          onChange={(e) =>
-                            handleDynamicChange("thankYouTitle", e.target.value)
-                          }
-                        />
-                        {validationErrors["thankYouTitle"] && (
-                          <p className="text-red-500">
-                            {validationErrors["thankYouTitle"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="thankyouMsg">Thank You Message</label>
-
-                        <Textarea
-                          value={dynamicData.thankYouMessage}
-                          placeholder={inputValues.thankYouMessage}
-                          onChange={(e) =>
-                            handleDynamicChange(
-                              "thankYouMessage",
-                              e.target.value
-                            )
-                          }
-                        />
-                        {validationErrors["thankYouMessage"] && (
-                          <p className="text-red-500">
-                            {validationErrors["thankYouMessage"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="redirecturl">
-                          {" "}
-                          Redirect URL (Optional)
-                        </label>
-                        <Input
-                          placeholder={inputValues.redirectUrl}
-                          onChange={(e) =>
-                            handleDynamicChange("redirectUrl", e.target.value)
-                          }
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="settings" className="space-y-6 mt-6">
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      {dynamicData.videoreviewEnabled === true ? (
-                        <div className="space-y-2">
-                          <label htmlFor="maximum video">
-                            {" "}
-                            Maximum Video duration
-                          </label>
-                          <Select
-                            onValueChange={(value) =>
-                              handleDynamicChange("videotime", value)
-                            }
-                            defaultValue={dynamicData.videotime}
-                          >
-                            <SelectTrigger className="p-3 ">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className=" ">
-                              <SelectItem value="30">30 sec</SelectItem>
-                              <SelectItem value="45">45 sec</SelectItem>
-                              <SelectItem value="90">90 sec</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      ) : null}
-                      <div className="space-y-2">
-                        <label htmlFor="review">Review Form Theme</label>
-                        <Select
-                          onValueChange={(value) => {
-                            handleDynamicChange("theme", value);
-                          }}
-                          defaultValue={dynamicData.theme}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a theme" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="light">Light</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="review form text">
-                          Review Submit Button Text
-                        </label>
-                        <Input
-                          value={dynamicData.textbuttonText}
-                          placeholder={inputValues.textbuttonText}
-                          onChange={(e) =>
-                            handleDynamicChange(
-                              "textbuttonText",
-                              e.target.value
-                            )
-                          }
-                        />
-                        {validationErrors["textbuttonText"] && (
-                          <p className="text-red-500">
-                            {validationErrors["textbuttonText"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="videoButtonText">
-                          Review Video button text
-                        </label>
-                        <Input
-                          value={dynamicData.videoButtonText}
-                          placeholder={inputValues.videoButtonText}
-                          onChange={(e) =>
-                            handleDynamicChange(
-                              "videoButtonText",
-                              e.target.value
-                            )
-                          }
-                        />
-                        {validationErrors["textbuttonText"] && (
-                          <p className="text-red-500">
-                            {validationErrors["textbuttonText"]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="questionlabel"> Question Label</label>
-                        <Input
-                          value={dynamicData.questionlabel}
-                          placeholder={inputValues.questionlabel}
-                          onChange={(e) =>
-                            handleDynamicChange("questionlabel", e.target.value)
-                          }
-                        />
-                        {validationErrors["questionlabel"] && (
-                          <p className="text-red-500">
-                            {validationErrors["questionlabel"]}
-                          </p>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+                <BasicTab
+                  dynamicData={dynamicData}
+                  handleDynamicChange={handleDynamicChange}
+                  addQuestionBox={addquestionBox}
+                  deletQuestionBox={deletQuestionBox}
+                  validationErrors={validationErrors}
+                  setDynamicData={setDynamicData}
+                />
+                <ThankyouTab
+                  dynamicData={dynamicData}
+                  handleDynamicChange={handleDynamicChange}
+                  validationErrors={validationErrors}
+                />
+                <SettingTab
+                  handleDynamicChange={handleDynamicChange}
+                  dynamicData={dynamicData}
+                  validationErrors={validationErrors}
+                />
               </form>
             </Tabs>
           </div>

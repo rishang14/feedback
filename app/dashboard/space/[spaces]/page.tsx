@@ -9,24 +9,28 @@ import {
   Archive,
   AlertTriangle,
   Boxes,
-  Lock,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
 import { useSession } from "next-auth/react";
 import { useSpaceDetails } from "@/store/spaceDetails";
 
-export default function page() {
+export default function Page() {
   const [activeSection, setActiveSection] = useState("all");
+  const { spaces } = useParams();
   // @ts-ignore
-  // const { SpaceQuestion } = useSpaceDetails();
+  const { questions, getSpaceDetails } = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-  // console.log(SpaceQuestion, "spaceqUESTION");
+
+  useEffect(() => {
+    if (spaces) getSpaceDetails(spaces as string);
+  }, [spaces]);
+  console.log(questions, "spaceqUESTION");
 
   if (status === "loading") return <Loading />;
   if (status !== "authenticated") {

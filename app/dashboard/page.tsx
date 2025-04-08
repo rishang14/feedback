@@ -109,7 +109,7 @@ const CreateSpaceButton = () => {
             Design the perfect testimonial collection experience
           </DialogDescription>
         </DialogHeader>
-        <SpaceForm closeModal={() => setOpen(false)} />
+        <SpaceForm closeModal={() => setOpen(false)}  edit={false} />
       </DialogContent>
     </Dialog>
   );
