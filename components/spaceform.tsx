@@ -46,7 +46,7 @@ const initialSpaceValues = {
   redirectUrl: "",
 };
 
-const inputValues = {
+const initialValues = {
   spaceName: "",
   header: "header goes here",
   customDescription: "We would love to hear your feedback!",
@@ -80,7 +80,8 @@ const inputValues = {
 const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
   // @ts-ignore
   const { questions } = useSpaceDetails();
-  const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
+  const defaultSpaceValues = edit ? questions[0] : initialSpaceValues; 
+  const inputValues= edit ? questions[0] : initialValues
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
   const [activeTab, setactiveTab] = useState("basic");
   const [validationErrors, setValidationErrors] = useState<
