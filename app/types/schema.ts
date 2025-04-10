@@ -81,3 +81,6 @@ export const spaceFormSchema = z.object({
   redirectUrl: z.string().optional(),
   videotime: z.string().default("30"),
 });
+
+
+export const QuestionSchema= spaceFormSchema.omit({spaceName: true});

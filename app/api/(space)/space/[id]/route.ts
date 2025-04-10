@@ -3,7 +3,6 @@ import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
-import { string } from "zod";
 
 const { auth } = NextAuth(authConfig);
 
@@ -33,9 +32,9 @@ export async function GET(
       );
     } 
 
-    return NextResponse.json({message:"space id is Invalid"})
+    return NextResponse.json({message:"space id is Invalid"},{status:400})
   } catch (error) {
     console.log(error); 
-    return NextResponse.json({error:"Internal Server Error"})
+    return NextResponse.json({error:"Internal Server Error"},{status:500})
   }
 }

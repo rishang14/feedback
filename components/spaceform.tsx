@@ -3,27 +3,29 @@ import React, { useState } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSpaceDetails } from "@/store/spaceDetails";
 import Image from "next/image";
 import {
+  KeySquare,
   Layout,
   MessageSquare,
   Settings,
   ThumbsUp,
 } from "lucide-react";
-import { spaceFormSchema } from "@/app/types/schema";
+import { QuestionSchema, spaceFormSchema } from "@/app/types/schema";
 import axios from "axios";
 import BasicTab from "./BasicTab";
 import ThankyouTab from "./ThankYouTab";
 import SettingTab from "./SettingTab";
+import { json } from "stream/consumers";
 type Question = {
   id: string;
   question: string;
+  _id?: string;
 };
 
 type spaceformtype = z.infer<typeof spaceFormSchema>;
-
 type SpaceFormProps = {
   closeModal: () => void;
   edit: boolean;
@@ -80,8 +82,9 @@ const initialValues = {
 const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
   // @ts-ignore
   const { questions } = useSpaceDetails();
-  const defaultSpaceValues = edit ? questions[0] : initialSpaceValues; 
-  const inputValues= edit ? questions[0] : initialValues
+  const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
+  const inputValues = edit ? questions[0] : initialValues;
+
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
   const [activeTab, setactiveTab] = useState("basic");
   const [validationErrors, setValidationErrors] = useState<
@@ -89,8 +92,10 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
   >({});
 
   const validateErrors = () => {
-    const result = spaceFormSchema.safeParse(dynamicData);
-
+    const schema = edit
+      ? QuestionSchema.safeParse(dynamicData)
+      : spaceFormSchema.safeParse(dynamicData);
+    const result = schema;
     if (!result.success) {
       const formattedErrors: Record<string, string> = {};
 
@@ -104,6 +109,68 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
     return null;
   };
 
+  const findChangesInQuestionsArray = (
+    oldArr: Question[],
+    updatedArr: Question[]
+  ) => {
+    // const array: Question[] = [];
+    // console.log(array, "before loop");
+    // updatedArr.forEach((item) => {
+    //   const olditem = oldArr.find((i) => i.id === item.id);
+    //   if (!olditem) {
+    //     array.push(item);
+    //   } else if (JSON.stringify(olditem) !== JSON.stringify(item)) {
+    //     array.push(item);
+    //   }
+    // });
+    // return array;
+
+    const changedLength = oldArr.length !== updatedArr.length;
+
+    const modified = updatedArr.some((item) => {
+      const olditem = oldArr.find((i) => i.id === item.id);
+      return olditem && JSON.stringify(olditem) !== JSON.stringify(item);
+    });
+    const deleted = oldArr.some((item) => {
+      return !updatedArr.some((i) => i.id === item.id);
+    });
+
+    const isAdded = updatedArr.some((updatedItem) => {
+      return !oldArr.some((old) => old.id === updatedItem.id);
+    });
+
+    const isChanged = changedLength || modified || deleted || isAdded;
+
+    return isChanged ? updatedArr : [];
+  };
+
+  const ChangedDataIneditFormField = (
+    oldvalues: typeof QuestionSchema,
+    updatedValues: typeof QuestionSchema
+  ) => {
+    const changedData: any = {};
+    for (const key in updatedValues) {
+      const oldlValue = oldvalues[key as keyof typeof oldvalues];
+      const updatedValue = updatedValues[key as keyof typeof updatedValues];
+
+      if (key === "questions") {
+        const oldQuestion = oldlValue as any;
+        const newQuestion = updatedValue as any;
+        const questionArray = findChangesInQuestionsArray(
+          oldQuestion,
+          newQuestion
+        );
+        if (questionArray.length > 0) {
+          changedData[key] = questionArray;
+        }
+        continue;
+      } else if (oldlValue !== updatedValue) {
+        changedData[key] = updatedValue;
+      }
+    }
+    return changedData;
+  };
+
   const handleDynamicChange = (fieldName: keyof spaceformtype, value: any) => {
     setDynamicData((prev: any) => ({ ...prev, [fieldName]: value }));
   };
@@ -115,14 +182,24 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
       setValidationErrors(errors);
       return;
     }
-    try {
-      await axios.post("/api/createspace", JSON.stringify(dynamicData), {
-        withCredentials: true,
-      });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log("form end successfully");
+
+    if (edit) {
+      const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData); 
+      if(Object.keys(data).length > 0){
+        console.log(data,"submit the data")
+      }else{
+        console.log("nothing to submit")
+      }
+    } else {
+      try {
+        await axios.post("/api/createspace", JSON.stringify(dynamicData), {
+          withCredentials: true,
+        });
+      } catch (e) {
+        console.log(e);
+      } finally {
+        console.log("form end successfully");
+      }
     }
   };
 
@@ -284,6 +361,7 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
                   deletQuestionBox={deletQuestionBox}
                   validationErrors={validationErrors}
                   setDynamicData={setDynamicData}
+                  edit={edit}
                 />
                 <ThankyouTab
                   dynamicData={dynamicData}
