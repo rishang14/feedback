@@ -19,9 +19,9 @@ export async function PATCH(
   }
   await connectDB();
   try { 
-    const {id} = params;  
-    const data= await req.body ; 
-
+    const {id} = await params;  
+    const data= await req.json() ; 
+    console.log(data)
     const questions= await SpaceQuestion.findById({_id:id}); 
     if(!questions) return NextResponse.json({message:"Pls provide valid id"},{status:400}); 
     

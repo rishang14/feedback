@@ -124,9 +124,7 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
     //   }
     // });
     // return array;
-
     const changedLength = oldArr.length !== updatedArr.length;
-
     const modified = updatedArr.some((item) => {
       const olditem = oldArr.find((i) => i.id === item.id);
       return olditem && JSON.stringify(olditem) !== JSON.stringify(item);
@@ -184,11 +182,20 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
     }
 
     if (edit) {
-      const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData); 
-      if(Object.keys(data).length > 0){
-        console.log(data,"submit the data")
-      }else{
-        console.log("nothing to submit")
+      const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData);
+      if (Object.keys(data).length > 0) {
+        try {
+          const res = axios.patch(
+            `/api/editspace/editreviewform/${questions[0]._id}`,
+            JSON.stringify(data),
+            { withCredentials: true }
+          ); 
+          console.log(res,"frontend")
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        console.log("nothing to submit");
       }
     } else {
       try {
