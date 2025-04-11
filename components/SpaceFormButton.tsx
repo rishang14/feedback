@@ -9,10 +9,15 @@ import {
   DialogHeader,
   DialogDescription,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
+import { Button } from "./ui/button"; 
+type Props = {
+  edit: boolean;
+  spaceid?: string;
+};
 
-export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => {
-  console.log(edit, "editvalue");
+export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
+  console.log(edit, "editvalue"); 
+  console.log(spaceid,"id")
   const [open, setOpen] = useState(false);
 
   const SpaceForm = dynamic(() => import("./spaceform"), {
@@ -38,7 +43,7 @@ export const OpenSpaceFormButton = ({ edit }: { edit: boolean }) => {
             Design the perfect Review collection experience.
           </DialogDescription>
         </DialogHeader>
-        <SpaceForm closeModal={() => setOpen(false)} edit={edit} />
+        <SpaceForm closeModal={() => setOpen(false)}  edit={edit} spaceid={spaceid} />
       </DialogContent>
     </Dialog>
   );

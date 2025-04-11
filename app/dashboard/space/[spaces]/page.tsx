@@ -24,7 +24,8 @@ import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 
 export default function Page() { 
   const [activeSection, setActiveSection] = useState("all");
-  const { spaces } = useParams();
+  const { spaces } = useParams(); 
+  console.log(spaces,"id")
   // @ts-ignore
   const { questions, getSpaceDetails } = useSpaceDetails();
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function Page() {
               <span className="text-white">Text credits</span>
               <span className="text-muted-foreground">10</span>
             </div>
-            <OpenSpaceFormButton edit={true} />
+            <OpenSpaceFormButton edit={true} spaceid={spaces && spaces as string} />
           </div>
         </div>
       </header>

@@ -4,21 +4,20 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSpaceDetails } from "@/store/spaceDetails";
+import { useSpaceDetails } from "@/store/spaceDetails"; 
 import Image from "next/image";
 import {
-  KeySquare,
   Layout,
   MessageSquare,
   Settings,
   ThumbsUp,
 } from "lucide-react";
-import { QuestionSchema, spaceFormSchema } from "@/app/types/schema";
+import { EditFormSchema, spaceFormSchema } from "@/app/types/schema";
 import axios from "axios";
 import BasicTab from "./BasicTab";
 import ThankyouTab from "./ThankYouTab";
 import SettingTab from "./SettingTab";
-import { json } from "stream/consumers";
+import { toast } from "sonner";
 type Question = {
   id: string;
   question: string;
@@ -28,7 +27,8 @@ type Question = {
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 type SpaceFormProps = {
   closeModal: () => void;
-  edit: boolean;
+  edit: boolean; 
+  spaceid?:any
 };
 const initialSpaceValues = {
   spaceName: "",
@@ -79,9 +79,10 @@ const initialValues = {
   redirectUrl: "",
 };
 
-const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
+const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => { 
+  console.log(spaceid,"id")
   // @ts-ignore
-  const { questions } = useSpaceDetails();
+  const { questions ,getSpaceDetails} = useSpaceDetails(); 
   const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
   const inputValues = edit ? questions[0] : initialValues;
 
@@ -91,9 +92,10 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
     Record<string, string>
   >({});
 
+
   const validateErrors = () => {
     const schema = edit
-      ? QuestionSchema.safeParse(dynamicData)
+      ? EditFormSchema.safeParse(dynamicData)
       : spaceFormSchema.safeParse(dynamicData);
     const result = schema;
     if (!result.success) {
@@ -143,8 +145,8 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
   };
 
   const ChangedDataIneditFormField = (
-    oldvalues: typeof QuestionSchema,
-    updatedValues: typeof QuestionSchema
+    oldvalues: typeof EditFormSchema,
+    updatedValues: typeof EditFormSchema
   ) => {
     const changedData: any = {};
     for (const key in updatedValues) {
@@ -185,12 +187,17 @@ const Spaceform = ({ closeModal, edit }: SpaceFormProps) => {
       const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData);
       if (Object.keys(data).length > 0) {
         try {
-          const res = axios.patch(
+          const res =await axios.patch(
             `/api/editspace/editreviewform/${questions[0]._id}`,
             JSON.stringify(data),
             { withCredentials: true }
-          ); 
-          console.log(res,"frontend")
+          )  
+          console.log(res,"res") 
+          if(res.data){ 
+            getSpaceDetails(spaceid)
+            closeModal(); 
+            toast("Edit form updated successfully");
+          }
         } catch (error) {
           console.log(error)
         }

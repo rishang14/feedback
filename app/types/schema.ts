@@ -67,7 +67,8 @@ export const spaceFormSchema = z.object({
           required_error: "Question is required",
           invalid_type_error: "Correct the format",
         }).min(1, "Question cannot be empty")
-        .max(100),
+        .max(100), 
+        _id:z.string().optional()
     })
   ).min(1, { message: "At least one question is required" }), 
 
@@ -83,4 +84,4 @@ export const spaceFormSchema = z.object({
 });
 
 
-export const QuestionSchema= spaceFormSchema.omit({spaceName: true});
+export const EditFormSchema= spaceFormSchema.omit({spaceName: true});

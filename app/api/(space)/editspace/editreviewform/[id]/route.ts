@@ -3,6 +3,7 @@ import connectDB from "@/lib/db.connect";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
+import { EditFormSchema } from "@/app/types/schema";
 
 const { auth } = NextAuth(authConfig);
 
@@ -18,14 +19,38 @@ export async function PATCH(
     );
   }
   await connectDB();
-  try { 
-    const {id} = await params;  
-    const data= await req.json() ; 
-    console.log(data)
-    const questions= await SpaceQuestion.findById({_id:id}); 
-    if(!questions) return NextResponse.json({message:"Pls provide valid id"},{status:400}); 
-    
-    return NextResponse.json({message:"Got the values" },{status:200})
+  try {
+    const { id } = await params;
+    const data = await req.json();
+    console.log(data);
+    const questions = await SpaceQuestion.findById({ _id: id });
+    if (!questions) {
+      return NextResponse.json(
+        { message: "Pls provide valid id" },
+        { status: 400 }
+      );
+    }
 
-  } catch (error) {}
+    const updataData = await SpaceQuestion.findByIdAndUpdate(
+      id,
+      { $set: data },
+      { new: true }
+    );
+    if (!updataData) {
+      return NextResponse.json(
+        { error: "Review Form not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Review Form is updated" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server  Error " },
+      { status: 500 }
+    );
+  }
 }
