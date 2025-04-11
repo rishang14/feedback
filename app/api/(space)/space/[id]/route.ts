@@ -4,19 +4,19 @@ import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 
-const { auth } = NextAuth(authConfig);
+// const { auth } = NextAuth(authConfig);
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return NextResponse.json(
-      { error: "You are not allowed to access this api route" },
-      { status: 400 }
-    );
-  }
+  // const session = await auth();
+  // if (!session?.user?.email) {
+  //   return NextResponse.json(
+  //     { error: "You are not allowed to access this api route" },
+  //     { status: 400 }
+  //   );
+  // }
 
   await connectDB();
   try {

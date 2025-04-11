@@ -9,7 +9,7 @@ import {
   Archive,
   AlertTriangle,
   Boxes,
-  Lock,
+  PencilIcon
 } from "lucide-react";
 import { useEffect, useState } from "react"; 
 import { useSession } from "next-auth/react"; 
@@ -69,7 +69,6 @@ export default function Page() {
       {/* Header */}
       <header className="border-b">
         <div className="flex h-16 items-center px-4 md:px-6">
-          <h1 className="text-2xl font-semibold text-white">first</h1>
           <div className="ml-auto flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Video className="h-4 w-4" />

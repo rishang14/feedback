@@ -8,7 +8,8 @@ import {
   DialogTitle,
   DialogHeader,
   DialogDescription,
-} from "./ui/dialog";
+} from "./ui/dialog"; 
+import { PencilIcon } from "lucide-react";
 import { Button } from "./ui/button"; 
 type Props = {
   edit: boolean;
@@ -27,8 +28,15 @@ export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
     <Dialog open={open} onOpenChange={setOpen} modal={true}>
       {/* Button to open modal */}
       <DialogTrigger asChild>
-        <Button className="text-white bg-blue-600 text-lg cursor-pointer">
-          {edit ? " Edit Space" : "+ Create a new Space"}
+        <Button className=" text-muted bg-blue-600 flex items-center justify-center space-x-2 cursor-pointer">
+        {edit ? (
+    <>
+      <PencilIcon className="w-4 h-4" />
+      Edit Space
+    </>
+  ) : (
+    "+ Create a new Space"
+  )}
         </Button>
       </DialogTrigger>
       <DialogContent
