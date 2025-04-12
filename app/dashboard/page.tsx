@@ -7,10 +7,12 @@ import { useGetSpace } from "@/store/getSpace";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
+import { Item } from "@radix-ui/react-dropdown-menu";
+import { any } from "zod";
 const Page = () => {
   const { status, data } = useSession();
   //@ts-ignore
-  const { getspace } = useGetSpace();
+  const {  spaces,getspace } = useGetSpace();
   const router = useRouter();
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
@@ -45,7 +47,12 @@ const Page = () => {
         {/* space body section  */}
         <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center justify-start  space-x-10 gap-y-6 flex-wrap  bg-gray-800 rounded-lg border   border-gray-700 shadow-sm">
           {/* <Emptyspace/> */}
-          <DashboardCardWithMenu />
+         { 
+        // @ts-ignore
+          spaces.map(spaces => { 
+          return   <DashboardCardWithMenu   item={spaces as any}  key={spaces._id} />
+          })
+         }
         </div>
       </div>
     </div>

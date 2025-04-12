@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useGetSpace } from "@/store/getSpace";
+import { any } from "zod";
 // import { useSpaceDetails } from "@/store/spaceDetails";
 
 const Dashboardcard = () => {
@@ -31,9 +32,9 @@ const Dashboardcard = () => {
 };
 export default Dashboardcard;
 
-export const DashboardCardWithMenu = () => {
+export const DashboardCardWithMenu = ( {item}:{item:any} ) => {
   // @ts-ignore
-  const { spaces } = useGetSpace();
+  console.log(item,"item")
   // @ts-ignore
   // const { getSpaceDetails } = useSpaceDetails();
   const router = useRouter();
@@ -44,16 +45,13 @@ export const DashboardCardWithMenu = () => {
     <Card className="bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm">
       <CardContent className="max-w-[250px] flex justify-between items-center ">
         <div className="w-[200px]  flex justify-between  ">
-          {spaces.map((item: any) => (
             <p
               className="text-white text-xl font-medium "
               onClick={() => handleClick(item._id)}
-              key={item._id}
             >
               {" "}
               {item.spacename}
             </p>
-          ))}
         </div>
       </CardContent>
       <CardDescription></CardDescription>
