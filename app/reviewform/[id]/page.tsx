@@ -93,25 +93,15 @@ export function TestimonialForm() {
             <DialogTitle className="text-xl">
               Write review 
             </DialogTitle>
-            {/* <Button
-              variant="ghost"
-              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
-              onClick={() => setOpen(false)}
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </Button> */}
           </DialogHeader>
-
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2 border-b-2 border-indigo-500 pb-1 inline-block">
               Questions
             </h3>
-
             <ul className="space-y-2 mt-3">
               <li className="flex items-start">
-                <span className="text-gray-600 mr-2">•</span>
-                <span className="text-sm">
+                <span className="text-gray-900 mr-2">•</span>
+                <span className="text-sm  text-gray-500">
                   what are you doing pls tell me i want to know about you
                 </span>
               </li>
