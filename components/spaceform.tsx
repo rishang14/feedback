@@ -234,7 +234,7 @@ const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => {
     }));
   };
   return (
-    <main className=" p-6">
+    <main className="p-6">
       <div className=" ">
         <div className="flex md:flex-row  flex-col-reverse   gap-8">
           <div className="w-[400px]  flex flex-col items-center mt-2 space-y-6">

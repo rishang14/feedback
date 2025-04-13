@@ -54,7 +54,7 @@ export const loginSchema = z.object({
 });
 
 export const spaceFormSchema = z.object({
-  spaceName: z.string().min(3, { message: "Space Name must be at least 3 characters" }),
+  spaceName: z.string().min(3, { message: "Space Name must be at least 3 characters" }).trim(),
   header: z.string().min(3, { message: "Header must be at least 3 characters" }),
   customDescription: z.string().min(20, { message: "Custom description must be at least 20 characters" }),
   textbuttonText: z.string().default("Submit Review"),

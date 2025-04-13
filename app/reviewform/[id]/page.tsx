@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Video, Send } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useGetSpace } from "@/store/getSpace"; 
+import { useGetSpace } from "@/store/getSpace";
 import { ThumbsUp } from "lucide-react";
 
 const page = () => {
@@ -21,11 +21,12 @@ const page = () => {
   return (
     <>
       <main className="min-h-screen flex items-center  bg-gray-100">
-
         <div className="container mx-auto max-w-4xl p-4 flex items-center justify-center md:p-8">
           <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
-            <div className="text-center mb-8"> 
-            <h1 className="text-xl font-semibold text-gray-800">Testimonial</h1>
+            <div className="text-center mb-8">
+              <h1 className="text-xl font-semibold text-gray-800">
+                Testimonial
+              </h1>
               <p className="text-gray-700">
                 write a warm medsaer oto the users todfjk i would love to kno
                 what is going on here pls tell me
@@ -84,26 +85,23 @@ export function TestimonialForm() {
         Write a testimonial
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md md:max-w-lg">
+        <DialogContent
+          className="sm:max-w-md md:max-w-lg  max-h-[95%] overflow-y-scroll"
+          onInteractOutside={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle className="text-xl">
-              Write text testimonial to
+              Write review 
             </DialogTitle>
-            <Button
+            {/* <Button
               variant="ghost"
               className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
               onClick={() => setOpen(false)}
             >
               <X className="h-4 w-4" />
               <span className="sr-only">Close</span>
-            </Button>
+            </Button> */}
           </DialogHeader>
-
-          <div className="border rounded-md p-2 mb-4 w-24">
-            <div className="bg-gray-100 h-16 flex items-center justify-center">
-              <div className="w-10 h-10 bg-gray-200"></div>
-            </div>
-          </div>
 
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2 border-b-2 border-indigo-500 pb-1 inline-block">
@@ -132,20 +130,31 @@ export function TestimonialForm() {
 
           <Textarea
             placeholder="Write your testimonial here..."
-            className="min-h-[120px] mb-4"
+            className="min-h-[120px] "
             value={testimonial}
             onChange={(e) => setTestimonial(e.target.value)}
           />
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-            <Button
-              className="bg-indigo-500 hover:bg-indigo-600 text-white flex items-center gap-2"
-              size="lg"
+          <div className="flex flex-col  gap-3 justify-center  ">
+            <div className="pt-2 space-y-2 ">
+              <label>Name</label>
+              <Input />
+              <div className="pt-2 space-y-2 ">
+                <label>Email</label>
+                <Input />
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center mt-4 space-x-2">
+            <Checkbox id="terms" />
+            <label
+              htmlFor="terms"
+              className="text-sm text-muted-foreground  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              <Video className="h-5 w-5" />
-              <span>Record a video</span>
-            </Button>
-
+              I give permission to use this testimonial across social channels
+              and other marketing efforts
+            </label>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
             <Button
               variant="secondary"
               className="bg-gray-800 hover:bg-gray-900 text-white flex items-center gap-2"
@@ -161,9 +170,9 @@ export function TestimonialForm() {
   );
 }
 
-
 import { useState } from "react";
 import { Star } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface StarRatingProps {
   rating: number;
@@ -171,10 +180,10 @@ interface StarRatingProps {
 }
 
 export function StarRating({ rating, onRatingChange }: StarRatingProps) {
-  const [hoverRating, setHoverRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(5);
 
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center  gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -185,7 +194,7 @@ export function StarRating({ rating, onRatingChange }: StarRatingProps) {
           onMouseLeave={() => setHoverRating(0)}
         >
           <Star
-            className={`h-8 w-8 ${
+            className={`h-5 w-5 ${
               star <= (hoverRating || rating)
                 ? "text-yellow-400 fill-yellow-400"
                 : "text-gray-300"
