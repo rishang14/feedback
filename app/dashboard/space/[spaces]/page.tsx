@@ -25,16 +25,16 @@ import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 export default function Page() { 
   const [activeSection, setActiveSection] = useState("all");
   const { spaces } = useParams(); 
-  console.log(spaces,"id")
+  // console.log(spaces,"id")
   // @ts-ignore
-  const { questions, getSpaceDetails } = useSpaceDetails();
+  const { questions, getSpaceDetails,testimonials } = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-
+  console.log(testimonials,"testimonials")
   useEffect(() => {
     if (spaces) getSpaceDetails(spaces as string);
   }, [spaces]);
-  console.log(questions, "spaceqUESTION");
+  // console.log(questions, "spaceqUESTION");
 
   if (status === "loading") return <Loading />;
   if (status !== "authenticated") {

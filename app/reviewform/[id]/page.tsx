@@ -1,13 +1,23 @@
 "use client";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Video, Send } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useGetSpace } from "@/store/getSpace";
-import { ThumbsUp } from "lucide-react";
+import { useState } from "react";
+import { Star } from "lucide-react";
+import ReviewForm from "@/components/reviewform";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"; 
+
+interface StarRatingProps {
+  rating: number;
+  onRatingChange: (rating: number) => void;
+}
+
 
 const page = () => {
   const { id } = useParams();
@@ -37,7 +47,6 @@ const page = () => {
               <h2 className="text-2xl font-bold mb-6 border-b-4 border-indigo-500 pb-2 inline-block">
                 QUESTIONS
               </h2>
-
               <ul className="space-y-4 mt-4">
                 <li className="flex items-start">
                   <span className="text-gray-600 mr-2">•</span>
@@ -51,9 +60,8 @@ const page = () => {
                 </li>
               </ul>
             </div>
-
             <div className="flex justify-center gap-4 mt-8">
-              <TestimonialForm />
+              <TestimonialFormButton spacename={id as string} />
             </div>
           </div>
         </div>
@@ -62,19 +70,11 @@ const page = () => {
   );
 };
 
-export default page;
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { X } from "lucide-react";
+export default page; 
 
-export function TestimonialForm() {
+
+export function TestimonialFormButton({ spacename }: { spacename: string }) {
   const [open, setOpen] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [testimonial, setTestimonial] = useState("");
 
   return (
     <>
@@ -90,9 +90,7 @@ export function TestimonialForm() {
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
-            <DialogTitle className="text-xl">
-              Write review 
-            </DialogTitle>
+            <DialogTitle className="text-xl">Write review</DialogTitle>
           </DialogHeader>
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2 border-b-2 border-indigo-500 pb-1 inline-block">
@@ -113,60 +111,11 @@ export function TestimonialForm() {
               </li>
             </ul>
           </div>
-
-          <div className="mb-4">
-            <StarRating rating={rating} onRatingChange={setRating} />
-          </div>
-
-          <Textarea
-            placeholder="Write your testimonial here..."
-            className="min-h-[120px] "
-            value={testimonial}
-            onChange={(e) => setTestimonial(e.target.value)}
-          />
-          <div className="flex flex-col  gap-3 justify-center  ">
-            <div className="pt-2 space-y-2 ">
-              <label>Name</label>
-              <Input />
-              <div className="pt-2 space-y-2 ">
-                <label>Email</label>
-                <Input />
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center mt-4 space-x-2">
-            <Checkbox id="terms" />
-            <label
-              htmlFor="terms"
-              className="text-sm text-muted-foreground  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              I give permission to use this testimonial across social channels
-              and other marketing efforts
-            </label>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
-            <Button
-              variant="secondary"
-              className="bg-gray-800 hover:bg-gray-900 text-white flex items-center gap-2"
-              size="lg"
-            >
-              <Send className="h-5 w-5" />
-              <span>Send in text</span>
-            </Button>
-          </div>
+          <ReviewForm closeModal={() => setOpen(false)} spacename={spacename} />
         </DialogContent>
       </Dialog>
     </>
   );
-}
-
-import { useState } from "react";
-import { Star } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-
-interface StarRatingProps {
-  rating: number;
-  onRatingChange: (rating: number) => void;
 }
 
 export function StarRating({ rating, onRatingChange }: StarRatingProps) {
