@@ -8,6 +8,13 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import {
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogContent,
+  DialogDescription,
+} from "./ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -18,18 +25,20 @@ import {
 import { reviewForm } from "@/app/types/schema";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { url } from "inspector";
 
 type props = {
   closeModal: () => void;
   spacename: string;
+  spacedetail: any;
 };
 
 type formProp = z.infer<typeof reviewForm>;
 
-const ReviewForm = ({ closeModal, spacename }: props) => {
-  const [rating, setRating] = useState(0);
-  const [testimonial, setTestimonial] = useState("");
-
+const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
+  const [open, setOpen] = useState(false);
   const form = useForm<formProp>({
     resolver: zodResolver(reviewForm),
     defaultValues: {
@@ -46,11 +55,16 @@ const ReviewForm = ({ closeModal, spacename }: props) => {
     handleSubmit,
     formState: { errors },
   } = form;
- 
-  const onsubmit = async(data: formProp) => {
+
+  const onsubmit = async (data: formProp) => {
     try {
-      const res= await axios.post(`/api/testimonial/${spacename}`,JSON.stringify(data))  
-      console.log(res,"res")
+      const res = await axios.post(
+        `/api/testimonial/${spacename}`,
+        JSON.stringify(data)
+      );
+      if (res.statusText === "OK") {
+        setOpen(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -60,24 +74,26 @@ const ReviewForm = ({ closeModal, spacename }: props) => {
     <>
       <Form {...form}>
         <form onSubmit={handleSubmit(onsubmit)}>
-          <div className="mb-4">
-            <FormField
-              control={control}
-              name="rating"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <StarRating
-                      {...field}
-                      // @ts-ignore
-                      rating={field?.value}
-                      onRatingChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+          {spacedetail?.ratingEnabled && (
+            <div className="mb-4">
+              <FormField
+                control={control}
+                name="rating"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <StarRating
+                        {...field}
+                        // @ts-ignore
+                        rating={field?.value}
+                        onRatingChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
           <FormField
             control={control}
             name="text"
@@ -160,8 +176,66 @@ const ReviewForm = ({ closeModal, spacename }: props) => {
           </div>
         </form>
       </Form>
+      <ThankyouModal
+        isOpen={open}
+        setIsOpen={setOpen}
+        spacedetail={spacedetail}
+        closeFormmodal={closeModal}
+      />
     </>
   );
 };
 
 export default ReviewForm;
+
+const ThankyouModal = ({
+  isOpen,
+  setIsOpen,
+  spacedetail,
+  closeFormmodal,
+}: any) => { 
+  const router=useRouter()
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent 
+        className="[&>button:last-child]:hidden sm:max-w-md"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle className="text-center flex flex-col items-center gap-4">
+            {/* <PartyPopper className="h-12 w-12 text-primary" /> */}
+            {spacedetail?.thankyouimg && (
+              <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
+                <Image
+                  src={
+                    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjRxcjIxbXJobjVoNzVwempua2twZ2dmbzVjeDZzaDZweHluMnQwaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26gsjCZpPolPr3sBy/giphy.gif"
+                  }
+                  alt="thankyou"
+                  objectPosition="center"
+                  className="w-full h-[250px]"
+                  width={100}
+                  height={100}
+                />
+              </div>
+            )}
+            {spacedetail?.thankYouTitle}
+          </DialogTitle>
+          <DialogDescription className="text-center">
+            {spacedetail?.thankYouMessage}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-center">
+          <Button
+            onClick={() => {
+              setIsOpen(false);
+              closeFormmodal(); 
+             
+            }}
+          >
+            Close
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
