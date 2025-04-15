@@ -17,7 +17,7 @@ export const useGetSpace = create((set) => ({
     console.log("got space name",spacename)
      try {
       const res= await axios.get(`/api/reviewformdetails/${spacename}`,) 
-      const data=await res.data.question; 
+      const data=await res.data.question[0]; 
       set({spaceReviewDetail:data});
      } catch (error) {
        console.log(error)

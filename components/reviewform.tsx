@@ -26,8 +26,6 @@ import { reviewForm } from "@/app/types/schema";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { url } from "inspector";
 
 type props = {
   closeModal: () => void;
@@ -46,7 +44,6 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
       email: "",
       text: "",
       consent: false,
-      rating: 5,
     },
   });
 
@@ -194,7 +191,6 @@ const ThankyouModal = ({
   spacedetail,
   closeFormmodal,
 }: any) => { 
-  const router=useRouter()
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent 

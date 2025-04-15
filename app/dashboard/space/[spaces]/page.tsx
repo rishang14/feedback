@@ -9,28 +9,28 @@ import {
   Archive,
   AlertTriangle,
   Boxes,
-  PencilIcon
+  PencilIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react"; 
-import { useSession } from "next-auth/react"; 
-import { useParams } from "next/navigation"; 
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { useSpaceDetails } from "@/store/spaceDetails";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
 import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 
-export default function Page() { 
+export default function Page() {
   const [activeSection, setActiveSection] = useState("all");
-  const { spaces } = useParams(); 
+  const { spaces } = useParams();
   // console.log(spaces,"id")
   // @ts-ignore
-  const { questions, getSpaceDetails,testimonials } = useSpaceDetails();
+  const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-  console.log(testimonials,"testimonials")
+  console.log(testimonials, "testimonials");
   useEffect(() => {
     if (spaces) getSpaceDetails(spaces as string);
   }, [spaces]);
@@ -80,7 +80,10 @@ export default function Page() {
               <span className="text-white">Text credits</span>
               <span className="text-muted-foreground">10</span>
             </div>
-            <OpenSpaceFormButton edit={true} spaceid={spaces && spaces as string} />
+            <OpenSpaceFormButton
+              edit={true}
+              spaceid={spaces && (spaces as string)}
+            />
           </div>
         </div>
       </header>
@@ -154,14 +157,15 @@ export default function Page() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6">
-          <div className="max-w-4xl">
+        <main className="flex-1 p-6  ">
+          <div className="w-full max-h-[90%] overflow-y-auto">
             <TestimonialCard
-              type="Text"
-              rating={5}
-              content="HELLO EVERYone"
-              name="Rishang"
-              date="15 jan 2024"
+              name="Alex Johnson"
+              email="alex.johnson@example.com"
+              description="The product exceeded all my expectations. The user interface is intuitive, and the customer support team was incredibly helpful when I had questions. I've already recommended it to several colleagues."
+              avatar="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80"
+              date="2 days ago"
+          
             />
           </div>
           {/* <Tabs defaultValue="all" className="w-full">
