@@ -4,12 +4,13 @@ import Space from "@/mongoose/space.schema";
 import connectDB from "@/lib/db.connect";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { name: string } }
+  req: NextRequest, 
+  // @ts-ignore
+  context: any
 ) { 
     await connectDB();
   try {
-    const { name } = await params; 
+    const { name } = await context.params; 
 
     console.log(name, "i am getting space name")
     const spaceid = await Space.find({ spacename: name }).select("_id");

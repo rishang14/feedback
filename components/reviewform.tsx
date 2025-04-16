@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import * as z from "zod";
 import { Checkbox } from "./ui/checkbox";
-import { StarRating } from "@/app/reviewform/[id]/page";
+import { StarRating } from "./starRating";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";

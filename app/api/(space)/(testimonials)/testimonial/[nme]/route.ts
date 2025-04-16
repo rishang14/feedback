@@ -3,16 +3,15 @@ import connectDB from "@/lib/db.connect";
 import { reviewForm } from "@/app/types/schema";
 import Space from "@/mongoose/space.schema";
 import Testimnoails from "@/mongoose/testimonial.schema";
-
 export async function POST(
-  req: NextRequest,
-  { params }: { params: { sname: string } }
+  request: NextRequest,
+  context: any
 ) {
   await connectDB();
-  try {
-    const { sname } = await params;
-    console.log(sname);
-    const body = await req.json();
+  try {  
+    const { nme } =  context.params;
+    // console.log(nme);
+    const body = await request.json();
     const validatedData = reviewForm.safeParse(body);
     if (!validatedData.success) {
       return NextResponse.json(
@@ -21,7 +20,7 @@ export async function POST(
       );
     }
     const { name, email, text, consent, rating } = validatedData.data;
-    const space = await Space.findOne({ spacename: sname }).select(" _id");
+    const space = await Space.findOne({ spacename: nme }).select(" _id");
     console.log(space, "here is the id");
     if (!space) {
       return NextResponse.json(

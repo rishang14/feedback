@@ -5,19 +5,9 @@ import { useParams } from "next/navigation";
 import { useGetSpace } from "@/store/getSpace";
 import { useState } from "react";
 import { Star } from "lucide-react";
-import ReviewForm from "@/components/reviewform";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import Loading from "@/app/loading";
+import { TestimonialFormButton } from "@/components/Testimonialbutton";
+import Loading from "@/app/loading"; 
 
-interface StarRatingProps {
-  rating: number;
-  onRatingChange: (rating: number) => void;
-}
 
 const page = () => {
   const { id } = useParams();
@@ -28,7 +18,6 @@ const page = () => {
   console.log(spaceReviewDetail);
  
 
-  
   useEffect(() => {
     if (id) getspaceReviewForm(id as string);
   }, []);
@@ -78,78 +67,6 @@ const page = () => {
 
 export default page;
 
-type prop = {
-  spacename: string;
-  spacedetails: any;
-};
 
-export function TestimonialFormButton({ spacename, spacedetails }: prop) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Button
-        onClick={() => setOpen(true)}
-        className="bg-indigo-500 hover:bg-indigo-600 text-white"
-      >
-        {spacedetails?.textbuttonText}
-      </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="sm:max-w-md md:max-w-lg  max-h-[95%] md:overflow-y-hidden overflow-y-scroll"
-          onInteractOutside={(e) => e.preventDefault()}
-        >
-          <DialogHeader>
-            <DialogTitle className="text-xl">Write review</DialogTitle>
-          </DialogHeader>
-          <div className="mb-6">
-            <h3 className="text-lg font-medium mb-2 border-b-2 border-indigo-500 pb-1 inline-block">
-              {spacedetails?.questionlabel}
-            </h3>
-            <ul className="space-y-2 mt-3">
-              {spacedetails?.questions?.map((item: any) => {
-                return (
-                  <li className="flex items-start" key={item._id}>
-                    <span className="text-gray-600 mr-2">•</span>
-                    <span>{item.question}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <ReviewForm
-            closeModal={() => setOpen(false)}
-            spacename={spacename}
-            spacedetail={spacedetails}
-          />
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
-export function StarRating({ rating, onRatingChange }: StarRatingProps) {
-  const [hoverRating, setHoverRating] = useState(5);
 
-  return (
-    <div className="flex items-center  gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          className="focus:outline-none"
-          onClick={() => onRatingChange(star)}
-          onMouseEnter={() => setHoverRating(star)}
-          onMouseLeave={() => setHoverRating(0)}
-        >
-          <Star
-            className={`h-5 w-5 ${
-              star <= (hoverRating || rating)
-                ? "text-yellow-400 fill-yellow-400"
-                : "text-gray-300"
-            } transition-colors`}
-          />
-        </button>
-      ))}
-    </div>
-  );
-}

@@ -7,10 +7,8 @@ import { useGetSpace } from "@/store/getSpace";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
-import { Item } from "@radix-ui/react-dropdown-menu";
-import { any } from "zod";
 const Page = () => {
-  const { status, data } = useSession();
+  const { status,  } = useSession();
   //@ts-ignore
   const {  spaces,getspace } = useGetSpace();
   const router = useRouter();

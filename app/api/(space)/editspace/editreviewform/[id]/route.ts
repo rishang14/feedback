@@ -3,13 +3,12 @@ import connectDB from "@/lib/db.connect";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
-import { EditFormSchema } from "@/app/types/schema";
 
 const { auth } = NextAuth(authConfig);
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   const session = await auth();
   if (!session?.user?.email) {
@@ -20,7 +19,7 @@ export async function PATCH(
   }
   await connectDB();
   try {
-    const { id } = await params;
+    const { id } =  context.params;
     const data = await req.json();
     console.log(data);
     const questions = await SpaceQuestion.findById({ _id: id });
@@ -48,8 +47,9 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server  Error " },
+    return NextResponse.json( 
+      // @ts-ignore
+      { error: "Internal server  Error ", },
       { status: 500 }
     );
   }

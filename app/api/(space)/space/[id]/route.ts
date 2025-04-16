@@ -9,7 +9,7 @@ import Testimnoails from "@/mongoose/testimonial.schema";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   // const session = await auth();
   // if (!session?.user?.email) {
@@ -21,7 +21,7 @@ export async function GET(
 
   await connectDB();
   try {
-    const { id } = await params;
+    const { id } =  context.params;
     const Questions = await SpaceQuestion.find({ spaceId: id }).select(
       "-spaceId"
     );

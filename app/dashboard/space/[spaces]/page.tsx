@@ -9,7 +9,6 @@ import {
   Archive,
   AlertTriangle,
   Boxes,
-  PencilIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
