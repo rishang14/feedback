@@ -28,7 +28,7 @@ export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
     <Dialog open={open} onOpenChange={setOpen} modal={true}>
       {/* Button to open modal */}
       <DialogTrigger asChild>
-        <Button className=" text-muted bg-blue-600 flex items-center justify-center space-x-2 cursor-pointer">
+        <Button size={"lg"} className=" bg-blue-600 flex items-center text-gray-200 justify-center space-x-2 cursor-pointer">
         {edit ? (
     <>
       <PencilIcon className="w-4 h-4" />

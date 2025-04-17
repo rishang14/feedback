@@ -19,7 +19,7 @@ import { any } from "zod";
 
 const Dashboardcard = () => {
   return (
-    <Card className='bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm" '>
+    <Card className='bg-zinc-950/50 overflow-hidden rounded-lg border border-gray-500/70 shadow-sm" '>
       <CardContent className=" ">
         <div className="flex justify-between  md:w-[280px]">
           <p className="text-white text-xl font-medium "> Hello</p>
@@ -42,7 +42,7 @@ export const DashboardCardWithMenu = ( {item}:{item:any} ) => {
     router.push(`/dashboard/space/${spaces}`);
   };
   return (
-    <Card className="bg-gray-800 overflow-hidden rounded-lg border border-gray-700 shadow-sm">
+    <Card className="bg-zinc-950/50 overflow-hidden rounded-lg border border-gray-500/70 shadow-sm">
       <CardContent className="max-w-[250px] flex justify-between items-center ">
         <div className="w-[200px]  flex justify-between  ">
             <p
