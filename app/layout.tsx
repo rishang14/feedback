@@ -30,10 +30,10 @@ export default function RootLayout({
 }>) { 
   
   return (
-    <html lang="en" className="dark" suppressHydrationWarning={true}>
+    <html lang="en"  suppressHydrationWarning={true}>
       <body 
       suppressHydrationWarning={true}
-        className={`${popppins.variable} antialiased  `}
+        className={`${popppins.variable} antialiased   `}
       > 
       <Providers>
        <CustomNav/>

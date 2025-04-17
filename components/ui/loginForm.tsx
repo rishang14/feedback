@@ -137,7 +137,7 @@ export function LoginForm({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input  {...field} id="password" type="password" />
+                      <Input  {...field} id="password" type="password" placeholder="*******"/>
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
@@ -145,7 +145,7 @@ export function LoginForm({
               />
 
               {/* Submit Button */}
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-neutral-800 text-white">
                 Sign in
               </Button>
               <div className="mt-4 text-center text-sm">

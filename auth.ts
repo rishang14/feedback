@@ -1,3 +1,6 @@
+
+export const runtime = 'nodejs'
+
 import NextAuth, { User as NextAuthUser } from "next-auth";
 import User from "@/mongoose/user.schema"
 import authConfig from "./lib/auth.config";

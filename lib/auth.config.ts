@@ -1,3 +1,5 @@
+export const runtime = 'nodejs'
+
 import type { NextAuthConfig, User as UserType } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";

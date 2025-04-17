@@ -65,11 +65,12 @@ export function SignupForm({
         duration: 2000,
       });
       router.push("/signin");
-      setLoading((prev) => !prev); 
-    } catch (error) {  
+      setLoading((prev) => !prev);
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.error("Error response:", error.response.data); 
-        const errorMessage = error.response.data.message || "Something went wrong!";
+        console.error("Error response:", error.response.data);
+        const errorMessage =
+          error.response.data.message || "Something went wrong!";
         toast(errorMessage);
       } else {
         toast("An unexpected error occurred");
@@ -147,17 +148,17 @@ export function SignupForm({
               />
 
               {/* Submit Button */}
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full  bg-neutral-800 text-white"
+              >
                 Sign Up
               </Button>
 
               {/* Already have an account? */}
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link
-                  href="/signin"
-                  className="underline underline-offset-4"
-                >
+                <Link href="/signin" className="underline underline-offset-4">
                   Sign In
                 </Link>
               </div>
