@@ -122,4 +122,11 @@ export const reviewForm = z.object({
   archived: z.boolean().optional(),
   consent: z.boolean().optional(),
   tags: z.array(z.string()).optional(),
-});
+}); 
+
+
+export const SpaceNameEditSchema= z.object({
+  spacename: z.string()
+  .min(3, { message: "Space Name must be at least 3 characters" })
+  .trim()
+})

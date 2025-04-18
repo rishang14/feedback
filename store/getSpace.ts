@@ -1,5 +1,7 @@
 import axios from "axios";
-import { create } from "zustand";
+import { create } from "zustand"; 
+
+
 
 export const useSpace = create((set) => ({
   spaces: [], 
@@ -21,5 +23,14 @@ export const useSpace = create((set) => ({
      } catch (error) {
        console.log(error)
      }
-  }
+  } ,
+  editSpaceName:async (spaceid:string,newName:string)=>{ 
+    console.log(spaceid,'received in usespace')
+     try {
+       const res=await axios.patch(`/api/editspace/spacename/${spaceid}/edit`,JSON.stringify(newName),{withCredentials:true});
+       console.log(res)
+     } catch (error) {
+       console.log(error)
+     } 
+  } 
 }));

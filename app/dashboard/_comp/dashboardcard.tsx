@@ -15,6 +15,7 @@ import { TrashIcon, Ellipsis, PencilIcon, Link, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import EditspaceDialog from "@/components/EditspaceDialog";
+import { Item } from "@radix-ui/react-dropdown-menu";
 
 const Dashboardcard = () => {
   return (
@@ -74,7 +75,7 @@ export const DashboardCardWithMenu = ({ item }: { item: any }) => {
               {" "}
               {item.spacename}
             </p>
-            <DropdownMenuDemo />
+            <DropdownMenuDemo  id={item._id as string}/>
           </div>
         </CardContent>
       </Card>
@@ -82,7 +83,7 @@ export const DashboardCardWithMenu = ({ item }: { item: any }) => {
   );
 };
 
-const DropdownMenuDemo = () => { 
+const DropdownMenuDemo = ({id}:{id:string}) => { 
   const [open,setIsOpen]=useState(false)
   return (
     <>
@@ -114,7 +115,7 @@ const DropdownMenuDemo = () => {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>  
-    <EditspaceDialog isopen={open} onchangeopen={setIsOpen}/>
+    <EditspaceDialog isopen={open} onchangeopen={setIsOpen} spaceid={id}/>
     </>
   );
 };
