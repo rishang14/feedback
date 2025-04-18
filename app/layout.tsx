@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from 'next/font/local'; 
 import { Toaster } from "sonner";
 import "./globals.css";
-import Nav from "@/components/LandingPageComp/Nav";  
+import CustomNav from "@/components/CutomNav";  
 import { Providers } from "./provider";
 
 const popppins = localFont({
@@ -25,16 +25,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children: React.ReactNode;   
+
+}>) { 
+  
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en"  suppressHydrationWarning={true}>
       <body 
       suppressHydrationWarning={true}
-        className={`${popppins.variable} antialiased`}
+        className={`${popppins.variable} antialiased   `}
       > 
       <Providers>
-         <Nav />  
+       <CustomNav/>
         {children} 
           <Toaster/> 
          </Providers>

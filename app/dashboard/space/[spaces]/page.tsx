@@ -11,30 +11,30 @@ import {
   Boxes,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useSpaceDetails } from "@/store/spaceDetails";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
-import { useSession } from "next-auth/react";
-import { useSpaceDetails } from "@/store/spaceDetails";
+import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 
 export default function Page() {
   const [activeSection, setActiveSection] = useState("all");
   const { spaces } = useParams();
   // @ts-ignore
-  const { questions, getSpaceDetails } = useSpaceDetails();
+  const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-
+  console.log(testimonials, "testimonials");
   useEffect(() => {
     if (spaces) getSpaceDetails(spaces as string);
   }, [spaces]);
-  console.log(questions, "spaceqUESTION");
-
-  if (status === "loading") return <Loading />;
+  if (status === "loading" || !questions) return <Loading />;
   if (status !== "authenticated") {
-    router.push("/auth/signin");
+    router.push("/signin");
     toast("Pls sign In to access this routes");
     return;
   }
@@ -65,7 +65,6 @@ export default function Page() {
       {/* Header */}
       <header className="border-b">
         <div className="flex h-16 items-center px-4 md:px-6">
-          <h1 className="text-2xl font-semibold text-white">first</h1>
           <div className="ml-auto flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Video className="h-4 w-4" />
@@ -77,7 +76,10 @@ export default function Page() {
               <span className="text-white">Text credits</span>
               <span className="text-muted-foreground">10</span>
             </div>
-            <Button className="text-white">Edit space</Button>
+            <OpenSpaceFormButton
+              edit={true}
+              spaceid={spaces && (spaces as string)}
+            />
           </div>
         </div>
       </header>
@@ -151,57 +153,21 @@ export default function Page() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6">
-          <div className="max-w-4xl">
-            <TestimonialCard
-              type="Text"
-              rating={5}
-              content="HELLO EVERYone"
-              name="Rishang"
-              date="15 jan 2024"
-            />
+        <main className="flex-1 p-6  min-h-screen max-h-screen overflow-y-auto ">
+          <div className="w-full flex flex-col gap-3 mt-4  ">
+            {testimonials.map((item: any) => {
+              return (
+                <TestimonialCard
+                  key={item._id}
+                  name={item?.name as string}
+                  email={item?.email as string}
+                  description={item?.text as string}
+                  avatar=""
+                  starred={item?.rating as number}
+                />
+              );
+            })}
           </div>
-          {/* <Tabs defaultValue="all" className="w-full">
-            <TabsList className="bg-background border">
-              <TabsTrigger 
-                value="all"
-                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-blue-500/10 data-[state=active]:hover:bg-blue-500"
-              >
-                All
-              </TabsTrigger>
-              <TabsTrigger 
-                value="good"
-                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-blue-500/10 data-[state=active]:hover:bg-blue-500"
-              >
-                Good
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="all" className="mt-6">
-              <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                <Boxes className="h-16 w-16 text-muted-foreground" />
-                <h3 className="text-xl font-semibold text-white">No testimonials yet</h3>
-                <div className="flex space-x-4">
-                  <Button className="bg-blue-500 hover:bg-blue-600">
-                    <Video className="mr-2 h-4 w-4 text-white" />
-                     Add a video
-                  </Button>
-                  <Button variant="outline" className="">
-                    <MessageSquare className="mr-2 h-4 w-4 text-black" />
-                    Add a text
-                  </Button>
-                  <Button variant="outline" className="">
-                    <Lock className="mr-2 h-4 w-4 text-black" />
-                    Bulk import
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="good">
-              <div className="flex flex-col items-center justify-center min-h-[400px]">
-                <p className="text-muted-foreground ">No good testimonials yet</p>
-              </div>
-            </TabsContent>
-          </Tabs> */}
         </main>
       </div>
     </div>

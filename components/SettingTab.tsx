@@ -2,9 +2,9 @@ import React from 'react';
 import z from "zod";
 import { spaceFormSchema } from "@/app/types/schema";
 import { Input } from "./ui/input";
-import { TabsContent } from "@radix-ui/react-tabs";
+import { TabsContent } from "./ui/tabs";
 import { Card, CardContent } from "./ui/card"; 
-import { Select,SelectTrigger,SelectContent ,SelectValue,SelectItem} from '@radix-ui/react-select';
+import { Select,SelectTrigger,SelectContent ,SelectValue,SelectItem} from './ui/select';
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 type props = {
   dynamicData: z.infer<typeof spaceFormSchema>;

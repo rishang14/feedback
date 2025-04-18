@@ -1,16 +1,17 @@
-import authConfig from "./lib/auth.config"
-import NextAuth from "next-auth"  
-import { NextRequest ,NextResponse} from "next/server"; 
+export const runtime = 'nodejs'
+
+import { NextRequest ,NextResponse} from "next/server";  
+import { auth } from "./auth";
 
 
-
-const { auth } = NextAuth(authConfig);  
+// const { auth } = NextAuth(authConfig);  
 
 const protectedRoutes = ['/dashboard','/dashboard/:path*','dashboard/space/:path*']
-const publicRoutes = ['/', '/signin,signup','/']
+const publicRoutes = ['/', '/signin,signup','/'] 
 
 export default auth(async function middleware(req: NextRequest) {
   const session=  await auth(); 
+  console.log(session,"session")
   const path = req.nextUrl.pathname; 
   const isProtectedRoute = protectedRoutes.includes(path);
   const isPublicRoute = publicRoutes.includes(path); 

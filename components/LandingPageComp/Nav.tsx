@@ -1,28 +1,16 @@
 "use client";
-import React from "react";
+import React ,{useState} from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 // import { signOut } from "next-auth/react";
 // import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { LogOutIcon, UserCircleIcon, Pencil } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@radix-ui/react-dropdown-menu";
+import { LogOut, UserCircleIcon, Pencil } from "lucide-react";
 import { useSession } from "next-auth/react"; 
 import { signOut } from "next-auth/react";
 
 const Nav = () => {
   const { status, data } = useSession(); 
-  // console.log(data,"data")
-
-  // console.log(session)
-
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
@@ -37,12 +25,6 @@ const Nav = () => {
               </div>
             ) : (
               <>
-                <Link
-                  href="/"
-                  className="font-medium hover:text-blue-300 text-white text-md"
-                >
-                  Features
-                </Link>
                 <Link
                   href="/signup"
                   className="font-medium hover:text-blue-300 text-white text-md"
@@ -69,11 +51,17 @@ const Nav = () => {
 
 export default Nav;
 
-const AvatarWithMenu = ({ data }: any) => {
+const AvatarWithMenu = ({ data }: any) => { 
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild className="">
-        <Avatar className="h-12 w-12   rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all">
+    <div className="flex justify-end  bg-black">
+      <div className="relative">
+        <Button
+        size={"icon"}
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
+        >
+          <Avatar className="    rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all">
           <AvatarFallback
             className="flex bg-white rounded-full items-center "
             color="white"
@@ -81,36 +69,28 @@ const AvatarWithMenu = ({ data }: any) => {
             <UserCircleIcon />
           </AvatarFallback>
         </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="flex flex-col p-4 border-1 rounded-sm border-slate-600 bg-white"
-        align="end"
-      >
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none text-black">
-              {data?.user?.name}
-            </p>
-            <p className="text-xs leading-none   text-muted-foreground">
-              {data?.user?.email}
-            </p>
+        </Button>
+
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
+            <div className="py-2">
+              <div className="font-medium">  {data?.user?.name}</div>
+              <div className="text-sm  text-muted-foreground">{data?.user?.email}</div>
+            </div>
+
+            <div className="py-1 border-t border-gray-100">
+              
+            </div>
+
+            <div className="py-1 border-t border-gray-100">
+              <Button className="flex items-center z-100 w-full py-2 bg-gray-200 text-left text-neutral-900"  onClick={()=>signOut({callbackUrl:"/"})}>
+                <LogOut className="w-4 h-4 mr-2" />
+                <span>Sign out</span>
+              </Button>
+            </div>
           </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer mt-2 mb-2">
-          <div className="flex gap-1  items-center ">
-            <Pencil className="mr-2  w-4 group-hover:text-blue-500" />
-            Edit profile
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer    text-red-600 hover:border-none">
-          <div className="flex gap-1  items-center " onClick={()=>signOut({callbackUrl:"/"})} >
-            <LogOutIcon className="mr-2  w-4 group-hover:text-red-700" />
-            Sign out
-          </div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        )}
+      </div>
+    </div>
   );
 };

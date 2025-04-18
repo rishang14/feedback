@@ -7,7 +7,7 @@ import User from "@/mongoose/user.schema";
 
 const { auth } = NextAuth(authConfig);
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await auth();
   if (!session?.user?.email) {
     return NextResponse.json(

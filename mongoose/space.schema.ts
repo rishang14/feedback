@@ -17,7 +17,9 @@ interface SpacecDocument{
         ref:"User"
       },
       spacename: {
-        type: String,
+        type: String, 
+        trim:true, 
+        unique:true,
         required: [true, "spacename is required"]
       },
       reviewFormLink: {

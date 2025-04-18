@@ -1,3 +1,4 @@
+
 import * as z from "zod";
 
 export const signupFormSchema = z.object({
@@ -54,24 +55,38 @@ export const loginSchema = z.object({
 });
 
 export const spaceFormSchema = z.object({
-  spaceName: z.string().min(3, { message: "Space Name must be at least 3 characters" }),
-  header: z.string().min(3, { message: "Header must be at least 3 characters" }),
-  customDescription: z.string().min(20, { message: "Custom description must be at least 20 characters" }),
+  spaceName: z
+    .string()
+    .min(3, { message: "Space Name must be at least 3 characters" })
+    .trim(),
+  header: z
+    .string()
+    .min(3, { message: "Header must be at least 3 characters" }),
+  customDescription: z
+    .string()
+    .min(20, { message: "Custom description must be at least 20 characters" }),
   textbuttonText: z.string().default("Submit Review"),
   videoButtonText: z.string().default("Start Recording"),
-  questions: z.array(
-    z.object({
-      id: z.string(),
-      question: z
-        .string({
-          required_error: "Question is required",
-          invalid_type_error: "Correct the format",
-        }).min(1, "Question cannot be empty")
-        .max(100),
-    })
-  ).min(1, { message: "At least one question is required" }), 
+  questions: z
+    .array(
+      z.object({
+        id: z.string(),
+        question: z
+          .string({
+            required_error: "Question is required",
+            invalid_type_error: "Correct the format",
+          })
+          .min(1, "Question cannot be empty")
+          .max(100),
+        _id: z.string().optional(),
+      })
+    )
+    .min(1, { message: "At least one question is required" }),
 
-  questionlabel: z.string().min(5, { message: "Question Label must be at least 5 characters" }).default("Questions"),
+  questionlabel: z
+    .string()
+    .min(5, { message: "Question Label must be at least 5 characters" })
+    .default("Questions"),
   thankYouTitle: z.string().default("Thank You"),
   thankYouMessage: z.string().default(""),
   theme: z.enum(["light", "dark"]).default("light"),
@@ -80,4 +95,31 @@ export const spaceFormSchema = z.object({
   ratingEnabled: z.boolean().default(false),
   redirectUrl: z.string().optional(),
   videotime: z.string().default("30"),
+});
+
+export const EditFormSchema = spaceFormSchema.omit({ spaceName: true });
+
+export const reviewForm = z.object({
+  name: z
+    .string({
+      required_error: "Name is required",
+      invalid_type_error: "Correct the format",
+    })
+    .min(3),
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Correct the format",
+    })
+    .email(),
+  rating: z.number().optional(),
+  text: z
+    .string({
+      required_error: "Review is required",
+    })
+    .min(50, { message: "Review must be at least of 50 characters" }),
+  walloflove: z.boolean().optional(),
+  archived: z.boolean().optional(),
+  consent: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
 });

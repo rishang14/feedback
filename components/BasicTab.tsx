@@ -1,11 +1,11 @@
 import React from "react";
 import z from "zod";
-import { TabsContent } from "@radix-ui/react-tabs";
+import { TabsContent } from "./ui/tabs";
 import { Card, CardContent } from "./ui/card";
 import { spaceFormSchema } from "@/app/types/schema";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Switch } from "@radix-ui/react-switch";
+import { Switch } from "./ui/switch";
 import { Textarea } from "./ui/textarea";
 import { Trash2, CirclePlus } from "lucide-react";
 type Question = {
@@ -20,7 +20,8 @@ type Props = {
   setDynamicData: React.Dispatch<React.SetStateAction<spaceformtype>>;
 //   handleQuestionChange: (index: number, value: string) => void;
 deletQuestionBox: (id: string) => void;
-  addQuestionBox: () => void;
+  addQuestionBox: () => void; 
+  edit:boolean
 };
 const BasicTab = ({
   dynamicData,
@@ -28,13 +29,17 @@ const BasicTab = ({
   validationErrors,
   deletQuestionBox,
   addQuestionBox,
-  setDynamicData
-}: Props) => {
+  setDynamicData, 
+  edit
+}: Props) => { 
+  // console.log(validationErrors,"i am getting the value in basic tab")
   return (
     <TabsContent value="basic" className="space-y-6 mt-6">
       <Card>
         <CardContent className="pt-6 space-y-6">
-          <div className="space-y-2">
+          {
+            !edit && (
+              <div className="space-y-2">
             <label htmlFor="space Name">Space Name</label>
             <Input
               value={dynamicData.spaceName}
@@ -45,6 +50,8 @@ const BasicTab = ({
               <p className="text-red-500">{validationErrors["spaceName"]}</p>
             )}
           </div>
+            )
+          }
           <div className="space-y-2">
             <label htmlFor="header"> Header Title</label>
             <Input
@@ -74,7 +81,12 @@ const BasicTab = ({
             )}
           </div>
           <div className="flex  space-y-2  flex-col">
-            <label htmlFor="Review Form question">Review Form question</label>
+            <label htmlFor="Review Form question">Review Form question</label> 
+            {validationErrors["questions"] && (
+              <p className="text-red-500">
+                {validationErrors["questions"]}
+              </p>
+            )}
             {dynamicData.questions.map((item: Question, ind: any) => {
               return (
                 <div
@@ -110,9 +122,9 @@ const BasicTab = ({
                       <Trash2 color="black" />
                     </Button>
                   </div>
-                  {validationErrors[`questions.${ind}.questions`] && (
+                  {validationErrors[`questions.${ind}.question`] && (
                     <p className="text-red-500 text-start">
-                      {validationErrors[`questions.${ind}.questions`]}
+                      {validationErrors[`questions.${ind}.question`]}
                     </p>
                   )}
                 </div>
@@ -152,7 +164,7 @@ const BasicTab = ({
               className="bg-blue-500 text-white p-2  w-full text-center"
               type="submit"
             >
-              Create Space
+             { edit ? "Update Space" :   "Create Space"  }
             </Button>
           </div>
         </CardContent>

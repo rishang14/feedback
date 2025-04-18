@@ -1,12 +1,12 @@
+import FeaturesSection from "@/components/LandingPageComp/Feature";
 import Hero from "@/components/LandingPageComp/Hero";
-import Nav from "@/components/LandingPageComp/Nav";
-import { ModeToggle } from "@/components/ThemeToggler";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";  
+import TestimonialSpace from "@/components/LandingPageComp/TestimonialSpace";
 export default function Home() {
   return ( 
     <>
-    <Hero/> 
+    <Hero/>   
+    <TestimonialSpace/>
+    <FeaturesSection/>
     </>
   );
 }
