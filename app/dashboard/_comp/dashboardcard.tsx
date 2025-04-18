@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -11,11 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Ellipsis } from "lucide-react";
+import { TrashIcon, Ellipsis, PencilIcon, Link, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useGetSpace } from "@/store/getSpace";
-import { any } from "zod";
-// import { useSpaceDetails } from "@/store/spaceDetails";
+import { AnimatePresence, motion } from "framer-motion";
+import EditspaceDialog from "@/components/EditspaceDialog";
 
 const Dashboardcard = () => {
   return (
@@ -32,9 +31,9 @@ const Dashboardcard = () => {
 };
 export default Dashboardcard;
 
-export const DashboardCardWithMenu = ( {item}:{item:any} ) => {
+export const DashboardCardWithMenu = ({ item }: { item: any }) => {
   // @ts-ignore
-  console.log(item,"item")
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   // @ts-ignore
   // const { getSpaceDetails } = useSpaceDetails();
   const router = useRouter();
@@ -42,47 +41,80 @@ export const DashboardCardWithMenu = ( {item}:{item:any} ) => {
     router.push(`/dashboard/space/${spaces}`);
   };
   return (
-    <Card className="bg-zinc-950/50 overflow-hidden rounded-lg border border-gray-500/70 shadow-sm">
-      <CardContent className="max-w-[250px] flex justify-between items-center ">
-        <div className="w-[200px]  flex justify-between  ">
+    <div
+      key={item._id}
+      className=" relative p-2 "
+      onMouseEnter={() => setHoveredIndex(item._id)}
+      onMouseLeave={() => setHoveredIndex(null)}
+    >
+      <AnimatePresence>
+        {hoveredIndex === item._id && (
+          <motion.span
+            className="absolute inset-0 h-full w-full bg-slate-800/[0.8] block rounded-lg"
+            layoutId="hoverBackground"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { duration: 0.15 },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.15, delay: 0.2 },
+            }}
+          />
+        )}
+      </AnimatePresence>
+      <Card className="bg-zinc-950/50 overflow-hidden relative group    rounded-lg border border-gray-500/70 shadow-sm">
+        <CardContent className="max-w-[250px] flex justify-between items-center ">
+          <div className="w-[200px]  flex justify-between ">
             <p
-              className="text-white text-xl font-medium "
+              className="text-white hover:text-gray-200/90 text-xl font-medium underline cursor-pointer"
               onClick={() => handleClick(item._id)}
             >
               {" "}
               {item.spacename}
             </p>
-        </div>
-      </CardContent>
-      <CardDescription></CardDescription>
-    </Card>
+            <DropdownMenuDemo />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
-const DropdownMenuDemo = () => {
+const DropdownMenuDemo = () => { 
+  const [open,setIsOpen]=useState(false)
   return (
+    <>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-gray-800 border-none hover:bg-gray-400 cursor-pointer"
+          className=" border-none hover:bg-gray-400 cursor-pointer"
           size="icon"
         >
           <Ellipsis size={40} color="#fff" strokeWidth={0.75} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-5 bg-gray-100">
-        <DropdownMenuLabel>Settings</DropdownMenuLabel>
+      <DropdownMenuContent className="flex flex-col bg-neutral-950" >
+        <DropdownMenuLabel className="text-white flex gap-2 items-center">
+          <Settings className="h-4 w-4" /> Settings
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            Edit Space
+              <DropdownMenuItem className="cursor-pointer text-gray-200 hover:bg-black" onClick={()=>setIsOpen(true)}>
+                <PencilIcon className="hover:text-black" /> Edit Space Name
+              </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer text-gray-200">
+            <TrashIcon color="red" /> Delete Space
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer ">
-            Delete Space
+          <DropdownMenuItem className="cursor-pointer text-gray-200">
+            <Link className="hover:text-black" /> Get Form Link
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu>  
+    <EditspaceDialog isopen={open} onchangeopen={setIsOpen}/>
+    </>
   );
 };

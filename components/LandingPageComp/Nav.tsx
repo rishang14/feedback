@@ -26,12 +26,6 @@ const Nav = () => {
             ) : (
               <>
                 <Link
-                  href="/"
-                  className="font-medium hover:text-blue-300 text-white text-md"
-                >
-                  Features
-                </Link>
-                <Link
                   href="/signup"
                   className="font-medium hover:text-blue-300 text-white text-md"
                 >
@@ -62,7 +56,8 @@ const AvatarWithMenu = ({ data }: any) => {
   return (
     <div className="flex justify-end  bg-black">
       <div className="relative">
-        <button
+        <Button
+        size={"icon"}
           onClick={() => setIsOpen(!isOpen)}
           className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
         >
@@ -74,10 +69,10 @@ const AvatarWithMenu = ({ data }: any) => {
             <UserCircleIcon />
           </AvatarFallback>
         </Avatar>
-        </button>
+        </Button>
 
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 py-2 px-3">
+          <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
             <div className="py-2">
               <div className="font-medium">  {data?.user?.name}</div>
               <div className="text-sm  text-muted-foreground">{data?.user?.email}</div>
@@ -88,7 +83,7 @@ const AvatarWithMenu = ({ data }: any) => {
             </div>
 
             <div className="py-1 border-t border-gray-100">
-              <Button className="flex items-center w-full py-2 bg-gray-200 text-left text-neutral-900"  onClick={()=>signOut({callbackUrl:"/"})}>
+              <Button className="flex items-center z-100 w-full py-2 bg-gray-200 text-left text-neutral-900"  onClick={()=>signOut({callbackUrl:"/"})}>
                 <LogOut className="w-4 h-4 mr-2" />
                 <span>Sign out</span>
               </Button>

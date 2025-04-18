@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button"
 export default function Hero() {
   return (
     <section className="relative w-full py-12 min-h-screen md:py-24 lg:py-32 overflow-hidden">
-      <div className="absolute bg-neutral-950 inset-0 -z-10 bg-[linear-gradient(to_right,#333_1px,transparent_1px),linear-gradient(to_bottom,#333_1px,transparent_1px)] bg-[size:4rem_4rem] dark:bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
+      <div className="absolute bg-zinc-900/10 inset-0 -z-10  bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center text-center space-y-4 md:space-y-8">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl max-w-3xl bg-gradient-to-r from-white via-gray-300 to-gray-500 text-transparent bg-clip-text">

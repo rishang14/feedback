@@ -3,14 +3,14 @@ import React, { useEffect } from "react";
 import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
 import { FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useGetSpace } from "@/store/getSpace";
+import { useSpace } from "@/store/getSpace";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 const Page = () => {
   const { status } = useSession();
   //@ts-ignore
-  const { spaces, getspace } = useGetSpace();
+  const { spaces, getspace } = useSpace();
   const router = useRouter();
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
@@ -22,8 +22,8 @@ const Page = () => {
   if (status === "loading") return <Loading />;
 
   return (
-    <main className="w-full min-h-screen  relative  py-12  md:py-24 lg:py-32 overflow-hidden  flex   ">
-      <div className="absolute bg-zinc-950/30 inset-0 -z-10 bg-[linear-gradient(to_right,#333_1px,transparent_1px),linear-gradient(to_bottom,#333_1px,transparent_1px)] bg-[size:4rem_4rem] dark:bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
+    <main className="w-full     md:py-24 lg:py-32 overflow-hidden  flex   ">
+      <div className="absolute bg-zinc-950/30 inset-0 -z-10 md:block hidden   bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
       <div className="container px-4 md:px-6">
         <div className="w-full  max-w-[1080] flex flex-col items-center p-5  md:m-auto ">
           <div className="flex items-center space-x-5 md:flex-row flex-col">
@@ -47,18 +47,22 @@ const Page = () => {
             </div>
             {/* space body section  */}
             <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-10 gap-y-6 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">
-              {/* <Emptyspace/> */}
-              {
-                // @ts-ignore
-                spaces.map((spaces) => {
-                  return (
-                    <DashboardCardWithMenu
-                      item={spaces as any}
-                      key={spaces._id}
-                    />
-                  );
-                })
-              }
+              {spaces?.length === 0 ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Emptyspace />
+                </div>
+              ) : (
+                <>
+                  {spaces.map((spaces: any) => {
+                    return (
+                      <DashboardCardWithMenu
+                        item={spaces as any}
+                        key={spaces._id}
+                      />
+                    );
+                  })}
+                </>
+              )}
             </div>
           </div>
         </div>

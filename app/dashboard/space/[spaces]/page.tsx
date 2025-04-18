@@ -24,7 +24,6 @@ import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 export default function Page() {
   const [activeSection, setActiveSection] = useState("all");
   const { spaces } = useParams();
-  // console.log(spaces,"id")
   // @ts-ignore
   const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
   const router = useRouter();
@@ -33,11 +32,9 @@ export default function Page() {
   useEffect(() => {
     if (spaces) getSpaceDetails(spaces as string);
   }, [spaces]);
-  // console.log(questions, "spaceqUESTION");
-
-  if (status === "loading") return <Loading />;
+  if (status === "loading" || !questions) return <Loading />;
   if (status !== "authenticated") {
-    router.push("/auth/signin");
+    router.push("/signin");
     toast("Pls sign In to access this routes");
     return;
   }
@@ -156,58 +153,21 @@ export default function Page() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6  ">
-          <div className="w-full max-h-[90%] overflow-y-auto">
-            <TestimonialCard
-              name="Alex Johnson"
-              email="alex.johnson@example.com"
-              description="The product exceeded all my expectations. The user interface is intuitive, and the customer support team was incredibly helpful when I had questions. I've already recommended it to several colleagues."
-              avatar="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80"
-              date="2 days ago"
-          
-            />
+        <main className="flex-1 p-6  min-h-screen max-h-screen overflow-y-auto ">
+          <div className="w-full flex flex-col gap-3 mt-4  ">
+            {testimonials.map((item: any) => {
+              return (
+                <TestimonialCard
+                  key={item._id}
+                  name={item?.name as string}
+                  email={item?.email as string}
+                  description={item?.text as string}
+                  avatar=""
+                  starred={item?.rating as number}
+                />
+              );
+            })}
           </div>
-          {/* <Tabs defaultValue="all" className="w-full">
-            <TabsList className="bg-background border">
-              <TabsTrigger 
-                value="all"
-                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-blue-500/10 data-[state=active]:hover:bg-blue-500"
-              >
-                All
-              </TabsTrigger>
-              <TabsTrigger 
-                value="good"
-                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-blue-500/10 data-[state=active]:hover:bg-blue-500"
-              >
-                Good
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="all" className="mt-6">
-              <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                <Boxes className="h-16 w-16 text-muted-foreground" />
-                <h3 className="text-xl font-semibold text-white">No testimonials yet</h3>
-                <div className="flex space-x-4">
-                  <Button className="bg-blue-500 hover:bg-blue-600">
-                    <Video className="mr-2 h-4 w-4 text-white" />
-                     Add a video
-                  </Button>
-                  <Button variant="outline" className="">
-                    <MessageSquare className="mr-2 h-4 w-4 text-black" />
-                    Add a text
-                  </Button>
-                  <Button variant="outline" className="">
-                    <Lock className="mr-2 h-4 w-4 text-black" />
-                    Bulk import
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="good">
-              <div className="flex flex-col items-center justify-center min-h-[400px]">
-                <p className="text-muted-foreground ">No good testimonials yet</p>
-              </div>
-            </TabsContent>
-          </Tabs> */}
         </main>
       </div>
     </div>
