@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import EditspaceDialog from "@/components/EditspaceDialog";
 import { Item } from "@radix-ui/react-dropdown-menu";
+import { toast } from "sonner";
 
 const Dashboardcard = () => {
   return (
@@ -41,6 +42,7 @@ export const DashboardCardWithMenu = ({ item }: { item: any }) => {
   const handleClick = async (spaces: any) => {
     router.push(`/dashboard/space/${spaces}`);
   };
+
   return (
     <div
       key={item._id}
@@ -75,7 +77,7 @@ export const DashboardCardWithMenu = ({ item }: { item: any }) => {
               {" "}
               {item.spacename}
             </p>
-            <DropdownMenuDemo  id={item._id as string}/>
+            <DropdownMenuDemo item={item} />
           </div>
         </CardContent>
       </Card>
@@ -83,39 +85,58 @@ export const DashboardCardWithMenu = ({ item }: { item: any }) => {
   );
 };
 
-const DropdownMenuDemo = ({id}:{id:string}) => { 
-  const [open,setIsOpen]=useState(false)
+const DropdownMenuDemo = ({ item }: any) => {
+  const handleCopyClick = async () => {
+    const url = "http://localhost:3000/reviewform/";
+    try {
+      await navigator.clipboard.writeText(`${url}${item.spacename}`);
+      toast("Review Form Link copied successfully");
+    } catch (error) {
+      toast("Error while Copying");
+    }
+  };
+  const [open, setIsOpen] = useState(false);
   return (
     <>
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className=" border-none hover:bg-gray-400 cursor-pointer"
-          size="icon"
-        >
-          <Ellipsis size={40} color="#fff" strokeWidth={0.75} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col bg-neutral-950" >
-        <DropdownMenuLabel className="text-white flex gap-2 items-center">
-          <Settings className="h-4 w-4" /> Settings
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer text-gray-200 hover:bg-black" onClick={()=>setIsOpen(true)}>
-                <PencilIcon className="hover:text-black" /> Edit Space Name
-              </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer text-gray-200">
-            <TrashIcon color="red" /> Delete Space
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer text-gray-200">
-            <Link className="hover:text-black" /> Get Form Link
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>  
-    <EditspaceDialog isopen={open} onchangeopen={setIsOpen} spaceid={id}/>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            className=" border-none hover:bg-gray-400 cursor-pointer"
+            size="icon"
+          >
+            <Ellipsis size={40} color="#fff" strokeWidth={0.75} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="flex flex-col bg-neutral-950">
+          <DropdownMenuLabel className="text-white flex gap-2 items-center">
+            <Settings className="h-4 w-4" /> Settings
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="cursor-pointer text-gray-200 hover:bg-black"
+              onClick={() => setIsOpen(true)}
+            >
+              <PencilIcon className="hover:text-black" /> Edit Space Name
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-gray-200">
+              <TrashIcon color="red" /> Delete Space
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer text-gray-200"
+              onClick={handleCopyClick}
+            >
+              <Link className="hover:text-black" /> Get Form Link
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <EditspaceDialog
+        isopen={open}
+        onchangeopen={setIsOpen}
+        spaceid={item._id as string}
+      />
     </>
   );
 };

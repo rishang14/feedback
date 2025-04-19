@@ -22,7 +22,7 @@ export async function PATCH(request: NextRequest, context: any) {
     const validatedData = SpaceNameEditSchema.safeParse(data);
     if (!validatedData.success) {
       return NextResponse.json(
-        { error: "Pls send validate name" },
+        { error: "Pls send validate Data" },
         { status: 401 }
       );
     } 
@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest, context: any) {
     const space = await Space.findOne({  spacename });
     if (space) {
       return NextResponse.json(
-        { error: "This spaceName already exists" },
+        { error: "Space with this name already exists choose different Name" },
         { status: 409 }
       );
     }

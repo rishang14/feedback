@@ -57,8 +57,7 @@ export const loginSchema = z.object({
 export const spaceFormSchema = z.object({
   spaceName: z
     .string()
-    .min(3, { message: "Space Name must be at least 3 characters" })
-    .trim(),
+    .min(3, { message: "Space Name must be at least 3 characters" }).transform((val) => val.trim().toLowerCase().replace(/\s+/g, "")),
   header: z
     .string()
     .min(3, { message: "Header must be at least 3 characters" }),
@@ -127,6 +126,5 @@ export const reviewForm = z.object({
 
 export const SpaceNameEditSchema= z.object({
   spacename: z.string()
-  .min(3, { message: "Space Name must be at least 3 characters" })
-  .trim()
+  .min(3, { message: "Space Name must be at least 3 characters" }).transform((val) => val.trim().toLowerCase().replace(/\s+/g, ""))
 })

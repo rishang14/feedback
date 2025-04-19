@@ -24,13 +24,13 @@ export const useSpace = create((set) => ({
        console.log(error)
      }
   } ,
-  editSpaceName:async (spaceid:string,newName:string)=>{ 
-    console.log(spaceid,'received in usespace')
-     try {
-       const res=await axios.patch(`/api/editspace/spacename/${spaceid}/edit`,JSON.stringify(newName),{withCredentials:true});
-       console.log(res)
-     } catch (error) {
-       console.log(error)
-     } 
-  } 
+  // editSpaceName:async (spaceid:string,newName:string)=>{ 
+  //   console.log(spaceid,'received in usespace')
+  //    try {
+  //      const res=await axios.patch(`/api/editspace/spacename/${spaceid}/edit`,JSON.stringify(newName),{withCredentials:true});
+  //      console.log(res)
+  //    } catch (error) {
+  //      console.log(error)
+  //    } 
+  // } 
 }));

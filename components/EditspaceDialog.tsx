@@ -23,31 +23,59 @@ import { PencilIcon } from "lucide-react";
 import { useSpace } from "@/store/getSpace";
 import { SpaceNameEditSchema } from "@/app/types/schema";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { toast } from "sonner";
+import { time } from "console";
 
 type prop = {
   isopen: boolean;
   onchangeopen: React.Dispatch<React.SetStateAction<boolean>>;
   spaceid: string;
-}; 
- 
-type spacemanetype= z.infer<typeof SpaceNameEditSchema>
+};
+
+type spacemanetype = z.infer<typeof SpaceNameEditSchema>;
 const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
   //  @ts-ignore
-  const { editSpaceName } = useSpace();
-  const [spacename, setspaceName] = useState<string>("");
-   const form = useForm<spacemanetype>({
-     resolver: zodResolver(SpaceNameEditSchema),
-     defaultValues: {
-       spacename:""
-     },
-   }); 
-   const {
+  const { getSpace } = useSpace();
+  const form = useForm<spacemanetype>({
+    resolver: zodResolver(SpaceNameEditSchema),
+    defaultValues: {
+      spacename: "",
+    },
+  });
+  const {
     control,
     handleSubmit,
-    formState: { errors },
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
   } = form;
-  const onSubmit = (data:spacemanetype) => {
-    console.log(spacename, "values");
+  const onSubmit = async (data: spacemanetype) => {
+    try {
+      const { spacename } = data;
+      const res = await axios.patch(
+        `/api/editspace/spacename/${spaceid}/edit`,
+        JSON.stringify({ spacename: spacename }),
+        { withCredentials: true }
+      );
+      onchangeopen(false);
+      reset();
+      toast.success("SpaceName Updated", { duration: 3000 });
+      window.location.reload();
+    } catch (error) {
+      // @ts-ignore
+      if (error.status === 409) {
+        setError("spacename", {
+          type: "server",
+          // @ts-ignore
+          message: error?.response?.data?.error || "Something went wrong",
+        });
+      } else {
+        toast.error("Something went wrong Pls try again");
+        reset();
+        onchangeopen(false);
+      }
+    }
   };
   return (
     <Dialog open={isopen}>
@@ -56,32 +84,50 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
           <DialogTitle className="text-white flex items-center gap-2">
             <PencilIcon className=" w-4 h-4 " /> Edit SpaceName
           </DialogTitle>
-        </DialogHeader> 
+        </DialogHeader>
         <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col  gap-4">
-            <Input
-              id="name"
-              value={spacename}
-              onChange={(e) => setspaceName(e.target.value)}
-              placeholder="Enter New Name"
-              className="bg-slate-900/10 text-white"
-            />
-            <div className="w-full items-center flex justify-end gap-4">
-              <Button type="submit" className="bg-blue-500 text-white">
-                Save
-              </Button>
-              <DialogClose asChild>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col  gap-4">
+              <FormField
+                control={control}
+                name="spacename"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isSubmitting}
+                        id="spacename"
+                        className="bg-slate-900/10 text-white"
+                        placeholder="Enter New Space name"
+                      />
+                    </FormControl>
+                    <FormMessage>{errors.spacename?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+              <div className="w-full items-center flex justify-end gap-4">
                 <Button
-                  className="bg-white text-black"
-                  onClick={() => onchangeopen(false)}
+                  type="submit"
+                  className="bg-blue-500 text-white"
+                  disabled={isSubmitting}
                 >
-                  Close
+                  {isSubmitting ? " Saving..." : "Save"}
                 </Button>
-              </DialogClose>
+                <DialogClose asChild>
+                  <Button
+                    className="bg-white text-black"
+                    onClick={() => {
+                      reset();
+                      onchangeopen(false);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </DialogClose>
+              </div>
             </div>
-          </div>
-        </form> 
+          </form>
         </Form>
       </DialogContent>
     </Dialog>

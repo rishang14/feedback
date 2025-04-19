@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
-import { useGetSpace } from "@/store/getSpace";
+import { useSpace } from "@/store/getSpace";
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { TestimonialFormButton } from "@/components/Testimonialbutton";
@@ -13,7 +13,7 @@ const page = () => {
   const { id } = useParams();
   console.log(id);
   // @ts-ignore
-  const { getspaceReviewForm, spaceReviewDetail } = useGetSpace();
+  const { getspaceReviewForm, spaceReviewDetail } = useSpace();
   console.log(typeof spaceReviewDetail, "detail");
   console.log(spaceReviewDetail);
  
