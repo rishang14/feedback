@@ -26,8 +26,8 @@ const Page = () => {
   if (status === "loading") return <Loading />;
 
   return (
-    <main className="w-full     md:py-24 lg:py-32 overflow-hidden  flex   ">
-      <div className="absolute bg-zinc-950/30 inset-0 -z-10 md:block hidden   bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
+    <main className="w-full   relative  md:py-24 lg:py-32 overflow-hidden  flex   ">
+      <div className="absolute bg-zinc-950/30 inset-0 -z-10 md:block hidden bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
       <div className="container px-4 md:px-6">
         <div className="w-full  max-w-[1080] flex flex-col items-center p-5  md:m-auto ">
           <div className="flex items-center space-x-5 md:flex-row flex-col">
@@ -47,7 +47,7 @@ const Page = () => {
               <h1 className=" md:text-4xl text-2xl font-bold   text-white ">
                 Active Spaces
               </h1>
-              <OpenSpaceFormButton edit={false} />
+              {spaces?.length > 0 && <OpenSpaceFormButton edit={false} />}
             </div>
             {/* space body section  */}
             <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-10 gap-y-6 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">

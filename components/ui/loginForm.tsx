@@ -71,20 +71,17 @@ export function LoginForm({
         email:data.email, 
         password:data.password
       })
-      if(res?.error){ 
+      if(res?.error !== null){ 
         console.log(res)
-        toast(res?.error)
-      } 
-      if(res?.ok){ 
-
-        toast("welcome again")
-        router.push("/dashboard"); 
-
+        toast.error('Invalid Credentials or User not exist',{duration:3000})
+      } else{
+        toast.success("Welcome Again",{duration:2000})
       }
+      
     } catch (error) {
-      if(error){ 
-        //@ts-ignore
-        toast(error?.message + "error")
+      if(error){  
+        console.log(error)
+        toast.error("Pls try again",{duration:3000})
       }
     }finally{
       setLoading(false)

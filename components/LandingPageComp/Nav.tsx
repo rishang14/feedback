@@ -12,7 +12,7 @@ import { signOut } from "next-auth/react";
 const Nav = () => {
   const { status, data } = useSession(); 
   return (
-    <header className=" bg-black/30  backdrop-blur-2xl w-full  shadow-lg border-b border-b-slate-800 z-[200]">
+    <header className=" bg-black/30  backdrop-blur-2xl w-full relative shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
         <Link href="/" className="md:text-2xl text-lg text-white font-bold  ">
           ReviewVault
@@ -59,7 +59,7 @@ const AvatarWithMenu = ({ data }: any) => {
         <Button
         size={"icon"}
           onClick={() => setIsOpen(!isOpen)}
-          className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
+          className=" rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
         >
           <Avatar className="    rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all">
           <AvatarFallback
@@ -72,7 +72,7 @@ const AvatarWithMenu = ({ data }: any) => {
         </Button>
 
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
+          <div className="absolute right-4 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
             <div className="py-2">
               <div className="font-medium">  {data?.user?.name}</div>
               <div className="text-sm  text-muted-foreground">{data?.user?.email}</div>

@@ -40,7 +40,7 @@ export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
+        className=" flex flex-col p-6 z-1000 min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
