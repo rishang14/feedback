@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useEffect }   from "react";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +25,6 @@ import { SpaceNameEditSchema } from "@/app/types/schema";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "sonner";
-import { time } from "console";
 
 type prop = {
   isopen: boolean;
@@ -36,7 +35,8 @@ type prop = {
 type spacemanetype = z.infer<typeof SpaceNameEditSchema>;
 const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
   //  @ts-ignore
-  const { getSpace } = useSpace();
+  // const { getSpace } = useSpace(); 
+  console.log(isopen,"after close")
   const form = useForm<spacemanetype>({
     resolver: zodResolver(SpaceNameEditSchema),
     defaultValues: {
@@ -49,7 +49,14 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
     setError,
     reset,
     formState: { errors, isSubmitting },
-  } = form;
+  } = form; 
+
+
+  useEffect(()=>{
+    if (!isopen) {
+      reset();
+    }
+  },[isopen,reset])
   const onSubmit = async (data: spacemanetype) => {
     try {
       const { spacename } = data;
@@ -78,7 +85,7 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
     }
   };
   return (
-    <Dialog open={isopen}>
+    <Dialog open={isopen} >
       <DialogContent className="flex flex-col bg-zinc-950">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
@@ -115,11 +122,12 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
                   {isSubmitting ? " Saving..." : "Save"}
                 </Button>
                 <DialogClose asChild>
-                  <Button
+                  <Button 
+                  type="button"
                     className="bg-white text-black"
                     onClick={() => {
-                      reset();
                       onchangeopen(false);
+                      reset();
                     }}
                   >
                     Close

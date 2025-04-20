@@ -1,6 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
-import Dashboardcard, { DashboardCardWithMenu } from "./_comp/dashboardcard";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Dashboardcard from "./_comp/dashboardcard";
+import DashboardCardWithMenu from "./_comp/dashboadrCard";
 import { FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSpace } from "@/store/getSpace";
@@ -9,7 +11,9 @@ import { useSession } from "next-auth/react";
 import { OpenSpaceFormButton } from "@/components/SpaceFormButton";
 const Page = () => {
   const { status } = useSession();
-  //@ts-ignore
+  // @ts-ignore
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // @ts-ignore
   const { spaces, getspace } = useSpace();
   const router = useRouter();
   useEffect(() => {
@@ -53,12 +57,36 @@ const Page = () => {
                 </div>
               ) : (
                 <>
-                  {spaces.map((spaces: any) => {
+                  {spaces.map((spaces: any, idx: any) => {
                     return (
-                      <DashboardCardWithMenu
-                        item={spaces as any}
+                      <div
                         key={spaces._id}
-                      />
+                        className="relative  "
+                        onMouseEnter={() => setHoveredIndex(idx)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        <AnimatePresence>
+                          {hoveredIndex === idx && (
+                            <motion.span
+                              className="absolute inset-0 h-full w-full bg-slate-800/[0.8] block rounded-lg"
+                              layoutId="hoverBackground"
+                              initial={{ opacity: 0 }}
+                              animate={{
+                                opacity: 1,
+                                transition: { duration: 0.15 },
+                              }}
+                              exit={{
+                                opacity: 0,
+                                transition: { duration: 0.15, delay: 0.2 },
+                              }}
+                            />
+                          )}
+                        </AnimatePresence>
+                        <DashboardCardWithMenu
+                          item={spaces as any}
+                          key={spaces._id}
+                        />
+                      </div>
                     );
                   })}
                 </>
