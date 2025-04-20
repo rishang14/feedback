@@ -11,25 +11,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { TrashIcon, Ellipsis, PencilIcon, Link, Settings } from "lucide-react";
-import { useRouter } from "next/navigation";
 import EditspaceDialog from "@/components/EditspaceDialog";
 import { toast } from "sonner";
+import DeleteSpaceDialog from "@/components/DeleteSpaceDialog";
 
 const DropdownMenuDemo = ({ item }: any) => {
-  const [open, setIsOpen] = useState(false);
+  const [editopen, setEditIsOpen] = useState(false);
+  const [deleteopen, setDelteIsOpen] = useState(false);
   const handleCopyClick = async () => {
     const url = "http://localhost:3000/reviewform/";
     try {
       await navigator.clipboard.writeText(`${url}${item.spacename}`);
-      toast("Review Form Link copied successfully");
+      toast.success("Review Form Link copied successfully");
     } catch (error) {
       toast("Error while Copying");
     }
   };
   const handleDialogopen = (newstate: boolean) => {
-    setIsOpen(newstate);
+    setEditIsOpen(newstate);
   };
-  console.log(open, "dashborad before");
   return (
     <>
       <DropdownMenu modal={false}>
@@ -54,7 +54,9 @@ const DropdownMenuDemo = ({ item }: any) => {
             >
               <PencilIcon className="hover:text-black" /> Edit Space Name
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-gray-200">
+            <DropdownMenuItem className="cursor-pointer text-gray-200" 
+            onClick={()=>setDelteIsOpen(true)}
+            >
               <TrashIcon color="red" /> Delete Space
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -67,8 +69,13 @@ const DropdownMenuDemo = ({ item }: any) => {
         </DropdownMenuContent>
       </DropdownMenu>
       <EditspaceDialog
-        isopen={open}
-        onchangeopen={setIsOpen}
+        isopen={editopen}
+        onchangeopen={setEditIsOpen}
+        spaceid={item._id as string}
+      />
+      <DeleteSpaceDialog
+        isopen={deleteopen}
+        onchangeopen={setDelteIsOpen}
         spaceid={item._id as string}
       />
     </>

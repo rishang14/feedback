@@ -61,7 +61,7 @@ const Page = () => {
                     return (
                       <div
                         key={spaces._id}
-                        className="relative  "
+                        className="relative p-2 "
                         onMouseEnter={() => setHoveredIndex(idx)}
                         onMouseLeave={() => setHoveredIndex(null)}
                       >

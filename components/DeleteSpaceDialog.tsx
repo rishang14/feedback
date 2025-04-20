@@ -8,10 +8,8 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTitle
   } from "@/components/ui/alert-dialog"
-  import { Button } from "@/components/ui/button"
 
 type prop = {
   isopen: boolean;
@@ -21,17 +19,17 @@ type prop = {
 const DeleteSpaceDialog = ({isopen,onchangeopen,spaceid}:prop) => {
   return (
     <AlertDialog open={isopen}   >
-    <AlertDialogContent >
+    <AlertDialogContent className=' bg-zinc-950'>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-        <AlertDialogDescription>
+        <AlertDialogTitle className='text-white '>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogDescription className='text-gray-400'>
           This action cannot be undone. This will permanently delete your
-          account and remove your data from our servers.
+          Space and remove your data from our servers.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel onClick={()=>onchangeopen(false)}>Cancel</AlertDialogCancel>
-        <AlertDialogAction>Continue</AlertDialogAction>
+        <AlertDialogCancel className='text-white bg-blue-500  hover:bg-blue-600' onClick={()=>onchangeopen(false)}>Cancel</AlertDialogCancel>
+        <AlertDialogAction className='text-white  bg-red-500' onClick={()=>console.log("i am delting")}>Delete Space</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
