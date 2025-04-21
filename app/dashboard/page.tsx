@@ -50,7 +50,7 @@ const Page = () => {
               {spaces?.length > 0 && <OpenSpaceFormButton edit={false} />}
             </div>
             {/* space body section  */}
-            <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-10 gap-y-6 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">
+            <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-5 gap-y-3 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">
               {spaces?.length === 0 ? (
                 <div className="w-full h-full flex items-center justify-center">
                   <Emptyspace />
