@@ -14,18 +14,17 @@ import { TrashIcon, Ellipsis, PencilIcon, Link, Settings } from "lucide-react";
 import EditspaceDialog from "@/components/EditspaceDialog";
 import { toast } from "sonner";
 import DeleteSpaceDialog from "@/components/DeleteSpaceDialog";
+import { useSpace } from "@/store/getSpace";
 
 const DropdownMenuDemo = ({ item }: any) => {
   const [editopen, setEditIsOpen] = useState(false);
   const [deleteopen, setDelteIsOpen] = useState(false);
-  const handleCopyClick = async () => {
-    const url = "http://localhost:3000/reviewform/";
-    try {
-      await navigator.clipboard.writeText(`${url}${item.spacename}`);
-      toast.success("Review Form Link copied successfully");
-    } catch (error) {
-      toast("Error while Copying");
-    }
+  // @ts-ignore
+  const { copyspaceReviewForm } = useSpace();
+  const handleCopyClick = async (spacename: string) => {
+    const res = await copyspaceReviewForm(spacename);
+    if (res.success) toast.success("Review form is copied", { duration: 3000 });
+    else toast.error("Pls try again", { duration: 3000 });
   };
   const handleDialogopen = (newstate: boolean) => {
     setEditIsOpen(newstate);
@@ -54,14 +53,15 @@ const DropdownMenuDemo = ({ item }: any) => {
             >
               <PencilIcon className="hover:text-black" /> Edit Space Name
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-gray-200" 
-            onClick={()=>setDelteIsOpen(true)}
+            <DropdownMenuItem
+              className="cursor-pointer text-gray-200"
+              onClick={() => setDelteIsOpen(true)}
             >
               <TrashIcon color="red" /> Delete Space
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer text-gray-200"
-              onClick={handleCopyClick}
+              onClick={() => handleCopyClick(item.spacename)}
             >
               <Link className="hover:text-black" /> Get Form Link
             </DropdownMenuItem>

@@ -32,5 +32,14 @@ export const useSpace = create((set) => ({
   //    } catch (error) {
   //      console.log(error)
   //    } 
-  // } 
+  // }  
+  copyspaceReviewForm: async(spacename : string)=>{
+     const url = "http://localhost:3000/reviewform/";
+        try {
+          await navigator.clipboard.writeText(`${url}${spacename}`);
+          return { success: true };
+        } catch (error) {
+           return {success:false,error}
+        }
+  }
 }));
