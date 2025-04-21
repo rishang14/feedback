@@ -24,15 +24,17 @@ export const useSpace = create((set) => ({
        console.log(error)
      }
   } ,
-  // editSpaceName:async (spaceid:string,newName:string)=>{ 
-  //   console.log(spaceid,'received in usespace')
-  //    try {
-  //      const res=await axios.patch(`/api/editspace/spacename/${spaceid}/edit`,JSON.stringify(newName),{withCredentials:true});
-  //      console.log(res)
-  //    } catch (error) {
-  //      console.log(error)
-  //    } 
-  // }  
+  deleteSpace:async (spaceid:string)=>{ 
+    console.log(spaceid,'received in usespace')
+     try {
+       const res=await axios.delete(`/api/editspace/spacename/${spaceid}/delete`,{withCredentials:true}); 
+       console.log(res)
+       return {success:true,}
+     } catch (error) {
+       console.log(error) 
+       return {success:false}
+     } 
+  } , 
   copyspaceReviewForm: async(spacename : string)=>{
      const url = "http://localhost:3000/reviewform/";
         try {
@@ -42,4 +44,5 @@ export const useSpace = create((set) => ({
            return {success:false,error}
         }
   }
+  
 }));

@@ -12,9 +12,9 @@ export async function GET(
   try {
     const { name } = await context.params; 
 
-    console.log(name, "i am getting space name")
+    // console.log(name, "i am getting space name")
     const spaceid = await Space.find({ spacename: name }).select("_id");
-     console.log(spaceid,"got id")
+    //  console.log(spaceid,"got id")
     if (!spaceid) {
       NextResponse.json(
         { error: "pls provide valid space name " },

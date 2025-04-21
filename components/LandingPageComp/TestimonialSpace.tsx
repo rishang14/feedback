@@ -133,12 +133,14 @@ export default function TestimonialSpace() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> 
+            <div className="w-full flex items-center md:justify-start justify-center">
             <Link href={"/signin"}>
             <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               Create your first form
             </Button>
             </Link>
+            </div>
           </div>
 
           <div className="rounded-lg border shadow-lg overflow-hidden bg-slate-900/100 ">

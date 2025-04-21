@@ -35,7 +35,7 @@ type prop = {
 type spacemanetype = z.infer<typeof SpaceNameEditSchema>;
 const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
   //  @ts-ignore
-  // const { getSpace } = useSpace(); 
+  const { getspace } = useSpace(); 
   console.log(isopen,"after close")
   const form = useForm<spacemanetype>({
     resolver: zodResolver(SpaceNameEditSchema),
@@ -68,7 +68,7 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
       onchangeopen(false);
       reset();
       toast.success("SpaceName Updated", { duration: 3000 });
-      window.location.reload();
+      await getspace()
     } catch (error) {
       // @ts-ignore
       if (error.status === 409) {
