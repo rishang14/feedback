@@ -4,8 +4,7 @@ import Space from "@/mongoose/space.schema";
 import connectDB from "@/lib/db.connect";
 
 export async function GET(
-  req: NextRequest, 
-  // @ts-ignore
+  request: NextRequest, 
   context: any
 ) { 
     await connectDB();
@@ -13,10 +12,10 @@ export async function GET(
     const { name } = await context.params; 
 
     // console.log(name, "i am getting space name")
-    const spaceid = await Space.find({ spacename: name }).select("_id");
+    const spaceid = await Space.findOne({ spacename: name }).select("_id");
     //  console.log(spaceid,"got id")
     if (!spaceid) {
-      NextResponse.json(
+     return NextResponse.json(
         { error: "pls provide valid space name " },
         { status: 401 }
       );
@@ -25,7 +24,7 @@ export async function GET(
       spaceId: spaceid ,
     }).select("-spaceId"); 
 
-    console.log(question,"got question")
+    // console.log(question,"got question")
     if (question) {
       return NextResponse.json({ question }, { status: 200 });
     }

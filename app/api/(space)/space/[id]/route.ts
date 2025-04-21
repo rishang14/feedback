@@ -21,7 +21,7 @@ export async function GET(
 
   await connectDB();
   try {
-    const { id } =  context.params;
+    const { id } = await context.params;
     const Questions = await SpaceQuestion.find({ spaceId: id }).select(
       "-spaceId"
     );

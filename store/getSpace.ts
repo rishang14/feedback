@@ -19,9 +19,11 @@ export const useSpace = create((set) => ({
      try {
       const res= await axios.get(`/api/reviewformdetails/${spacename}`,) 
       const data=await res.data.question[0]; 
-      set({spaceReviewDetail:data});
+      set({spaceReviewDetail:data}); 
+      return {success:true}
      } catch (error) {
-       console.log(error)
+       console.log(error) 
+       return {success:false}
      }
   } ,
   deleteSpace:async (spaceid:string)=>{ 

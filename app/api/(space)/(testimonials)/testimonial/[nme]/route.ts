@@ -9,7 +9,7 @@ export async function POST(
 ) {
   await connectDB();
   try {  
-    const { nme } =  context.params;
+    const { nme } = await context.params;
     // console.log(nme);
     const body = await request.json();
     const validatedData = reviewForm.safeParse(body);
@@ -21,7 +21,6 @@ export async function POST(
     }
     const { name, email, text, consent, rating } = validatedData.data;
     const space = await Space.findOne({ spacename: nme }).select(" _id");
-    console.log(space, "here is the id");
     if (!space) {
       return NextResponse.json(
         { message: "Pls provide valid Name" },
