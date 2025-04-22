@@ -1,5 +1,4 @@
 
-export const runtime = 'nodejs'
 
 import NextAuth, { User as NextAuthUser } from "next-auth";
 import User from "@/mongoose/user.schema"
@@ -12,7 +11,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: "jwt",
-  },
+  }, 
+  secret:process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.user = user; // Attach user info to token
