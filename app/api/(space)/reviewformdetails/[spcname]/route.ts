@@ -9,11 +9,11 @@ export async function GET(
 ) { 
     await connectDB();
   try {
-    const { name } = await context.params; 
+    const { spcname } = await context.params; 
 
-    // console.log(name, "i am getting space name")
-    const spaceid = await Space.findOne({ spacename: name }).select("_id");
-    //  console.log(spaceid,"got id")
+    console.log(spcname, "i am getting space name")
+    const spaceid = await Space.findOne({ spacename: spcname }).select("_id");
+     console.log(spaceid,"got id")
     if (!spaceid) {
      return NextResponse.json(
         { error: "pls provide valid space name " },

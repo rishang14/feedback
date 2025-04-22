@@ -1,33 +1,37 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import { useSpace } from "@/store/getSpace";
 import { ThumbsUp } from "lucide-react";
 import { TestimonialFormButton } from "@/components/Testimonialbutton";
 import Loading from "@/app/loading"; 
+import NotFound from "@/app/not-found";
 
 
 const Page = () => {
   const { id } = useParams();
   // @ts-ignore
-  const { getspaceReviewForm, spaceReviewDetail } = useSpace();
+  const { getspaceReviewForm, spaceReviewDetail } = useSpace(); 
+  const [error,setError] =useState(false)
 
   useEffect(() => {
     const fetchData = async () => { 
       if(id){
         const res= await getspaceReviewForm(id as string); 
-        console.log(res)
-        if(!res.success){
-          notFound();
+        console.log(res,"res")
+         if(!res.success){
+          setError(true)
+         }
         }else{
           console.log("hello")
         }
-      }
-    };
+      };
     fetchData();
-  }, [id]);
+  }, []);
   
-
+    if(error){
+      return <NotFound/>
+    }
   if (Object?.keys(spaceReviewDetail)?.length === 0) return <Loading />;
   return (
     <>
