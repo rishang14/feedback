@@ -4,20 +4,16 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSpaceDetails } from "@/store/spaceDetails"; 
+import { useSpaceDetails } from "@/store/spaceDetails";
 import Image from "next/image";
-import {
-  Layout,
-  MessageSquare,
-  Settings,
-  ThumbsUp,
-} from "lucide-react";
+import { Layout, MessageSquare, Settings, ThumbsUp } from "lucide-react";
 import { EditFormSchema, spaceFormSchema } from "@/app/types/schema";
 import axios from "axios";
 import BasicTab from "./BasicTab";
 import ThankyouTab from "./ThankYouTab";
 import SettingTab from "./SettingTab";
 import { toast } from "sonner";
+import { useSpace } from "@/store/getSpace";
 type Question = {
   id: string;
   question: string;
@@ -27,8 +23,8 @@ type Question = {
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 type SpaceFormProps = {
   closeModal: () => void;
-  edit: boolean; 
-  spaceid?:any
+  edit: boolean;
+  spaceid?: any;
 };
 const initialSpaceValues = {
   spaceName: "",
@@ -79,19 +75,19 @@ const initialValues = {
   redirectUrl: "",
 };
 
-const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => { 
-  console.log(spaceid,"id")
+const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
   // @ts-ignore
-  const { questions ,getSpaceDetails} = useSpaceDetails(); 
+  const { questions, getSpaceDetails,editSpaceForm } = useSpaceDetails();
   const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
   const inputValues = edit ? questions[0] : initialValues;
-
+  // @ts-ignore
+  const { getspace, copyspaceReviewForm } = useSpace();
   const [dynamicData, setDynamicData] = useState(defaultSpaceValues);
   const [activeTab, setactiveTab] = useState("basic");
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
-
+  const [pending, setpending] = useState<boolean>(false);
 
   const validateErrors = () => {
     const schema = edit
@@ -152,7 +148,6 @@ const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => {
     for (const key in updatedValues) {
       const oldlValue = oldvalues[key as keyof typeof oldvalues];
       const updatedValue = updatedValues[key as keyof typeof updatedValues];
-
       if (key === "questions") {
         const oldQuestion = oldlValue as any;
         const newQuestion = updatedValue as any;
@@ -182,37 +177,61 @@ const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => {
       setValidationErrors(errors);
       return;
     }
-
     if (edit) {
       const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData);
       if (Object.keys(data).length > 0) {
+        setpending(true);
         try {
-          const res =await axios.patch(
-            `/api/editspace/editreviewform/${questions[0]._id}`,
-            JSON.stringify(data),
-            { withCredentials: true }
-          )  
-          console.log(res,"res") 
-          if(res.data){ 
-            getSpaceDetails(spaceid)
-            closeModal(); 
-            toast("Edit form updated successfully");
+          const res = await editSpaceForm(data,questions[0]._id)
+          if (res.success) {
+            getSpaceDetails(spaceid);
+            closeModal();
+            toast.success("Edit form updated successfully");
+          }else{
+            toast.error("Something Went wrong while updating")
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
+        } finally {
+          setpending(false);
         }
       } else {
         console.log("nothing to submit");
       }
     } else {
       try {
-        await axios.post("/api/createspace", JSON.stringify(dynamicData), {
-          withCredentials: true,
-        });
+        setpending(true);
+        const res = await axios.post(
+          "/api/createspace",
+          JSON.stringify(dynamicData),
+          {
+            withCredentials: true,
+          }
+        );
+        if (res?.data) {
+          toast.success("Space is created");
+          if (await copyspaceReviewForm(res?.data?.reviewFormlink as string)) {
+            toast("Review form is copied to clipboard");
+          } else {
+            toast.error("copy space review from from spaces");
+          }
+          await getspace();
+          closeModal();
+        }
       } catch (e) {
-        console.log(e);
+        // @ts-ignore
+        console.log(e.status);
+        // @ts-ignore
+        if (e?.status === 400) {
+          setValidationErrors({
+            // @ts-ignore
+            spaceName: e?.response.data.error,
+          });
+        } else {
+          toast.error("Internal Server error", { duration: 2000 });
+        }
       } finally {
-        console.log("form end successfully");
+        setpending(false);
       }
     }
   };
@@ -246,59 +265,85 @@ const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => {
               <Card
                 className={`border-2 ${
                   dynamicData?.theme === "dark" ? "bg-zinc-900" : "bg-white"
-                } mt-2 min-w-[390px] p-4`}
+                } mt-2 min-w-[390px] max-w-[400px] p-4`}
               >
                 <CardContent className="pt-6">
+                  {/* <div className="space-y-4"> */}
+                  <div className=" flex justify-center ">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md transform transition-transform hover:scale-105">
+                      <ThumbsUp color="white" className="text-white h-8 w-8" />
+                    </div>
+                  </div>
+                  <div className="space-y-2 p-2  text-center">
+                    <h1 className="tracking-tight truncate max-w-full text-2xl font-bold">
+                      {dynamicData?.header
+                        ? dynamicData.header
+                        : inputValues.header}
+                    </h1>
+                    <p className="text-gray-400 text-sm md:text-base line-clamp-2">
+                      {dynamicData?.customDescription
+                        ? dynamicData?.customDescription
+                        : inputValues?.customDescription}
+                    </p>
+                  </div>
                   <div className="space-y-4">
-                    <div className=" flex justify-center items-center ">
-                      <div className="w-[60px] max-h-[60px] bg-blue-400 p-3 flex items-center justify-center rounded-full">
-                        <ThumbsUp color="white" size={60} />
-                      </div>
-                    </div>
-                    <div className="space-y-2 p-2">
-                      <h1 className="text-2xl text-center font-bold">
-                        {dynamicData?.header
-                          ? dynamicData.header
-                          : inputValues.header}
-                      </h1>
-                      <p className="text-muted-foreground text-center">
-                        {dynamicData?.customDescription
-                          ? dynamicData?.customDescription
-                          : inputValues?.customDescription}
-                      </p>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="space-y-2 flex flex-col gap-2 ">
-                        <h3 className="p-2 text-lg  text-black ">
-                          {" "}
-                          {dynamicData?.questionlabel
-                            ? dynamicData.questionlabel
-                            : inputValues.questionlabel}
-                        </h3>
+                    <div className="space-y-2 flex flex-col gap-2 ">
+                      <h3 className="p-2 text-lg  text-black ">
+                        {" "}
+                        {dynamicData?.questionlabel
+                          ? dynamicData.questionlabel
+                          : inputValues.questionlabel}
+                      </h3>
+                      <ul className="space-y-2 pl-2">
+                        {/* {dynamicData.questions[0].map((item:Question) => (
+                  <li key={item.id} className="text-gray-600 text-sm flex items-start">
+                    <span className="mr-2 text-blue-500 flex-shrink-0">•</span>
+                    <span className="truncate">{item.question}</span>
+                  </li>
+                ))} */}
                         {dynamicData?.questions[0]?.question != ""
                           ? dynamicData.questions.map((items: Question) => (
-                              <li className="text-gray-500" key={items.id}>
-                                {items.question}
+                              <li
+                                className="text-gray-600 text-sm flex items-start"
+                                key={items.id}
+                              >
+                                <span className="mr-2 text-blue-500 flex-shrink-0">
+                                  •
+                                </span>
+                                <span className="truncate">
+                                  {items.question}
+                                </span>
                               </li>
                             ))
                           : inputValues.questions.map((items: Question) => (
-                              <li className="text-gray-500" key={items.id}>
-                                {items.question}
+                              <li
+                                className="text-gray-600 text-sm flex items-start"
+                                key={items.id}
+                              >
+                                <span className="mr-2 text-blue-500 flex-shrink-0">
+                                  •
+                                </span>
+                                <span className="truncate">
+                                  {items.question}
+                                </span>
                               </li>
                             ))}
-                      </div>
-
-                      <Button className={`w-full   text-black bg-gray-400  `}>
-                        {dynamicData?.textbuttonText
-                          ? dynamicData.textbuttonText
-                          : inputValues.textbuttonText}
-                      </Button>
-                      <Button className={`w-full   text-black bg-blue-500  `}>
-                        {dynamicData?.videoButtonText
-                          ? dynamicData.videoButtonText
-                          : inputValues.videoButtonText}
-                      </Button>
+                      </ul>
                     </div>
+
+                    <Button
+                      className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium overflow-hidden"
+                      variant={"secondary"}
+                    >
+                      {dynamicData?.textbuttonText
+                        ? dynamicData.textbuttonText
+                        : inputValues.textbuttonText}
+                    </Button>
+                    <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium overflow-hidden">
+                      {dynamicData?.videoButtonText
+                        ? dynamicData.videoButtonText
+                        : inputValues.videoButtonText}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -376,6 +421,7 @@ const Spaceform = ({ closeModal, edit,spaceid }: SpaceFormProps) => {
                   validationErrors={validationErrors}
                   setDynamicData={setDynamicData}
                   edit={edit}
+                  pending={pending}
                 />
                 <ThankyouTab
                   dynamicData={dynamicData}

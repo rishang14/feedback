@@ -1,33 +1,48 @@
-"use client";
-import React, { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
-import { useGetSpace } from "@/store/getSpace";
-import { useState } from "react";
-import { Star } from "lucide-react";
+"use client"
+import React, { useEffect, useState } from "react";
+import { notFound, useParams } from "next/navigation";
+import { useSpace } from "@/store/getSpace";
+import { ThumbsUp } from "lucide-react";
 import { TestimonialFormButton } from "@/components/Testimonialbutton";
 import Loading from "@/app/loading"; 
+import NotFound from "@/app/not-found";
 
 
-const page = () => {
+const Page = () => {
   const { id } = useParams();
-  console.log(id);
   // @ts-ignore
-  const { getspaceReviewForm, spaceReviewDetail } = useGetSpace();
-  console.log(typeof spaceReviewDetail, "detail");
-  console.log(spaceReviewDetail);
- 
+  const { getspaceReviewForm, spaceReviewDetail } = useSpace(); 
+  const [error,setError] =useState(false)
 
   useEffect(() => {
-    if (id) getspaceReviewForm(id as string);
+    const fetchData = async () => { 
+      if(id){
+        const res= await getspaceReviewForm(id as string); 
+        console.log(res,"res")
+         if(!res.success){
+          setError(true)
+         }
+        }else{
+          console.log("hello")
+        }
+      };
+    fetchData();
   }, []);
   
-  if (Object.keys(spaceReviewDetail).length === 0) return <Loading />;
+    if(error){
+      return <NotFound/>
+    }
+  if (Object?.keys(spaceReviewDetail)?.length === 0) return <Loading />;
   return (
     <>
       <main className="min-h-screen flex items-center  bg-gray-100">
         <div className="container mx-auto max-w-4xl p-4  flex items-center justify-center md:p-8">
           <div className="bg-white rounded-lg md:min-w-150  shadow-md p-6 md:p-8">
+          <div className=" flex justify-center ">
+           <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md transform transition-transform hover:scale-105">
+             <ThumbsUp color="white" className="text-white h-8 w-8"/>
+             </div>
+           </div>
             <div className="text-center mb-8">
               <h1 className="text-xl font-semibold text-gray-800">
                 {spaceReviewDetail?.header}
@@ -65,7 +80,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
 
 
 

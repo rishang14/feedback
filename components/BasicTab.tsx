@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
 import { Textarea } from "./ui/textarea";
 import { Trash2, CirclePlus } from "lucide-react";
+
 type Question = {
   id: string;
   question: string;
@@ -18,10 +19,11 @@ type Props = {
   handleDynamicChange: (fieldName: keyof spaceformtype, value: any) => void;
   validationErrors: Record<string, string>;
   setDynamicData: React.Dispatch<React.SetStateAction<spaceformtype>>;
-//   handleQuestionChange: (index: number, value: string) => void;
-deletQuestionBox: (id: string) => void;
-  addQuestionBox: () => void; 
-  edit:boolean
+  //   handleQuestionChange: (index: number, value: string) => void;
+  deletQuestionBox: (id: string) => void;
+  addQuestionBox: () => void;
+  edit: boolean; 
+  pending:boolean
 };
 const BasicTab = ({
   dynamicData,
@@ -29,29 +31,32 @@ const BasicTab = ({
   validationErrors,
   deletQuestionBox,
   addQuestionBox,
-  setDynamicData, 
-  edit
-}: Props) => { 
+  setDynamicData,
+  edit, 
+  pending
+}: Props) => {
+
   // console.log(validationErrors,"i am getting the value in basic tab")
   return (
     <TabsContent value="basic" className="space-y-6 mt-6">
       <Card>
         <CardContent className="pt-6 space-y-6">
-          {
-            !edit && (
-              <div className="space-y-2">
-            <label htmlFor="space Name">Space Name</label>
-            <Input
-              value={dynamicData.spaceName}
-              placeholder="Enter Space Name"
-              onChange={(e) => handleDynamicChange("spaceName", e.target.value)}
-            />
-            {validationErrors["spaceName"] && (
-              <p className="text-red-500">{validationErrors["spaceName"]}</p>
-            )}
-          </div>
-            )
-          }
+          {!edit && (
+            <div className="space-y-2">
+              <label htmlFor="space Name">Space Name</label>
+              <Input
+                value={dynamicData.spaceName}
+                placeholder="Enter Space Name"
+                onChange={(e) =>
+                  handleDynamicChange("spaceName", e.target.value)
+                } 
+                disabled={pending}
+              />
+              {validationErrors["spaceName"] && (
+                <p className="text-red-500">{validationErrors["spaceName"]}</p>
+              )}
+            </div>
+          )}
           <div className="space-y-2">
             <label htmlFor="header"> Header Title</label>
             <Input
@@ -59,7 +64,8 @@ const BasicTab = ({
               placeholder="Review form Header Title"
               onChange={(e) => {
                 handleDynamicChange("header", e.target.value);
-              }}
+              }} 
+              disabled={pending}
             />
             {validationErrors["header"] && (
               <p className="text-red-500">{validationErrors["header"]}</p>
@@ -69,10 +75,11 @@ const BasicTab = ({
             <label htmlFor="customDescription"> Review Form Description</label>
             <Textarea
               value={dynamicData.customDescription}
-              placeholder='We would love to hear your feedback!'
+              placeholder="We would love to hear your feedback!"
               onChange={(e) =>
                 handleDynamicChange("customDescription", e.target.value)
-              }
+              } 
+              disabled={pending}
             />
             {validationErrors["customDescription"] && (
               <p className="text-red-500">
@@ -81,11 +88,9 @@ const BasicTab = ({
             )}
           </div>
           <div className="flex  space-y-2  flex-col">
-            <label htmlFor="Review Form question">Review Form question</label> 
+            <label htmlFor="Review Form question">Review Form question</label>
             {validationErrors["questions"] && (
-              <p className="text-red-500">
-                {validationErrors["questions"]}
-              </p>
+              <p className="text-red-500">{validationErrors["questions"]}</p>
             )}
             {dynamicData.questions.map((item: Question, ind: any) => {
               return (
@@ -110,14 +115,16 @@ const BasicTab = ({
                             questions: updatedQuestions,
                           };
                         });
-                      }}
+                      }} 
+                      disabled={pending}
                     />
 
                     <Button
                       className="text-lg cursor-pointer bg-white hover:text-gray-400"
                       variant="link"
                       type="button"
-                      onClick={() => deletQuestionBox(item.id)}
+                      onClick={() => deletQuestionBox(item.id)} 
+                      disabled={pending}
                     >
                       <Trash2 color="black" />
                     </Button>
@@ -135,12 +142,12 @@ const BasicTab = ({
               className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
               variant={"ghost"}
               onClick={addQuestionBox}
-              type="button"
+              type="button" 
+              disabled={pending}
             >
               <CirclePlus color="black" /> Add more{" "}
             </Button>
           </div>
-
           <div className="flex items-center justify-center space-x-10 ">
             <label htmlFor="Enable Rating">Enable Rating</label>
 
@@ -163,8 +170,15 @@ const BasicTab = ({
             <Button
               className="bg-blue-500 text-white p-2  w-full text-center"
               type="submit"
+              disabled={pending}
             >
-             { edit ? "Update Space" :   "Create Space"  }
+              {edit
+                ? pending
+                  ? "Updating space..."
+                  : "Update Space"
+                : pending
+                ? "Creating Space..."
+                : "Create Space"}
             </Button>
           </div>
         </CardContent>

@@ -1,6 +1,10 @@
-import axios from "axios";
-import { create } from "zustand";
+import axios from "axios"; 
+import z from "zod"
+import { create } from "zustand"; 
+import { EditFormSchema } from "@/app/types/schema";
 
+
+type prop= z.infer<typeof EditFormSchema>
 export const useSpaceDetails = create((set) => ({
   questions: {},
   testimonials:[],
@@ -15,5 +19,19 @@ export const useSpaceDetails = create((set) => ({
     } catch (error) {
       console.log(error);
     }
-  },
+  }, 
+  editSpaceForm: async(changeditems:prop, spaceid:string)=>{
+   try {
+    const res= await axios.patch(
+      `/api/editspace/editreviewform/${spaceid}`,
+      JSON.stringify(changeditems),
+      { withCredentials: true }
+    ); 
+    if(res.data){
+      return {success:true}
+    }
+   } catch (error) {
+    return {success:false,error}
+   }
+  }
 }));

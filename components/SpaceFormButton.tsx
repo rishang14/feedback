@@ -11,36 +11,19 @@ import {
 } from "./ui/dialog"; 
 import { PencilIcon } from "lucide-react";
 import { Button } from "./ui/button"; 
+import Spaceform from "./spaceform";
 type Props = {
   edit: boolean;
-  spaceid?: string;
+  spaceid?: string; 
+  open:boolean,
+  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
-  console.log(edit, "editvalue"); 
-  console.log(spaceid,"id")
-  const [open, setOpen] = useState(false);
-
-  const SpaceForm = dynamic(() => import("./spaceform"), {
-    ssr: false,
-  });
+ const OpenSpaceFormButton = ({ edit,spaceid ,open,setOpen}:Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={true}>
-      {/* Button to open modal */}
-      <DialogTrigger asChild>
-        <Button size={"lg"} className=" bg-blue-600 flex items-center text-gray-200 justify-center space-x-2 cursor-pointer">
-        {edit ? (
-    <>
-      <PencilIcon className="w-4 h-4" />
-      Edit Space
-    </>
-  ) : (
-    "+ Create a new Space"
-  )}
-        </Button>
-      </DialogTrigger>
       <DialogContent
-        className=" flex flex-col p-6  min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
+        className=" flex flex-col p-6 z-1000 min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
@@ -51,8 +34,10 @@ export const OpenSpaceFormButton = ({ edit,spaceid }:Props) => {
             Design the perfect Review collection experience.
           </DialogDescription>
         </DialogHeader>
-        <SpaceForm closeModal={() => setOpen(false)}  edit={edit} spaceid={spaceid} />
+        <Spaceform closeModal={() => setOpen(false)}  edit={edit} spaceid={spaceid} />
       </DialogContent>
     </Dialog>
   );
 };
+
+export default OpenSpaceFormButton;

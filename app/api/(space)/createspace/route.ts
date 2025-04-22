@@ -6,6 +6,7 @@ import Space from "@/mongoose/space.schema";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import { spaceFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
+import { error } from "console";
 
 const { auth } = NextAuth(authConfig);
 
@@ -32,7 +33,11 @@ export async function POST(req: NextRequest) {
       );
     }
     const user = await User.findOne({ email: session?.user.email });
-    // console.log(user, "user");
+    // console.log(user, "user"); 
+
+    const spaceExists= await Space.findOne({spacename:validatedData.data.spaceName}); 
+
+    if(spaceExists) return NextResponse.json({error:"Space with this name already exists"},{status:400});
 
     const createSpace = await Space.create({
       userId: user._id,
@@ -69,7 +74,7 @@ export async function POST(req: NextRequest) {
 
     if (spaceQuestion) {
       return NextResponse.json(
-        { message: "Your Space is created " },
+        { message: "Your Space is created ",reviewFormlink:validatedData.data.spaceName },
         { status: 200 }
       );
     }

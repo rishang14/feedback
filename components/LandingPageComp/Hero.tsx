@@ -36,8 +36,8 @@ export default function Hero() {
   return (
     <section className="relative w-full py-12 min-h-screen md:py-24 lg:py-32 overflow-hidden">
       <div className="absolute bg-zinc-900/10 inset-0 -z-10  bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center text-center space-y-4 md:space-y-8">
+      <div className="container px-4  md:px-6">
+        <div className="flex flex-col items-center mt-10 text-center space-y-4  md:space-y-8">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl max-w-3xl bg-gradient-to-r from-white via-gray-300 to-gray-500 text-transparent bg-clip-text">
           Unlock the Power of Testimonials.
           </h1>
@@ -48,7 +48,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-md">
             <Link href="/signin">
             <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
-              Try FREE now
+              Try FREE Now
             </Button>
             </Link>
           </div>
