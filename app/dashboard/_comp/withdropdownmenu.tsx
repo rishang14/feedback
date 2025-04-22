@@ -9,11 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { TrashIcon, Ellipsis, PencilIcon, Link, Settings } from "lucide-react";
-import EditspaceDialog from "@/components/EditspaceDialog";
 import { toast } from "sonner";
-import DeleteSpaceDialog from "@/components/DeleteSpaceDialog";
 import { useSpace } from "@/store/getSpace";
 
 const DropdownMenuDemo = ({ item }: any) => {
@@ -29,6 +28,13 @@ const DropdownMenuDemo = ({ item }: any) => {
   const handleDialogopen = (newstate: boolean) => {
     setEditIsOpen(newstate);
   };
+
+  const EditDialog = dynamic(() => import("@/components/EditspaceDialog"), {
+    ssr: false,
+  });
+  const DeleteDialog = dynamic(() => import("@/components/DeleteSpaceDialog"), {
+    ssr: false,
+  });
   return (
     <>
       <DropdownMenu modal={false}>
@@ -68,12 +74,12 @@ const DropdownMenuDemo = ({ item }: any) => {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <EditspaceDialog
+      <EditDialog
         isopen={editopen}
         onchangeopen={setEditIsOpen}
         spaceid={item._id as string}
       />
-      <DeleteSpaceDialog
+      <DeleteDialog
         isopen={deleteopen}
         onchangeopen={setDelteIsOpen}
         spaceid={item._id as string}

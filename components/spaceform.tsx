@@ -77,7 +77,7 @@ const initialValues = {
 
 const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
   // @ts-ignore
-  const { questions, getSpaceDetails } = useSpaceDetails();
+  const { questions, getSpaceDetails,editSpaceForm } = useSpaceDetails();
   const defaultSpaceValues = edit ? questions[0] : initialSpaceValues;
   const inputValues = edit ? questions[0] : initialValues;
   // @ts-ignore
@@ -148,7 +148,6 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
     for (const key in updatedValues) {
       const oldlValue = oldvalues[key as keyof typeof oldvalues];
       const updatedValue = updatedValues[key as keyof typeof updatedValues];
-
       if (key === "questions") {
         const oldQuestion = oldlValue as any;
         const newQuestion = updatedValue as any;
@@ -178,22 +177,18 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
       setValidationErrors(errors);
       return;
     }
-
     if (edit) {
       const data = ChangedDataIneditFormField(defaultSpaceValues, dynamicData);
       if (Object.keys(data).length > 0) {
         setpending(true);
         try {
-          const res = await axios.patch(
-            `/api/editspace/editreviewform/${questions[0]._id}`,
-            JSON.stringify(data),
-            { withCredentials: true }
-          );
-          console.log(res, "res");
-          if (res.data) {
+          const res = await editSpaceForm(data,questions[0]._id)
+          if (res.success) {
             getSpaceDetails(spaceid);
             closeModal();
-            toast("Edit form updated successfully");
+            toast.success("Edit form updated successfully");
+          }else{
+            toast.error("Something Went wrong while updating")
           }
         } catch (error) {
           console.log(error);
@@ -236,7 +231,6 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
           toast.error("Internal Server error", { duration: 2000 });
         }
       } finally {
-        console.log("form end successfully");
         setpending(false);
       }
     }
@@ -275,33 +269,33 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
               >
                 <CardContent className="pt-6">
                   {/* <div className="space-y-4"> */}
-                    <div className=" flex justify-center ">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md transform transition-transform hover:scale-105">
-                        <ThumbsUp color="white" className="text-white h-8 w-8"/>
-                      </div>
+                  <div className=" flex justify-center ">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md transform transition-transform hover:scale-105">
+                      <ThumbsUp color="white" className="text-white h-8 w-8" />
                     </div>
-                    <div className="space-y-2 p-2  text-center">
-                      <h1 className="tracking-tight truncate max-w-full text-2xl font-bold">
-                        {dynamicData?.header
-                          ? dynamicData.header
-                          : inputValues.header}
-                      </h1>
-                      <p className="text-gray-400 text-sm md:text-base line-clamp-2">
-                        {dynamicData?.customDescription
-                          ? dynamicData?.customDescription
-                          : inputValues?.customDescription}
-                      </p>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="space-y-2 flex flex-col gap-2 ">
-                        <h3 className="p-2 text-lg  text-black ">
-                          {" "}
-                          {dynamicData?.questionlabel
-                            ? dynamicData.questionlabel
-                            : inputValues.questionlabel}
-                        </h3> 
-                        <ul className="space-y-2 pl-2">
-                {/* {dynamicData.questions[0].map((item:Question) => (
+                  </div>
+                  <div className="space-y-2 p-2  text-center">
+                    <h1 className="tracking-tight truncate max-w-full text-2xl font-bold">
+                      {dynamicData?.header
+                        ? dynamicData.header
+                        : inputValues.header}
+                    </h1>
+                    <p className="text-gray-400 text-sm md:text-base line-clamp-2">
+                      {dynamicData?.customDescription
+                        ? dynamicData?.customDescription
+                        : inputValues?.customDescription}
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2 flex flex-col gap-2 ">
+                      <h3 className="p-2 text-lg  text-black ">
+                        {" "}
+                        {dynamicData?.questionlabel
+                          ? dynamicData.questionlabel
+                          : inputValues.questionlabel}
+                      </h3>
+                      <ul className="space-y-2 pl-2">
+                        {/* {dynamicData.questions[0].map((item:Question) => (
                   <li key={item.id} className="text-gray-600 text-sm flex items-start">
                     <span className="mr-2 text-blue-500 flex-shrink-0">•</span>
                     <span className="truncate">{item.question}</span>
@@ -309,35 +303,48 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
                 ))} */}
                         {dynamicData?.questions[0]?.question != ""
                           ? dynamicData.questions.map((items: Question) => (
-                              <li className="text-gray-600 text-sm flex items-start" key={items.id}>
-                                <span className="mr-2 text-blue-500 flex-shrink-0">•</span>
-                                <span className="truncate">{items.question}</span>
+                              <li
+                                className="text-gray-600 text-sm flex items-start"
+                                key={items.id}
+                              >
+                                <span className="mr-2 text-blue-500 flex-shrink-0">
+                                  •
+                                </span>
+                                <span className="truncate">
+                                  {items.question}
+                                </span>
                               </li>
                             ))
                           : inputValues.questions.map((items: Question) => (
-                              <li className="text-gray-600 text-sm flex items-start" key={items.id}>
-                                <span className="mr-2 text-blue-500 flex-shrink-0">•</span>
-                                <span className="truncate">{items.question}</span>
+                              <li
+                                className="text-gray-600 text-sm flex items-start"
+                                key={items.id}
+                              >
+                                <span className="mr-2 text-blue-500 flex-shrink-0">
+                                  •
+                                </span>
+                                <span className="truncate">
+                                  {items.question}
+                                </span>
                               </li>
-                            ))} 
-                             </ul>
-                      </div>
-
-                      <Button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium overflow-hidden"
-                      variant={"secondary"} 
-                      
-                      >
-                        {dynamicData?.textbuttonText
-                          ? dynamicData.textbuttonText
-                          : inputValues.textbuttonText}
-                      </Button>
-                      <Button className='w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium overflow-hidden'
-                     >
-                        {dynamicData?.videoButtonText
-                          ? dynamicData.videoButtonText
-                          : inputValues.videoButtonText}
-                      </Button>
+                            ))}
+                      </ul>
                     </div>
+
+                    <Button
+                      className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium overflow-hidden"
+                      variant={"secondary"}
+                    >
+                      {dynamicData?.textbuttonText
+                        ? dynamicData.textbuttonText
+                        : inputValues.textbuttonText}
+                    </Button>
+                    <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium overflow-hidden">
+                      {dynamicData?.videoButtonText
+                        ? dynamicData.videoButtonText
+                        : inputValues.videoButtonText}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
