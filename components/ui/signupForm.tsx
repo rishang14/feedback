@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { signupFormSchema } from "@/app/types/schema";
+import Loading from "@/app/loading";
 
 type formType = z.infer<typeof signupFormSchema>;
 
@@ -80,7 +81,7 @@ export function SignupForm({
     }
   };
 
-  if (loading) return <div className="text-white text-4xl">loading</div>;
+  if (loading) return <Loading/>
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
