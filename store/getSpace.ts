@@ -38,7 +38,7 @@ export const useSpace = create((set) => ({
      } 
   } , 
   copyspaceReviewForm: async(spacename : string)=>{
-     const url = "http://localhost:3000/reviewform/";
+     const url = "https://feedbackvault.vercel.app/";
         try {
           await navigator.clipboard.writeText(`${url}${spacename}`);
           return { success: true };
