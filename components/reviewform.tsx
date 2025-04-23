@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
@@ -36,6 +37,7 @@ type props = {
 type formProp = z.infer<typeof reviewForm>;
 
 const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
+  const [pending,setPending]=useState(false)
   const [open, setOpen] = useState(false);
   const form = useForm<formProp>({
     resolver: zodResolver(reviewForm),
