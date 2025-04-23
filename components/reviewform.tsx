@@ -53,17 +53,21 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
     formState: { errors },
   } = form;
 
+
   const onsubmit = async (data: formProp) => {
-    try {
+    try { 
+      setPending(true)
       const res = await axios.post(
         `/api/testimonial/${spacename}`,
         JSON.stringify(data)
       );
-      if (res.statusText === "OK") {
+      if (res?.status === 200) {
         setOpen(true);
       }
     } catch (error) {
       console.log(error);
+    }finally{
+       setPending(false)
     }
   };
 
@@ -97,7 +101,7 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea {...field} id="text" className="min-h-[120px] " />
+                  <Textarea {...field} id="text" className="min-h-[120px] " disabled={pending}/>
                 </FormControl>
                 <FormMessage>{errors.text?.message}</FormMessage>
               </FormItem>
@@ -112,7 +116,7 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
                   <FormItem>
                     <FormLabel> Your Name</FormLabel>
                     <FormControl>
-                      <Input {...field} id="name" />
+                      <Input {...field} id="name" disabled={pending} />
                     </FormControl>
                     <FormMessage>{errors.name?.message}</FormMessage>
                   </FormItem>
@@ -126,7 +130,7 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
                     <FormItem>
                       <FormLabel> Your Email</FormLabel>
                       <FormControl>
-                        <Input {...field} id="email" type="email" />
+                        <Input {...field} id="email" type="email"  disabled={pending}/>
                       </FormControl>
                       <FormMessage>{errors.email?.message}</FormMessage>
                     </FormItem>
@@ -148,7 +152,8 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
                       channels and other marketing efforts
                     </FormLabel>
                     <FormControl>
-                      <Checkbox
+                      <Checkbox 
+                      disabled={pending}
                         id="consent"
                         checked={field.value}
                         onCheckedChange={field.onChange}
@@ -165,10 +170,11 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
               variant="secondary"
               className="bg-gray-800 hover:bg-gray-900 text-white flex items-center gap-2"
               size="lg"
-              type="submit"
+              type="submit" 
+              disabled={pending}
             >
               <Send className="h-5 w-5" />
-              <span>Send in text</span>
+             {pending ? "Sending..."  : <span>Send in text</span>}  
             </Button>
           </div>
         </form>
