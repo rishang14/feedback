@@ -70,6 +70,8 @@ export default async function middleware(req: NextRequest) {
    const cookie = req.cookies.get("__Secure-authjs.session-token")?.value 
               || req.cookies.get("authjs.session-token")?.value;
   console.log("🍪 COOKIE:", cookie);
+    salt:"__Secure-authjs.session-token",
+  });
   console.log(session,"sesion")
   const isProtected = protectedRoutes.some(route => path.startsWith(route));
   const isPublic = publicRoutes.includes(path);
