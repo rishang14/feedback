@@ -65,7 +65,7 @@ export default async function middleware(req: NextRequest) {
   const session = await getToken({
     req,
     secret:process.env.NEXTAUTH_SECRET,
-    salt:'authjs.session-token'
+    // salt:'authjs.session-token' || "__Secure-authjs.session-token";
   });
   console.log(session,"sesion")
   const isProtected = protectedRoutes.some(route => path.startsWith(route));
