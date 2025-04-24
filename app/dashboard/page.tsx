@@ -79,11 +79,13 @@ const Page = () => {
                           {" "}
                           Create your first space to start collecting review .
                         </p>
-                        <CreateSpaceForm
-                          edit={false}
-                          open={open}
-                          setOpen={setopen}
-                        />
+                        <Button
+                    size={"lg"}
+                    onClick={() => setopen(true)}
+                    className=" bg-blue-600 flex items-center text-gray-200 justify-center space-x-2 cursor-pointer"
+                  >
+                    + Create a new Space
+                  </Button>
                       </div>
                     </div>
                   </div>

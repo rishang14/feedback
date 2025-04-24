@@ -65,6 +65,7 @@ export default async function middleware(req: NextRequest) {
   const session = await getToken({
     req,
     secret:process.env.NEXTAUTH_SECRET,
+    // secureCookie: true
   }); 
    const cookie = req.cookies.get("__Secure-authjs.session-token")?.value 
               || req.cookies.get("authjs.session-token")?.value;

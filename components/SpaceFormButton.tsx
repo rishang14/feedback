@@ -1,16 +1,11 @@
 "use client";
-import { useState } from "react";
-import dynamic from "next/dynamic";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogTitle,
   DialogHeader,
   DialogDescription,
 } from "./ui/dialog"; 
-import { PencilIcon } from "lucide-react";
-import { Button } from "./ui/button"; 
 import Spaceform from "./spaceform";
 type Props = {
   edit: boolean;
