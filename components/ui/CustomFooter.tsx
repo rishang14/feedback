@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 const CustomFooter = () => { 
     const path =usePathname()  
-    const pathsnames=["/reviewform/","/dashboard/space/", "/dashboard"]
+    const pathsnames=["/reviewform/","/dashboard/space/", "/dashboard","/profile"]
     const shouldHideNav = pathsnames.some(prefix => path.startsWith(prefix));
   
     return  ( !shouldHideNav && <Footer/> )

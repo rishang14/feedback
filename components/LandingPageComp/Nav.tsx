@@ -1,11 +1,9 @@
 "use client";
-import React ,{useState} from "react";
+import React ,{useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-// import { signOut } from "next-auth/react";
-// import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { LogOut, UserCircleIcon, Pencil } from "lucide-react";
+import { LogOut, UserCircleIcon, User } from "lucide-react";
 import { useSession } from "next-auth/react"; 
 import { signOut } from "next-auth/react";
 
@@ -52,38 +50,64 @@ const Nav = () => {
 export default Nav;
 
 const AvatarWithMenu = ({ data }: any) => { 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false) 
+  const ref=useRef(null); 
+  useEffect(() => { 
+    
+    function handleClickOutside(event:any) { 
+      // @ts-ignore
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
   return (
-    <div className="flex justify-end  bg-black">
+    <div className="flex justify-end bg-gray-900">
       <div className="relative">
         <Button
-        size={"icon"}
+          size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className=" rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
+          className="rounded-full bg-gray-800 flex items-center justify-center text-white border border-gray-700 cursor-pointer hover:bg-gray-700"
         >
-          <Avatar className="    rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all">
-          <AvatarFallback
-            className="flex bg-white rounded-full items-center "
-            color="white"
-          >
-            <UserCircleIcon />
-          </AvatarFallback>
-        </Avatar>
+          <Avatar className="rounded-full cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all">
+            <AvatarFallback className="flex bg-gray-800 text-gray-100 rounded-full items-center">
+              <UserCircleIcon />
+            </AvatarFallback>
+          </Avatar>
         </Button>
 
         {isOpen && (
-          <div className="absolute right-4 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
+          <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-50 py-2 px-3 border border-gray-700" ref={ref}>
             <div className="py-2">
-              <div className="font-medium">  {data?.user?.name}</div>
-              <div className="text-sm  text-muted-foreground">{data?.user?.email}</div>
+              <div className="font-medium text-gray-100">{data?.user.name}</div>
+              <div className="text-sm text-gray-400">{data?.user.email}</div>
             </div>
 
-            <div className="py-1 border-t border-gray-100">
-              
+            <div className="py-1 border-t border-gray-700"> 
+              <Link href={"/profile"}>
+              <Button
+                variant="ghost"
+                className="flex items-center w-full justify-start py-2 text-left text-gray-200 hover:bg-gray-700 hover:text-white"
+                onClick={()=>setIsOpen(false)}  
+              >
+                <User className="w-4 h-4 mr-2" />
+                <span>My Profile</span>
+              </Button> 
+              </Link>
             </div>
 
-            <div className="py-1 border-t border-gray-100">
-              <Button className="flex items-center z-100 w-full py-2 bg-gray-200 text-left text-neutral-900"  onClick={()=>signOut({callbackUrl:"/"})}>
+            <div className="py-1 border-t border-gray-700">
+              <Button
+                variant="ghost"
+                className="flex items-center w-full justify-start py-2 text-left text-gray-200 hover:bg-gray-700 hover:text-white"
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
                 <LogOut className="w-4 h-4 mr-2" />
                 <span>Sign out</span>
               </Button>
@@ -92,5 +116,5 @@ const AvatarWithMenu = ({ data }: any) => {
         )}
       </div>
     </div>
-  );
+  )
 };
