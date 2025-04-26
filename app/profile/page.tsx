@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,21 +11,34 @@ import { ChangePasswordDialog } from "@/components/changepassword"
 import { ChangeUsernameDialog } from "@/components/changeUdsername"
 import { DeleteAccountDialog } from "@/components/deleteprofile"
 import { ForgotPasswordDialog } from "@/components/forgotPassword"
+import { useSession } from "next-auth/react"
+import Loading from "../loading"
 
-export default function ProfilePage() {
+export default function ProfilePage() { 
+  const {status,data} =useSession(); 
+  console.log(data)
   // Mock user data - in a real app, this would come from your auth system
   const [user, setUser] = useState({
-    username: "johndoe",
-    email: "john.doe@example.com",
-    isVerified: true,
-    avatarUrl: "/placeholder.svg?height=100&width=100",
+    username: "",
+    email:"",
+    isVerified:true,
   })
-
+   
+   useEffect(()=>{
+    if (data) {
+      setUser((prev) => ({
+        ...prev,
+        username: data.user?.name as string, 
+        email:data.user?.email as string
+      }));
+    }
+   },[data])
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const [isChangeUsernameOpen, setIsChangeUsernameOpen] = useState(false)
   const [isDeleteAccountOpen, setIsDeleteAccountOpen] = useState(false)
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false)
-
+  
+  if(status === "loading") return <Loading/>
   return ( 
     <div className="w-full relative flex items-center justify-center">
         <div className="absolute bg-zinc-900/10 inset-0 -z-10  bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
@@ -38,8 +51,9 @@ export default function ProfilePage() {
         <Card className="md:col-span-1 bg-neutral-950 border-neutral-800 text-neutral-50">
           <CardHeader className="flex flex-col items-center text-center">
             <Avatar className="h-24 w-24 mb-4">
-              {/* <AvatarImage src={user.avatarUrl || "/placeholder.svg"} alt={user.username} /> */}
-              <AvatarFallback className="bg-neutral-800">{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+              {/* <AvatarImage src={user.avatarUrl || "/placeholder.svg"} alt={user.username} /> */} 
+              {/* @ts-ignore */}
+              <AvatarFallback className="bg-neutral-800">{user?.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
             <CardTitle className="text-xl">{user.username}</CardTitle>
             <div className="flex items-center mt-1">
@@ -117,13 +131,13 @@ export default function ProfilePage() {
       <ChangeUsernameDialog
         open={isChangeUsernameOpen}
         onOpenChange={setIsChangeUsernameOpen}
-        currentUsername={user.username}
+        currentUsername={user.username as string}
         onUsernameChange={(newUsername) => setUser({ ...user, username: newUsername })}
       />
 
       <DeleteAccountDialog open={isDeleteAccountOpen} onOpenChange={setIsDeleteAccountOpen} />
 
-      <ForgotPasswordDialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen} email={user.email} />
+      <ForgotPasswordDialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen} email={user.email as string} />
     </div> 
     </div>
   )
