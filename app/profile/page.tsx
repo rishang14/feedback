@@ -17,11 +17,10 @@ import Loading from "../loading"
 export default function ProfilePage() { 
   const {status,data} =useSession(); 
   console.log(data)
-  // Mock user data - in a real app, this would come from your auth system
   const [user, setUser] = useState({
     username: "",
     email:"",
-    isVerified:true,
+    isVerified:false,
   })
    
    useEffect(()=>{
@@ -29,7 +28,9 @@ export default function ProfilePage() {
       setUser((prev) => ({
         ...prev,
         username: data.user?.name as string, 
-        email:data.user?.email as string
+        email:data.user?.email as string, 
+        // @ts-ignore 
+        isVerified:data?.user?.isVerified  as boolean
       }));
     }
    },[data])
