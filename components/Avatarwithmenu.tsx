@@ -24,10 +24,10 @@ const AvatarWithMenu = ({ data }: any) => {
     }, [ref]);
     return (
       <div className="flex justify-end bg-gray-900">
-        <div className="relative">
+        <div className="relative"  ref={ref}>
           <Button
             size="icon"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen((prev)=>!prev)}
             className="rounded-full bg-gray-800 flex items-center justify-center text-white border border-gray-700 cursor-pointer hover:bg-gray-700"
           >
             <Avatar className="rounded-full cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all">

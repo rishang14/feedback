@@ -2,6 +2,8 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { signupFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
+import { generateVerificationToken, getVerificationTokenByEmail } from "@/lib/emailhelper";
+import { SendverificationEmail } from "@/lib/mailer/nodemailer";
 
 connectDB(); //db connect is done
 
@@ -42,8 +44,14 @@ export async function POST(request: NextRequest) {
       email,
       password: hashedPassword,
     });
-    
-    if(createuser){
+    if(createuser){  
+      // Generate token and send email
+       await generateVerificationToken(createuser.email);  
+      const email= await SendverificationEmail(createuser.email,createuser.username); 
+      console.log(email,"email")
+      // console.log(generatedtoken,"tOKEN"); 
+      // console.log(getverificationtoken,'userverification token')
+
       return NextResponse.json(
         { message: `Success new user is created with  ${email} and this ${username}` },
         { status: 200 }
