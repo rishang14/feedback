@@ -74,7 +74,7 @@ export function SignupForm({
       toast.success(` Thankyou for signUp ${data.username}`, {
         duration: 1000,
       }); 
-      toast.info("Pls Check your email for verifying it ",{duration:3000})
+      toast.success("Pls Check your email for verifying it ",{duration:3000})
       // router.push("/signin");
       // setLoading((prev) => !prev);
     } catch (error) {
