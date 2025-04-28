@@ -6,7 +6,9 @@ import Space from "@/mongoose/space.schema";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import { spaceFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
-import { error } from "console";
+
+
+
 
 const { auth } = NextAuth(authConfig);
 
