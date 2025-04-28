@@ -27,9 +27,18 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { signupFormSchema } from "@/app/types/schema";
 import Loading from "@/app/loading";
+import { MultiStepLoader } from "./multi-step-loader";
 
 type formType = z.infer<typeof signupFormSchema>;
 
+
+const loadingStates = [
+  { text: "Fetching Your Detail..." },
+  { text: "Sending it to Backends..." },
+  { text: "Saving user..." },
+  { text: "Sending Verifying email..." },
+  { text: "Finalizing setup..." },
+];
 export function SignupForm({
   className,
   ...props
@@ -62,11 +71,12 @@ export function SignupForm({
       });
 
       console.log(res.data);
-      toast(` Thankyou for signUp ${data.username}`, {
-        duration: 2000,
-      });
-      router.push("/signin");
-      setLoading((prev) => !prev);
+      toast.success(` Thankyou for signUp ${data.username}`, {
+        duration: 1000,
+      }); 
+      toast.info("Pls Check your email for verifying it ",{duration:3000})
+      // router.push("/signin");
+      // setLoading((prev) => !prev);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response.data);
@@ -81,7 +91,15 @@ export function SignupForm({
     }
   };
 
-  if (loading) return <Loading/>
+  if (loading) return <div className=" flex items-center bg-black justify-center w-full min-h-screen">
+  //     {loading && (
+        <MultiStepLoader
+          loadingStates={loadingStates}
+          loading={loading}
+          duration={1000}
+        />
+      )}
+    </div>
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

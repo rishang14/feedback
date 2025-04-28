@@ -22,7 +22,7 @@ try {
       }); 
      
       const verificationToken = await getVerificationTokenByEmail(email); 
-      const verificationLink = `${process.env.NEXTAUTH_URL}/auth/verify?token=${verificationToken}`; 
+      const verificationLink = `${process.env.NEXTAUTH_URL}/verifyemail?token=${verificationToken}`; 
       const  info = await transporter.sendMail({
         from: process.env.EMAILUSER,
         to: email,
