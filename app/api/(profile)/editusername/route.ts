@@ -4,8 +4,6 @@ import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import User from "@/mongoose/user.schema";
 import { usernameSchema } from "@/app/types/schema";
-import { error } from "console";
-
 const { auth } = NextAuth(authConfig);
 export async function PATCH(request: NextRequest) {
   const session = await auth();
