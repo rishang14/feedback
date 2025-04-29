@@ -4,6 +4,7 @@ import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import User from "@/mongoose/user.schema";
 import { usernameSchema } from "@/app/types/schema";
+import { error } from "console";
 
 const { auth } = NextAuth(authConfig);
 export async function PATCH(request: NextRequest) {
@@ -21,12 +22,20 @@ export async function PATCH(request: NextRequest) {
     console.log(uid, "id"); 
     console.log(body,"body")
     const validatedData = usernameSchema.safeParse(body);
-     console.log(validatedData.data?.username,"username")
+    // @ts-ignore
+     const {username} = validatedData?.data
     if (!validatedData.success) {
       return NextResponse.json(
         { error: "username is not valid" },
         { status: 400 }
       );
+    } 
+    const name=await User.findByIdAndUpdate(uid,{
+      username :username
+    })  
+     
+    if(!name){
+      return NextResponse.json({error:'Something Went wrong while Updating'},{status:400});
     }
     
     return NextResponse.json({ message: "Username Changed" }, { status: 200 });

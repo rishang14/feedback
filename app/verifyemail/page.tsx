@@ -35,15 +35,17 @@ const Page = () => {
   const verifyEmail = async()=>{ 
     setLoading(true)
   try {
-    const res= await axios.post("/api/auth/verifyemail",{token} ); 
-     if(res.status ===400){ 
-      // @ts-ignore
-       toast.error(res?.response?.data?.error)
-     } 
+    const res= await axios.post("/api/auth/verifyemail",{token} );  
+    // @ts-ignore
+    console.log(res?.response?.data)
      toast.success("Email is Verified Login Now",{duration:2000}) ; 
      router.push("/signin")
-  } catch (error) {
-    console.log(error)
+  } catch (error:any) {
+    console.log(error) 
+    if(error.status ===400){ 
+      // @ts-ignore 
+       toast.error(error?.response?.data?.error,{duration:3000})
+     }  
   }finally{
    setLoading(false)
   }

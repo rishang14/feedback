@@ -133,7 +133,6 @@ export default function ProfilePage() {
         open={isChangeUsernameOpen}
         onOpenChange={setIsChangeUsernameOpen}
         currentUsername={user.username as string}
-        onUsernameChange={(newUsername) => setUser({ ...user, username: newUsername })}
       />
 
       <DeleteAccountDialog open={isDeleteAccountOpen} onOpenChange={setIsDeleteAccountOpen} />

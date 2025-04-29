@@ -4,13 +4,15 @@ import { create } from "zustand";
  export const useProfile=create((set)=> ({
 editusername: async(id:string, newname:string)=>{
    try {
-    const res= axios.patch("/api/editusername",{
+    const res=  await axios.patch("/api/editusername",{
         uid:id, 
         username:newname
-    },{withCredentials:true}); 
-    console.log(res)
+    },{withCredentials:true});  
+
+     if(res.statusText === "OK"
+     ) return {success:true ,message:"Username Changed"}
    } catch (error) {
-    
+    return {success:false ,message:"something went wrong"}
    }
 }
 
