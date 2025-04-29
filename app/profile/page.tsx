@@ -41,7 +41,7 @@ export default function ProfilePage() {
   
   if(status === "loading") return <Loading/>
   return ( 
-    <div className="w-full relative flex items-center justify-center">
+    <div className="w-full h-full relative flex items-center justify-center">
         <div className="absolute bg-zinc-900/10 inset-0 -z-10  bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
     <div className="container   py-8 px-4  max-w-[1040px]"> 
     

@@ -24,8 +24,8 @@ const datas = [
 
 export default function FeaturesSection() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-zinc-950">
-      <div className="container px-4 md:px-6">
+    <section className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 bg-zinc-950">
+      <div className="container  px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl md:text-5xl">

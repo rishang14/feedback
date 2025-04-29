@@ -5,7 +5,6 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import CustomNav from "@/components/CutomNav";  
 import { Providers } from "./provider";
-import CustomFooter from "@/components/ui/CustomFooter";
 
 const popppins = localFont({
   display: 'swap',
@@ -40,7 +39,6 @@ export default function RootLayout({
        <CustomNav/>
         {children}  
 
-        <CustomFooter/>
           <Toaster/> 
          </Providers>
       </body>
