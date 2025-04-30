@@ -30,7 +30,6 @@ import {
   FormMessage,
   FormLabel,
 } from "./ui/form";
-import Loading from "@/app/loading";
 import { toast } from "sonner";
 
 interface ChangeUsernameDialogProps {
@@ -39,13 +38,13 @@ interface ChangeUsernameDialogProps {
   currentUsername: string;
 }
 
-type formType = z.infer<typeof usernameSchema>;
+type formType = z.infer<typeof usernameSchema>; 
 
-export function ChangeUsernameDialog({
+const  ChangeUsernameDialog=({
   open,
   onOpenChange,
   currentUsername,
-}: ChangeUsernameDialogProps) {
+}: ChangeUsernameDialogProps) =>{
   const [success, setSuccess] = useState({
     loading: false,
     value: false,
@@ -114,7 +113,7 @@ export function ChangeUsernameDialog({
                   <FormItem>
                     <FormLabel>Enter Your Name</FormLabel>
                     <FormControl>
-                      <Input {...field} id="username" placeholder="John Doe"  className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50  text-white selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "/>
+                      <Input {...field} id="username" placeholder="John Doe" disabled={success.loading}  className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50  text-white selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "/>
                     </FormControl>
                     <FormMessage className="text-neutral-400">{errors.username?.message}</FormMessage>
                   </FormItem>
@@ -140,3 +139,6 @@ export function ChangeUsernameDialog({
     </Dialog>
   );
 }
+
+
+export  default ChangeUsernameDialog;

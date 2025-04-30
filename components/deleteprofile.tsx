@@ -22,7 +22,7 @@ interface DeleteAccountDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogProps) {
+const  DeleteAccountDialog=({ open, onOpenChange }: DeleteAccountDialogProps)=> {
   const [confirmation, setConfirmation] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -54,13 +54,13 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]  bg-neutral-950 border-neutral-800">
         <DialogHeader>
           <DialogTitle className="text-red-600 flex items-center">
             <AlertTriangle className="h-5 w-5 mr-2" />
             Delete Account
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-neutral-400">
             This action cannot be undone. This will permanently delete your account and remove your data from our
             servers.
           </DialogDescription>
@@ -82,22 +82,24 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
           </Alert>
 
           <div className="space-y-2">
-            <Label htmlFor="delete-confirmation">
-              Type <span className="font-bold">DELETE</span> to confirm
+            <Label htmlFor="delete-confirmation" className="text-neutral-400">
+              Type <span className="font-bold text-red-500">DELETE</span> to confirm
             </Label>
             <Input
               id="delete-confirmation"
               value={confirmation}
               onChange={(e) => setConfirmation(e.target.value)}
-              placeholder="DELETE"
+              placeholder="DELETE" 
+              className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400v text-white" 
+
             />
           </div>
 
           <DialogFooter className="pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" className="bg-blue-500 text-white "  onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="destructive" disabled={isLoading}>
+            <Button type="submit" variant="destructive" className="bg-red-500 text-white " disabled={isLoading}>
               {isLoading ? "Deleting..." : "Delete Account"}
             </Button>
           </DialogFooter>
@@ -106,3 +108,6 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
     </Dialog>
   )
 }
+
+
+export default DeleteAccountDialog;

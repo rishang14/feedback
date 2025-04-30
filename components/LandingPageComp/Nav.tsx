@@ -17,7 +17,6 @@ const Nav = () => {
     }
     getvalues();
   }, []);
-  console.log(userdetails, "nav");
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full relative shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">

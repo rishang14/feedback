@@ -23,7 +23,7 @@ interface ForgotPasswordDialogProps {
   email: string
 }
 
-export function ForgotPasswordDialog({ open, onOpenChange, email }: ForgotPasswordDialogProps) {
+const  ForgotPasswordDialog =({ open, onOpenChange, email }: ForgotPasswordDialogProps) =>{
   const [emailInput, setEmailInput] = useState(email)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
@@ -67,10 +67,10 @@ export function ForgotPasswordDialog({ open, onOpenChange, email }: ForgotPasswo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]  bg-neutral-950 border-neutral-800">
         <DialogHeader>
-          <DialogTitle>Reset Password</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-white">Reset Password</DialogTitle>
+          <DialogDescription className="text-neutral-400">
             Enter your email address and we'll send you a link to reset your password.
           </DialogDescription>
         </DialogHeader>
@@ -97,15 +97,16 @@ export function ForgotPasswordDialog({ open, onOpenChange, email }: ForgotPasswo
               type="email"
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
-              placeholder="Enter your email address"
+              placeholder="Enter your email address" 
+              className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400v text-white " 
             />
           </div>
 
           <DialogFooter className="pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button"   className="bg-blue-500 text-white " variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || success}>
+            <Button type="submit" disabled={isLoading || success} className="bg-white text-shadow-black" >
               {isLoading ? "Sending..." : success ? "Sent!" : "Send Reset Link"}
             </Button>
           </DialogFooter>
@@ -114,3 +115,5 @@ export function ForgotPasswordDialog({ open, onOpenChange, email }: ForgotPasswo
     </Dialog>
   )
 }
+
+export default ForgotPasswordDialog;
