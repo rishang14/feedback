@@ -52,7 +52,7 @@ export function ChangeUsernameDialog({
   });
   const { data } = useSession();
   // @ts-ignore
-  const { editusername } = useProfile();
+  const { editusername,getuserdetails } = useProfile();
 
   const form = useForm<formType>({
     resolver: zodResolver(usernameSchema),
@@ -68,26 +68,26 @@ export function ChangeUsernameDialog({
   } = form;
 
   const onsubmit = async (value: formType) => {
-    setSuccess((prev) => ({
-      ...prev,
-      prev: true,
-    }));
+    setSuccess({
+      loading: true,
+      value:true
+    });
     try {
       // @ts-ignore
       const res = await editusername(data?.user?.userId, value.username);
       if (res.success) {
         toast.success("username changed");
         onOpenChange(false);
+        await getuserdetails()
       } else {
         toast.error("Something went wrong ");
       }
     } catch (error) {
     } finally {
-      setSuccess((prev) => ({
-        ...prev,
+      setSuccess({
         loading: false,
         value: false,
-      }));
+      });
     }
   };
   return (

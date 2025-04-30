@@ -1,12 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { useSession } from "next-auth/react"; 
+import { useSession } from "next-auth/react";
 import AvatarWithMenu from "../Avatarwithmenu";
+import { useProfile } from "@/store/editprofile";
 
 const Nav = () => {
-  const { status, data } = useSession(); 
+  const { status, data } = useSession();
+  // @ts-ignore
+  const { userdetails, getuserdetails } = useProfile();
+
+  useEffect(() => {
+    async function getvalues() {
+      await getuserdetails();
+    }
+    getvalues();
+  }, []);
+  console.log(userdetails, "nav");
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full relative shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
@@ -17,7 +28,7 @@ const Nav = () => {
           <div className="flex  items-center md:space-x-6 space-x-2">
             {status === "authenticated" ? (
               <div className="">
-                <AvatarWithMenu data={data} />
+                <AvatarWithMenu data={userdetails} />
               </div>
             ) : (
               <>

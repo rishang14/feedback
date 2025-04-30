@@ -40,8 +40,8 @@ const AvatarWithMenu = ({ data }: any) => {
           {isOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-50 py-2 px-3 border border-gray-700" ref={ref}>
               <div className="py-2">
-                <div className="font-medium text-gray-100">{data?.user.name}</div>
-                <div className="text-sm text-gray-400">{data?.user.email}</div>
+                <div className="font-medium text-gray-100">{data?.username}</div>
+                <div className="text-sm text-gray-400">{data?.email}</div>
               </div>
   
               <div className="py-1 border-t border-gray-700"> 

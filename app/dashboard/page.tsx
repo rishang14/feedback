@@ -22,7 +22,10 @@ const Page = () => {
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
   useEffect(() => {
-    getspace();
+   async function spaces(){
+     await getspace()
+   } 
+   spaces()
   }, []);
 
   const CreateSpaceForm = dynamic(

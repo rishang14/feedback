@@ -1,5 +1,5 @@
 import connectDB from "@/lib/db.connect";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import User from "@/mongoose/user.schema";
 import NextAuth from "next-auth";
 import authConfig from "@/lib/auth.config";
@@ -7,9 +7,8 @@ import { error } from "console";
 
 const { auth } = NextAuth(authConfig);
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const session = await auth();
-
   if (!session?.user?.email)
     return NextResponse.json(
       { error: "You are not allowed to access this api route" },
@@ -17,10 +16,10 @@ export async function GET(request: NextRequest) {
     );
   await connectDB();
   try {
-    const body = await request.json();
-    const { uid } = body;
+  
+    const email=session?.user?.email  
 
-    const user = await User.findById(uid).select(
+    const user = await User.find({email}).select(
       " _id username isVerified email "
     );
 

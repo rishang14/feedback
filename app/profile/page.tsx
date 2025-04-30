@@ -13,27 +13,21 @@ import { DeleteAccountDialog } from "@/components/deleteprofile"
 import { ForgotPasswordDialog } from "@/components/forgotPassword"
 import { useSession } from "next-auth/react"
 import Loading from "../loading"
+import { useProfile } from "@/store/editprofile"
+import { futimes } from "fs"
 
 export default function ProfilePage() { 
-  const {status,data} =useSession(); 
-  console.log(data)
-  const [user, setUser] = useState({
-    username: "",
-    email:"",
-    isVerified:false,
-  })
-   
+  const {status,data} =useSession();  
+  // @ts-ignore
+  const {userdetails,getuserdetails} =useProfile(); 
+  console.log(userdetails,"profile")
+  
    useEffect(()=>{
-    if (data) {
-      setUser((prev) => ({
-        ...prev,
-        username: data.user?.name as string, 
-        email:data.user?.email as string, 
-        // @ts-ignore 
-        isVerified:data?.user?.isVerified  as boolean
-      }));
-    }
-   },[data])
+      async function getprofile(){
+        await getuserdetails() 
+      } 
+      getprofile()
+   },[])
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const [isChangeUsernameOpen, setIsChangeUsernameOpen] = useState(false)
   const [isDeleteAccountOpen, setIsDeleteAccountOpen] = useState(false)
@@ -54,12 +48,12 @@ export default function ProfilePage() {
             <Avatar className="h-24 w-24 mb-4">
               {/* <AvatarImage src={user.avatarUrl || "/placeholder.svg"} alt={user.username} /> */} 
               {/* @ts-ignore */}
-              <AvatarFallback className="bg-neutral-800">{user?.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback className="bg-neutral-800">{userdetails?.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-xl">{user.username}</CardTitle>
+            <CardTitle className="text-xl">{userdetails.username}</CardTitle>
             <div className="flex items-center mt-1">
-              <span className="text-sm text-muted-foreground" style={{ color: "#a0a0a0" }}>{user.email}</span>
-              {user.isVerified && (
+              <span className="text-sm text-muted-foreground" style={{ color: "#a0a0a0" }}>{userdetails.email}</span>
+              {userdetails.isVerified && (
                 <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 border-green-200 flex items-center">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   Verified
@@ -91,11 +85,11 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground"  style={{ color: "#a0a0a0" }}>Username</p>
-                  <p className="font-medium">{user.username}</p>
+                  <p className="font-medium">{userdetails.username}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground" style={{ color: "#a0a0a0" }}>Email</p>
-                  <p className="font-medium">{user.email}</p>
+                  <p className="font-medium">{userdetails.email}</p>
                 </div>
               </div>
             </div>
@@ -126,18 +120,17 @@ export default function ProfilePage() {
         </Card>
       </div>
 
-      {/* Dialogs */}
       <ChangePasswordDialog open={isChangePasswordOpen} onOpenChange={setIsChangePasswordOpen} />
 
       <ChangeUsernameDialog
         open={isChangeUsernameOpen}
         onOpenChange={setIsChangeUsernameOpen}
-        currentUsername={user.username as string}
+        currentUsername={userdetails.username as string}
       />
 
       <DeleteAccountDialog open={isDeleteAccountOpen} onOpenChange={setIsDeleteAccountOpen} />
 
-      <ForgotPasswordDialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen} email={user.email as string} />
+      <ForgotPasswordDialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen} email={userdetails.email as string} />
     </div> 
     </div>
   )
