@@ -5,12 +5,13 @@ import User from "@/mongoose/user.schema";
 import { generateVerificationToken, getVerificationTokenByEmail } from "@/lib/emailhelper";
 import { SendverificationEmail } from "@/lib/mailer/nodemailer";
 
-connectDB(); //db connect is done
+ //db connect is done
 
 
 const bcrypt = require("bcrypt");
 
 export async function POST(request: NextRequest) {
+  await connectDB()
   try {
     const body = await request.json();
 

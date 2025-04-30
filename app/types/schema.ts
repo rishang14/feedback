@@ -139,7 +139,8 @@ export const usernameSchema = z.object({
 })
 
 
-export const PasswordSchema = z
+export const PasswordSchema = z.object({
+  currentpass: z
   .string()
   .min(5, { message: "Password must be at least 5 characters long" })
   .refine(
@@ -152,4 +153,19 @@ export const PasswordSchema = z
       message:
         "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
     }
-  );
+  ), 
+  newPass: z
+  .string()
+  .min(5, { message: "Password must be at least 5 characters long" })
+  .refine(
+    (value) => {
+      const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+      return regex.test(value);
+    },
+    {
+      message:
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+    }
+  )
+})
