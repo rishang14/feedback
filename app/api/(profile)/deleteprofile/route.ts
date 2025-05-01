@@ -2,13 +2,13 @@ import connectDB from "@/lib/db.connect";
 import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { getUserByEmail, spaceidsContainsTestimonials, getspacesWthUserId } from "@/lib/helper";
 
 const { auth } = NextAuth(authConfig);
 
 export async function DELETE() {
   const session = await auth();
-  console.log(session, "session");
-  if (session?.user?.email) {
+  if (!session?.user?.email) {
     return NextResponse.json(
       { error: "You are not allowed to access this api route" },
       { status: 400 }
@@ -16,6 +16,16 @@ export async function DELETE() {
   }
   await connectDB();
   try {
+    const email = session?.user?.email;
+    const user =await  getUserByEmail(email as string); 
+    const sapceids= await getspacesWthUserId(user._id as string); 
+    const spccontainTestimonials= await spaceidsContainsTestimonials(sapceids)
+    console.log(sapceids,"ids");  
+    console.log(spccontainTestimonials,"Testimonials"); 
+
+    
     return NextResponse.json({ message: "User deleted" }, { status: 200 });
-  } catch (error: any) {}
+  } catch (error: any) {
+    console.log(error)
+  }
 }

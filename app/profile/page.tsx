@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { CheckCircle2, Lock, User, AlertTriangle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Loading from "../loading";
-import { useProfile } from "@/store/editprofile";
+import { useProfile } from "@/store/profile";
 
 export default function ProfilePage() {
   const { status, data } = useSession();

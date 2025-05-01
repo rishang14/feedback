@@ -25,5 +25,15 @@ export const useProfile = create((set) => ({
       const res = await axios.get("/api/getuser", { withCredentials: true });
        set({userdetails: res.data.user[0]});
     } catch (error) {}
-  },
+  }, 
+
+  deleteUser :async()=>{
+     try {
+        const res= await axios.delete("/api/deleteprofile",{withCredentials:true}); 
+        console.log(res)
+     } catch ( error:any
+     ) {
+       console.log(error)
+     }
+  }
 }));

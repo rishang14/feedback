@@ -18,13 +18,14 @@ export const DeleteSpace = async (spaceid: string) => {
     await session.abortTransaction();
     throw error;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 };
 
-export const getuserbyId = async (uid: string) => {
-  const user = await User.findOne({ _id: uid }).select("_id");
-  return user._id;
+export const getUserByEmail = async (email: string) => {
+  const user = await User.findOne({ email });
+  if (!user) return null;
+  return user;
 };
 
 export const getspacesWthUserId = async (uid: string) => {
@@ -46,4 +47,25 @@ export const DeleteProfile = async (
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
+  try {
+    if (testimonialids.length > 0) {
+      await Testimnoails.deleteMany({
+        spaceId: { $in: testimonialids },
+      }).session(session);
+    }
+    if (spaceIds.length > 0) {
+      await SpaceQuestion.deleteMany({ spaceId: { $in: spaceIds } }).session(
+        session
+      );
+      await Space.deleteMany({ _id: { $in: spaceIds } }).session(session);
+    }
+    await User.findByIdAndDelete(userid).session(session);
+    await session.commitTransaction();
+    console.log("✅ User and all associated data deleted successfully");
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };

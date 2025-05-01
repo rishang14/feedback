@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import AvatarWithMenu from "../Avatarwithmenu";
-import { useProfile } from "@/store/editprofile";
+import { useProfile } from "@/store/profile";
 
 const Nav = () => {
   const { status, data } = useSession();

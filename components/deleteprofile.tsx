@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,46 +11,44 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { AlertCircle, AlertTriangle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AlertCircle, AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useProfile } from "@/store/profile";
 
 interface DeleteAccountDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-const  DeleteAccountDialog=({ open, onOpenChange }: DeleteAccountDialogProps)=> {
-  const [confirmation, setConfirmation] = useState("")
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+const DeleteAccountDialog = ({
+  open,
+  onOpenChange,
+}: DeleteAccountDialogProps) => {
+  const [confirmation, setConfirmation] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  // @ts-ignore
+  const { deleteUser } = useProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-
-    // Validate confirmation
+    e.preventDefault();
+    setError("");
     if (confirmation !== "DELETE") {
-      setError('Please type "DELETE" to confirm')
-      return
+      setError('Please type "DELETE" to confirm');
+      return;
     }
-
-    // Simulate API call
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      // In a real app, you would call your API here
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      // Redirect to logout or home page after account deletion
-      window.location.href = "/"
+      await deleteUser();
     } catch (err) {
-      setError("Failed to delete account. Please try again.")
-      setIsLoading(false)
+      setError("Failed to delete account. Please try again.");
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -61,8 +59,8 @@ const  DeleteAccountDialog=({ open, onOpenChange }: DeleteAccountDialogProps)=> 
             Delete Account
           </DialogTitle>
           <DialogDescription className="text-neutral-400">
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
 
@@ -77,37 +75,46 @@ const  DeleteAccountDialog=({ open, onOpenChange }: DeleteAccountDialogProps)=> 
           <Alert variant="destructive" className="border-red-300">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              All of your data will be permanently removed. This action cannot be undone.
+              All of your data will be permanently removed. This action cannot
+              be undone.
             </AlertDescription>
           </Alert>
 
           <div className="space-y-2">
             <Label htmlFor="delete-confirmation" className="text-neutral-400">
-              Type <span className="font-bold text-red-500">DELETE</span> to confirm
+              Type <span className="font-bold text-red-500">DELETE</span> to
+              confirm
             </Label>
             <Input
               id="delete-confirmation"
               value={confirmation}
               onChange={(e) => setConfirmation(e.target.value)}
-              placeholder="DELETE" 
-              className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400v text-white" 
-
+              placeholder="DELETE"
+              className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400v text-white"
             />
           </div>
 
           <DialogFooter className="pt-4">
-            <Button type="button" className="bg-blue-500 text-white "  onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              className="bg-blue-500 text-white "
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="destructive" className="bg-red-500 text-white " disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="destructive"
+              className="bg-red-500 text-white "
+              disabled={isLoading}
+            >
               {isLoading ? "Deleting..." : "Delete Account"}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
-
+  );
+};
 
 export default DeleteAccountDialog;
