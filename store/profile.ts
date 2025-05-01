@@ -30,7 +30,7 @@ export const useProfile = create((set) => ({
   deleteUser :async()=>{
      try {
         const res= await axios.delete("/api/deleteprofile",{withCredentials:true}); 
-        console.log(res)
+         if(res.statusText=== "OK") return {success:true}
      } catch ( error:any
      ) {
        console.log(error)

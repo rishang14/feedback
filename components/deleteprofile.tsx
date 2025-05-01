@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useProfile } from "@/store/profile";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface DeleteAccountDialogProps {
   open: boolean;
@@ -30,6 +32,7 @@ const DeleteAccountDialog = ({
   const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   // @ts-ignore
   const { deleteUser } = useProfile();
 
@@ -43,7 +46,11 @@ const DeleteAccountDialog = ({
     setIsLoading(true);
 
     try {
-      await deleteUser();
+      const res = await deleteUser();
+      if (res.success) {
+        await signOut({ callbackUrl: "/" });
+        router.push("/");
+      }
     } catch (err) {
       setError("Failed to delete account. Please try again.");
       setIsLoading(false);

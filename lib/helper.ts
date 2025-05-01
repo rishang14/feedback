@@ -61,7 +61,7 @@ export const DeleteProfile = async (
     }
     await User.findByIdAndDelete(userid).session(session);
     await session.commitTransaction();
-    console.log("✅ User and all associated data deleted successfully");
+    console.log("User and all data deleted successfully");
   } catch (error) {
     await session.abortTransaction();
     throw error;

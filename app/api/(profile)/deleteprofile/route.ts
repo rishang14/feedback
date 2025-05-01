@@ -8,8 +8,6 @@ import {
   getspacesWthUserId,
   DeleteProfile,
 } from "@/lib/helper";
-import { redirect } from "next/navigation";
-import { url } from "inspector";
 
 const { auth } = NextAuth(authConfig);
 
@@ -30,8 +28,7 @@ export async function DELETE() {
     console.log(sapceids, "ids");
     console.log(spccontainTestimonials, "Testimonials");
     await DeleteProfile(user._id as string, sapceids, spccontainTestimonials);
-    return NextResponse.redirect(new URL("/"));
-    // return NextResponse.json({ message: "User deleted" }, { status: 200 });
+    return NextResponse.json({ message: "User deleted" }, { status: 200 });
   } catch (error: any) {
     console.log(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
