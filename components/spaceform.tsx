@@ -253,7 +253,7 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
     }));
   };
   return (
-        <div className="flex md:flex-row  flex-col-reverse ">
+        <div className="flex lg:flex-row  flex-col-reverse ">
           <div className="md:w-[400px]   flex flex-col items-center mt-2 space-y-6">
             <div className="text-lg font-semibold flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
