@@ -8,9 +8,9 @@ interface UserDocument{
     phone: string;
     image: string; 
     isVerified:boolean 
-    verifyToken:string 
+    emailToken:string 
     verifyTokenExpiry:Date
-    frogotPasswordToken:string,
+    forgotPasswordToken:string,
     forgotpasswordTokenExpiry:Date
     createdAt: Date;
     updatedAt: Date;
@@ -38,13 +38,13 @@ const UserSchema = new Schema<UserDocument>({
       type:Boolean,
       default:false
     } ,
-    verifyToken:{
+    emailToken:{
       type:String
     },
     verifyTokenExpiry:{
       type:Date
     },
-    frogotPasswordToken:{
+    forgotPasswordToken:{
       type:String
     },
     forgotpasswordTokenExpiry:{

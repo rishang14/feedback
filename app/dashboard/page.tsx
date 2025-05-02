@@ -38,8 +38,8 @@ const Page = () => {
 
   return (
     <>
-      <main className="w-full   relative  md:py-24 lg:py-32 overflow-hidden  flex   ">
-        <div className="absolute bg-zinc-950/30 inset-0 -z-10 md:block hidden bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div>
+      <main className="w-full    md:py-10  flex  items-center justify-center ">
+        {/* <div className="absolute bg-zinc-950/30  inset-0 -z-10 md:block hidden bg-[size:4rem_4rem] bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)]"></div> */}
         <div className="container px-4 md:px-6">
           <div className="w-full  max-w-[1080] flex flex-col items-center p-5  md:m-auto ">
             <div className="flex items-center space-x-5 md:flex-row flex-col">
@@ -52,9 +52,9 @@ const Page = () => {
                 <Dashboardcard />
               </div>
             </div>
-            <div className="flex items-center space-x-5 flex-col  md:mt-20 ">
+            <div className="flex items-center md:justify-center space-x-5 flex-col  md:mt-20 ">
               {/* // sapce head section  */}
-              <div className="p-5 flex items-center md:flex-row flex-col md:w-[935px] w-full  md:justify-between gap-5">
+              <div className="p-5 flex container w-full md:flex-row  flex-col  mx-auto  md:justify-between gap-5">
                 <h1 className=" md:text-4xl text-2xl font-bold   text-white ">
                   Active Spaces
                 </h1>
@@ -69,7 +69,7 @@ const Page = () => {
                 )}
               </div>
               {/* space body section  */}
-              <div className=" md:w-[935px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-5 gap-y-3 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">
+              <div className=" container md:min-w-[600px] p-5 mx-auto w-full flex items-center md:justify-start justify-center  md:space-x-8 gap-y-3 flex-wrap  bg-zinc-950/90 rounded-lg border   border-gray-700 shadow-sm">
                 {spaces?.length === 0 ? (
                   <div className="w-full h-full flex items-center justify-center">
                     <div className="flex items-center justify-center   ">

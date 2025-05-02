@@ -1,12 +1,14 @@
 import fs from "fs";
 import nodemailer from "nodemailer"; 
 import { getVerificationTokenByEmail } from "../emailhelper";
-import { ConnectionStates } from "mongoose";
 
+
+type prop= "verifyemail" | "forgotpassword"
 const verificationMailHTML = fs.readFileSync("public/template/email-verification.html", "utf-8");
 const resetPassMailHTML = fs.readFileSync("public/template/password-forgot.html", "utf-8"); 
 
-export const  SendverificationEmail =async (email:string,name:string)=>{
+
+export const  SendverificationEmail =async (email:string,name:string,emailtype:prop)=>{
 try { 
   console.log(email,"email"); 
   console.log(name,"name")
@@ -20,15 +22,26 @@ try {
           pass: process.env.EMAILPASS,
         },
       }); 
-     
-      const verificationToken = await getVerificationTokenByEmail(email); 
+     let info;
+    if(emailtype==="verifyemail") {
+      const verificationToken = await getVerificationTokenByEmail(email,"verifyemail"); 
       const verificationLink = `${process.env.NEXTAUTH_URL}/verifyemail?token=${verificationToken}`; 
-      const  info = await transporter.sendMail({
+      info = await transporter.sendMail({
         from: process.env.EMAILUSER,
         to: email,
         subject: "Verify your email address",
         html: verificationMailHTML.replace("{{ user_name }}", name).replace("{{verification_link}}", verificationLink),
       });
+     }else if(emailtype==="forgotpassword"){
+      const forgottoken = await getVerificationTokenByEmail(email,"forgotpassword"); 
+      const resetlink = `${process.env.NEXTAUTH_URL}/forgotpassword?token=${forgottoken}`; 
+      info = await transporter.sendMail({
+        from: process.env.EMAILUSER,
+        to: email,
+        subject: "Forgot Your Password",
+        html: resetPassMailHTML.replace("{{ user_name }}", name).replace("{{reset_link}}", resetlink),
+      });
+     }
       return info;
 
     

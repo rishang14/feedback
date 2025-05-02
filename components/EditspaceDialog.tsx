@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -85,12 +86,13 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
     }
   };
   return (
-    <Dialog open={isopen} >
+    <Dialog open={isopen} onOpenChange={onchangeopen}>
       <DialogContent className="flex flex-col bg-zinc-950">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <PencilIcon className=" w-4 h-4 " /> Edit SpaceName
-          </DialogTitle>
+          </DialogTitle> 
+          <DialogDescription className="text-neutral-400"> Edit Your Space name Here</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
