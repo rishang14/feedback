@@ -148,7 +148,7 @@ const BasicTab = ({
               <CirclePlus color="black" /> Add more{" "}
             </Button>
           </div>
-          <div className="flex items-center justify-center space-x-10 ">
+          <div className="flex items-center justify-center md:flex-row flex-col space-x-10 ">
             <label htmlFor="Enable Rating">Enable Rating</label>
 
             <Switch
