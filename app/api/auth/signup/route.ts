@@ -47,20 +47,14 @@ export async function POST(request: NextRequest) {
     });
     if(createuser){  
       // Generate token and send email
-       await generateVerificationToken(createuser.email);  
-      const email= await SendverificationEmail(createuser.email,createuser.username); 
-      console.log(email,"email")
-      // console.log(generatedtoken,"tOKEN"); 
-      // console.log(getverificationtoken,'userverification token')
-
+       await generateVerificationToken(createuser.email,"verifyemail");     
+       await SendverificationEmail(createuser.email,createuser.username,"verifyemail"); 
       return NextResponse.json(
         { message: `Success new user is created with  ${email} and this ${username}` },
         { status: 200 }
       );
     }
-    
   } catch (error) { 
-
     console.log(error)
     return NextResponse.json(
       { error: error},
