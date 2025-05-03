@@ -169,3 +169,8 @@ export const PasswordSchema = z.object({
     }
   )
 })
+
+
+export const TagSchema= z.object({
+  tags:z.string().min(3, { message: "Tags must be at least 3 characters" })
+})
