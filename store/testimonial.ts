@@ -56,4 +56,24 @@ export const UseTestimonial = create((set) => ({
       return { success: false, error: "Something went wrong" };
     }
   },
+  likeTestimonial: async (id: string) => {
+    try {
+      const res = await axios.patch(`/api/${id}/like`, {
+        withCredentials: true,
+      });
+      if (res.statusText === "OK") return { success: true };
+    } catch (error: any) {
+      return { success: false, error: "Something went wrong" };
+    }
+  },
+  unlikeTestimonial: async (id: string) => {
+    try {
+      const res = await axios.patch(`/api/${id}/unlike`, {
+        withCredentials: true,
+      });
+      if (res.statusText === "OK") return { success: true };
+    } catch (error) {
+      return { success: false, error: "Something went wrong" };
+    }
+  },
 }));
