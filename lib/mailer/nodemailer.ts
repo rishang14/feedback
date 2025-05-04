@@ -1,11 +1,21 @@
 import fs from "fs";
 import nodemailer from "nodemailer"; 
-import { getVerificationTokenByEmail } from "../emailhelper";
+import { getVerificationTokenByEmail } from "../emailhelper"; 
+import path from "path",
 
 
 type prop= "verifyemail" | "forgotpassword"
-const verificationMailHTML = fs.readFileSync("public/template/email-verification.html", "utf-8");
-const resetPassMailHTML = fs.readFileSync("public/template/password-forgot.html", "utf-8"); 
+import path from "path";
+
+const verificationMailHTML = fs.readFileSync(
+  path.join(process.cwd(), "public", "template", "email-verification.html"),
+  "utf-8"
+);
+
+const resetPassMailHTML = fs.readFileSync(
+  path.join(process.cwd(), "public", "template", "password-forgot.html"),
+  "utf-8"
+);
 
 
 export const  SendverificationEmail =async (email:string,name:string,emailtype:prop)=>{
