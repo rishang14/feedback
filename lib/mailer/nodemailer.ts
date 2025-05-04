@@ -1,11 +1,11 @@
 import fs from "fs";
 import nodemailer from "nodemailer"; 
 import { getVerificationTokenByEmail } from "../emailhelper"; 
-import path from "path",
+import path from "path";
 
 
 type prop= "verifyemail" | "forgotpassword"
-import path from "path";
+
 
 const verificationMailHTML = fs.readFileSync(
   path.join(process.cwd(), "public", "template", "email-verification.html"),
