@@ -2,7 +2,7 @@ import authConfig from "@/lib/auth.config";
 import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
-import { DeleteSpace } from "@/lib/deleteSpace";
+import { DeleteSpace } from "@/lib/helper";
 
 const { auth } = NextAuth(authConfig);
 

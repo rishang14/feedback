@@ -20,7 +20,7 @@ export function TestimonialFormButton({ spacename, spacedetails }: any) {
         </Button>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent
-            className="sm:max-w-md md:max-w-lg  max-h-[95%] md:overflow-y-hidden overflow-y-scroll"
+            className="sm:max-w-md md:max-w-lg  max-h-[95%] md:overflow-y-auto overflow-y-scroll"
             onInteractOutside={(e) => e.preventDefault()}
           >
             <DialogHeader>

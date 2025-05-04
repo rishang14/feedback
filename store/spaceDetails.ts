@@ -33,5 +33,25 @@ export const useSpaceDetails = create((set) => ({
    } catch (error) {
     return {success:false,error}
    }
-  }
+  } ,
+  addtag:async (spacId:string , tagname:string)=>{  
+   try {
+    const res= await axios.patch(`/api/editspace/spacename/${spacId}/addtag`,{tags:tagname},{withCredentials:true});  
+    if( res.statusText === "OK") {
+      return {success:true};
+    }
+   } catch (error:any) {
+    return  {success:false,error:"Something Went Wrong"}
+   }
+  },
+  removeTag:async (spacId:string , tagname:string)=>{  
+    try {
+     const res= await axios.patch(`/api/editspace/spacename/${spacId}/deletetag`,{tags:tagname},{withCredentials:true});  
+     if( res.statusText === "OK") {
+       return {success:true};
+     }
+    } catch (error:any) {
+     return  {success:false,error:"Something Went Wrong"}
+    }
+   }
 }));

@@ -1,16 +1,22 @@
 "use client";
-import React ,{useState} from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-// import { signOut } from "next-auth/react";
-// import { useSession } from "next-auth/react";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { LogOut, UserCircleIcon, Pencil } from "lucide-react";
-import { useSession } from "next-auth/react"; 
-import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import AvatarWithMenu from "../Avatarwithmenu";
+import { useProfile } from "@/store/profile";
 
 const Nav = () => {
-  const { status, data } = useSession(); 
+  const { status, data } = useSession();
+  // @ts-ignore
+  const { userdetails, getuserdetails } = useProfile();
+
+  useEffect(() => {
+    async function getvalues() {
+      await getuserdetails();
+    }
+    getvalues();
+  }, []);
   return (
     <header className=" bg-black/30  backdrop-blur-2xl w-full relative shadow-lg border-b border-b-slate-800 z-[200]">
       <nav className="flex justify-between items-center w-full mt-5 md:px-12 pb-3 px-4 ">
@@ -21,7 +27,7 @@ const Nav = () => {
           <div className="flex  items-center md:space-x-6 space-x-2">
             {status === "authenticated" ? (
               <div className="">
-                <AvatarWithMenu data={data} />
+                <AvatarWithMenu data={userdetails} />
               </div>
             ) : (
               <>
@@ -50,47 +56,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
-const AvatarWithMenu = ({ data }: any) => { 
-  const [isOpen, setIsOpen] = useState(false)
-  return (
-    <div className="flex justify-end  bg-black">
-      <div className="relative">
-        <Button
-        size={"icon"}
-          onClick={() => setIsOpen(!isOpen)}
-          className=" rounded-full bg-white flex items-center justify-center text-black border border-gray-300 cursor-pointer"
-        >
-          <Avatar className="    rounded-full cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all">
-          <AvatarFallback
-            className="flex bg-white rounded-full items-center "
-            color="white"
-          >
-            <UserCircleIcon />
-          </AvatarFallback>
-        </Avatar>
-        </Button>
-
-        {isOpen && (
-          <div className="absolute right-4 mt-2 w-40 bg-white rounded-md shadow-lg z-100 py-2 px-3">
-            <div className="py-2">
-              <div className="font-medium">  {data?.user?.name}</div>
-              <div className="text-sm  text-muted-foreground">{data?.user?.email}</div>
-            </div>
-
-            <div className="py-1 border-t border-gray-100">
-              
-            </div>
-
-            <div className="py-1 border-t border-gray-100">
-              <Button className="flex items-center z-100 w-full py-2 bg-gray-200 text-left text-neutral-900"  onClick={()=>signOut({callbackUrl:"/"})}>
-                <LogOut className="w-4 h-4 mr-2" />
-                <span>Sign out</span>
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};

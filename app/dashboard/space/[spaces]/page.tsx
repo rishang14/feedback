@@ -3,8 +3,7 @@
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import {
-  Inbox,
-  Video,
+  MessageCircleCode,  
   MessageSquare,
   Heart,
   Archive,
@@ -70,23 +69,19 @@ export default function Page() {
   );
   return (
     <>
-      <div className="min-h-screen bg-foreground">
+      <div className="">
         {/* Header */}
         <header className="border-b">
           <div className="flex h-16 items-center px-4 md:px-6">
             <div className="ml-auto flex items-center space-x-4">
+        
               <div className="flex items-center space-x-2">
-                <Video className="h-4 w-4" />
-                <span className="text-white">Video credits :</span>
-                <span className="text-muted-foreground ">2</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4" />
+                <MessageSquare className="h-4 w-4 text-white" />
                 <span className="text-white">Text credits</span>
                 <span className="text-muted-foreground">10</span>
               </div>
               <Button
-                size={"lg"}
+               
                 onClick={() => setopen(true)}
                 className=" bg-blue-600 flex items-center text-gray-200 justify-center space-x-2 cursor-pointer"
               >
@@ -97,25 +92,14 @@ export default function Page() {
         </header>
 
         {/* Main Content */}
-        <div className="flex">
-          {/* Sidebar */}
-          <aside className="w-64 border-r h-[calc(100vh-4rem)] p-4">
+        <div className="">
+          <aside className="w-64 border-r border-white flex flex-col items-center  p-4">
             <h2 className="text-lg font-semibold mb-4 text-white ">Inbox</h2>
             <div className="space-y-2">
               {sidebarButton(
-                <Inbox className="mr-2 h-4 w-4 text-white" />,
-                "All",
-                "all"
-              )}
-              {sidebarButton(
-                <Video className="mr-2 h-4 w-4 text-white" />,
-                "Video",
-                "video"
-              )}
-              {sidebarButton(
-                <MessageSquare className="mr-2 h-4 w-4 text-white " />,
-                "Text",
-                "text"
+                <MessageCircleCode  className="mr-2 h-4 w-4 text-white" />,
+                 "Reviews",
+                 "review"
               )}
               {sidebarButton(
                 <Heart className="mr-2 h-4 w-4 text-white" />,
@@ -127,45 +111,25 @@ export default function Page() {
                 "Archived",
                 "archived"
               )}
-              {sidebarButton(
-                <AlertTriangle className="mr-2 h-4 w-4 text-white" />,
-                "Spam",
-                "spam"
-              )}
+              
             </div>
-
-            <div className="mt-8">
-              <h2 className="text-lg font-semibold mb-4 text-white">
-                Integrations
-              </h2>
-              {sidebarButton(
-                <Boxes className="mr-2 h-4 w-4 text-white" />,
-                "View integrations",
-                "integrations"
-              )}
-            </div>
-
-            <div className="mt-8">
+  
+            <div className="space-y-2">
               <h2 className="text-lg font-semibold mb-4 text-white">
                 Embed widgets
               </h2>
-              <div className="space-y-2">
+              
                 {sidebarButton(
                   <Heart className="mr-2 h-4 w-4 text-white" />,
                   "Wall of Love",
                   "wall-of-love"
                 )}
-                {sidebarButton(
-                  <MessageSquare className="mr-2 h-4 w-4 text-white" />,
-                  "Single testimonial",
-                  "single-testimonial"
-                )}
-              </div>
+
             </div>
           </aside>
 
           {/* Main Content Area */}
-          <main className="flex-1 p-6  min-h-screen max-h-screen overflow-y-auto ">
+          <main className="flex-1 p-6   overflow-y-auto ">
             <div className="w-full flex flex-col gap-3 mt-4  ">
               {testimonials.map((item: any) => {
                 return (

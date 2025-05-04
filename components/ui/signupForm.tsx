@@ -27,9 +27,17 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { signupFormSchema } from "@/app/types/schema";
 import Loading from "@/app/loading";
+import { MultiStepLoader } from "./multi-step-loader";
 
 type formType = z.infer<typeof signupFormSchema>;
 
+const loadingStates = [
+  { text: "Fetching Your Detail..." },
+  { text: "Sending it to Backends..." },
+  { text: "Saving user..." },
+  { text: "Sending Verifying email..." },
+  { text: "Finalizing setup..." },
+];
 export function SignupForm({
   className,
   ...props
@@ -62,11 +70,12 @@ export function SignupForm({
       });
 
       console.log(res.data);
-      toast(` Thankyou for signUp ${data.username}`, {
-        duration: 2000,
+      toast.success(` Thankyou for signUp ${data.username}`, {
+        duration: 1000,
       });
-      router.push("/signin");
-      setLoading((prev) => !prev);
+      toast.success("Pls Check your email  ", { duration: 3000 });
+      // router.push("/signin");
+      // setLoading((prev) => !prev);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response.data);
@@ -81,18 +90,36 @@ export function SignupForm({
     }
   };
 
-  if (loading) return <Loading/>
+  if (loading)
+    return (
+      <div className=" flex items-center bg-black justify-center w-full min-h-screen">
+        //{" "}
+        {loading && (
+          <MultiStepLoader
+            loadingStates={loadingStates}
+            loading={loading}
+            duration={2000}
+          />
+        )}
+      </div>
+    );
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+    // <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Card className="bg-neutral-950 text-neutral-50 border-neutral-800 flex flex-col">
         <CardHeader>
-          <CardTitle className="text-2xl text-center"> Signup</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-2xl text-center text-white">
+            {" "}
+            Signup
+          </CardTitle>
+          <CardDescription
+            className="text-center  text-neutral-400
+          "
+          >
             Welcome to Reviewvault
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col">
           <Form {...form}>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -106,7 +133,13 @@ export function SignupForm({
                   <FormItem>
                     <FormLabel>Enter Your Name</FormLabel>
                     <FormControl>
-                      <Input {...field} id="name" placeholder="John Doe" />
+                      <Input
+                        {...field}
+                        id="name"
+                        type="text"
+                        placeholder="John Doe"
+                        className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "
+                      />
                     </FormControl>
                     <FormMessage>{errors.username?.message}</FormMessage>
                   </FormItem>
@@ -126,6 +159,7 @@ export function SignupForm({
                         id="email"
                         type="email"
                         placeholder="@gmail.com"
+                        className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "
                       />
                     </FormControl>
                     <FormMessage>{errors.email?.message}</FormMessage>
@@ -141,7 +175,12 @@ export function SignupForm({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} id="password" type="password" />
+                      <Input
+                        {...field}
+                        id="password"
+                        type="password"
+                        className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "
+                      />
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
@@ -167,6 +206,6 @@ export function SignupForm({
           </Form>
         </CardContent>
       </Card>
-    </div>
+    // </div>
   );
 }

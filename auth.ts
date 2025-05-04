@@ -24,14 +24,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             //@ts-ignore
             session.user.name=token.user.username;  
             // @ts-ignore
-            session.user.userId=token.user._id
+            session.user.userId=token.user._id; 
+            // @ts-ignore
+            session.user.isVerified=token.user.isVerified
           }
       return session;
     },
     async signIn({ user }) {
       const users = await User.findOne({ _id: user.id });
-      if (users) return true;
-      return false;
+      if (!users?.isVerified) return false;
+      return true;
     }
   }
 })

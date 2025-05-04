@@ -6,7 +6,12 @@ interface UserDocument{
     password: string;
     username: string;
     phone: string;
-    image: string;
+    image: string; 
+    isVerified:boolean 
+    emailToken:string 
+    verifyTokenExpiry:Date
+    forgotPasswordToken:string,
+    forgotpasswordTokenExpiry:Date
     createdAt: Date;
     updatedAt: Date;
   }
@@ -28,7 +33,24 @@ const UserSchema = new Schema<UserDocument>({
     username: {
       type: String,
       required: [true, "Name is required"]
+    }, 
+    isVerified:{
+      type:Boolean,
+      default:false
+    } ,
+    emailToken:{
+      type:String
     },
+    verifyTokenExpiry:{
+      type:Date
+    },
+    forgotPasswordToken:{
+      type:String
+    },
+    forgotpasswordTokenExpiry:{
+      type:Date
+    }
+
   },
   {
     timestamps: true,

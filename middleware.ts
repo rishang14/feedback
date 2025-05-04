@@ -57,15 +57,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from "next-auth/jwt";
 
-const protectedRoutes = ['/dashboard','/dashboard/:path*','dashboard/space/:path*']
-const publicRoutes = ['/', '/signin,signup','/'] 
+const protectedRoutes = ['/dashboard','/dashboard/:path*','dashboard/space/:path*','profile']
+const publicRoutes = ['/', '/signin,signup','reviewform/:path*'] 
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const session = await getToken({
     req,
     secret:process.env.NEXTAUTH_SECRET,
-   secureCookie: true
+  //  secureCookie: true
   }); 
    const cookie = req.cookies.get("__Secure-authjs.session-token")?.value 
               || req.cookies.get("authjs.session-token")?.value;

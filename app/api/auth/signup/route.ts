@@ -2,13 +2,16 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { signupFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
+import { generateVerificationToken, getVerificationTokenByEmail } from "@/lib/emailhelper";
+import { SendverificationEmail } from "@/lib/mailer/nodemailer";
 
-connectDB(); //db connect is done
+ //db connect is done
 
 
 const bcrypt = require("bcrypt");
 
 export async function POST(request: NextRequest) {
+  await connectDB()
   try {
     const body = await request.json();
 
@@ -42,16 +45,16 @@ export async function POST(request: NextRequest) {
       email,
       password: hashedPassword,
     });
-    
-    if(createuser){
+    if(createuser){  
+      // Generate token and send email
+       await generateVerificationToken(createuser.email,"verifyemail");     
+       await SendverificationEmail(createuser.email,createuser.username,"verifyemail"); 
       return NextResponse.json(
         { message: `Success new user is created with  ${email} and this ${username}` },
         { status: 200 }
       );
     }
-    
   } catch (error) { 
-
     console.log(error)
     return NextResponse.json(
       { error: error},

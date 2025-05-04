@@ -253,10 +253,8 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
     }));
   };
   return (
-    <main className="p-6">
-      <div className=" ">
-        <div className="flex md:flex-row  flex-col-reverse   gap-8">
-          <div className="w-[400px]  flex flex-col items-center mt-2 space-y-6">
+        <div className="flex lg:flex-row  flex-col-reverse ">
+          <div className="md:w-[400px]   flex flex-col items-center mt-2 space-y-6">
             <div className="text-lg font-semibold flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               Live Preview
@@ -265,7 +263,7 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
               <Card
                 className={`border-2 ${
                   dynamicData?.theme === "dark" ? "bg-zinc-900" : "bg-white"
-                } mt-2 min-w-[390px] max-w-[400px] p-4`}
+                } mt-2 flex p-4`}
               >
                 <CardContent className="pt-6">
                   {/* <div className="space-y-4"> */}
@@ -437,8 +435,6 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
             </Tabs>
           </div>
         </div>
-      </div>
-    </main>
   );
 };
 

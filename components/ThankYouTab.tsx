@@ -4,7 +4,7 @@ import { spaceFormSchema } from "@/app/types/schema";
 import { Input } from "./ui/input";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Card, CardContent } from "./ui/card";
-import { Checkbox } from "@radix-ui/react-checkbox";
+import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 type spaceformtype = z.infer<typeof spaceFormSchema>;
 type props = {

@@ -2,15 +2,10 @@
 import type { NextAuthConfig, User as UserType } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import User from "@/mongoose/user.schema";
 import connectDB from "./db.connect";
+import { getUserByEmail } from "./helper";
 
-const getUserByEmail = async (email: string) => {
-    const user = await User.findOne({ email });
-    // console.log("User: ", user)
-    if (!user) return null;
-    return user;
-}
+
 
 export default {
     providers: [

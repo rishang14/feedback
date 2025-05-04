@@ -94,10 +94,11 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} >
-      <Card>
+      <Card className="bg-neutral-950 text-neutral-50 border-neutral-800">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>welcome Back</CardDescription>
+          <CardTitle className="text-2xl text-center text-white">Login</CardTitle>
+
+          <CardDescription className="text-center  text-neutral-400">welcome Back</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -119,6 +120,7 @@ export function LoginForm({
                         id="email"
                         type="email"
                         placeholder="@gmail.com"
+                        className="bg-neutral-900 focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50 selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400"
                       />
                     </FormControl>
                     <FormMessage>{errors.email?.message}</FormMessage>
@@ -134,7 +136,8 @@ export function LoginForm({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input  {...field} id="password" type="password" placeholder="*******"/>
+                      <Input  {...field} id="password" type="password" placeholder="*******" 
+                       className="bg-neutral-900 focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50 selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400"/>
                     </FormControl>
                     <FormMessage>{errors.password?.message}</FormMessage>
                   </FormItem>
