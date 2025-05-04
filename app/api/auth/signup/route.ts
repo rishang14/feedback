@@ -2,7 +2,7 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { signupFormSchema } from "@/app/types/schema";
 import User from "@/mongoose/user.schema";
-import { generateVerificationToken, getVerificationTokenByEmail } from "@/lib/emailhelper";
+import { generateVerificationToken } from "@/lib/emailhelper";
 import { SendverificationEmail } from "@/lib/mailer/nodemailer";
 
  //db connect is done
@@ -49,11 +49,11 @@ export async function POST(request: NextRequest) {
       // Generate token and send email
        await generateVerificationToken(createuser.email,"verifyemail");     
        await SendverificationEmail(createuser.email,createuser.username,"verifyemail"); 
-      return NextResponse.json(
-        { message: `Success new user is created with  ${email} and this ${username}` },
-        { status: 200 }
-      );
-    }
+    } 
+    return NextResponse.json(
+      { message: `Success new user is created with  ${email} and this ${username}` },
+      { status: 200 }
+    );
   } catch (error) { 
     console.log(error)
     return NextResponse.json(

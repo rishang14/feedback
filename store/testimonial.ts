@@ -9,7 +9,7 @@ export const UseTestimonial = create((set) => ({
         { tag: tagname },
         { withCredentials: true }
       );
-      if ((res.statusText = "OK")) return { success: true };
+      if ((res.status = 200)) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something Went Wrong" };
     }
@@ -21,7 +21,7 @@ export const UseTestimonial = create((set) => ({
         { tag: tagname },
         { withCredentials: true }
       );
-      if ((res.statusText = "OK")) return { success: true };
+      if ((res.status = 200)) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something Went Wrong" };
     }
@@ -31,7 +31,7 @@ export const UseTestimonial = create((set) => ({
       const res = await axios.patch(`/api/${id}/archiveTestimonial`, {
         withCredentials: true,
       });
-      if ((res.statusText = "OK")) return { success: true };
+      if ((res.status = 200)) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something Went Wrong" };
     }
@@ -41,7 +41,7 @@ export const UseTestimonial = create((set) => ({
       const res = await axios.patch(`/api/${id}/unarchivedTestimonial`, {
         withCredentials: true,
       });
-      if ((res.statusText = "OK")) return { success: true };
+      if ((res.status === 200)) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something Went Wrong" };
     }
@@ -51,7 +51,7 @@ export const UseTestimonial = create((set) => ({
       const res = await axios.delete(`/api/${id}/deleteTestimonial`, {
         withCredentials: true,
       });
-      if (res.statusText === "OK") return { success: true };
+      if (res.status === 200) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something went wrong" };
     }
@@ -61,7 +61,7 @@ export const UseTestimonial = create((set) => ({
       const res = await axios.patch(`/api/${id}/like`, {
         withCredentials: true,
       });
-      if (res.statusText === "OK") return { success: true };
+      if (res.status === 200) return { success: true };
     } catch (error: any) {
       return { success: false, error: "Something went wrong" };
     }
@@ -71,7 +71,7 @@ export const UseTestimonial = create((set) => ({
       const res = await axios.patch(`/api/${id}/unlike`, {
         withCredentials: true,
       });
-      if (res.statusText === "OK") return { success: true };
+      if (res.status === 200) return { success: true };
     } catch (error) {
       return { success: false, error: "Something went wrong" };
     }
