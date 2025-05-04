@@ -37,7 +37,7 @@ export const useSpaceDetails = create((set) => ({
   addtag:async (spacId:string , tagname:string)=>{  
    try {
     const res= await axios.patch(`/api/editspace/spacename/${spacId}/addtag`,{tags:tagname},{withCredentials:true});  
-    if( res.statusText === "OK") {
+    if( res.status === 200) {
       return {success:true};
     }
    } catch (error:any) {
@@ -47,7 +47,7 @@ export const useSpaceDetails = create((set) => ({
   removeTag:async (spacId:string , tagname:string)=>{  
     try {
      const res= await axios.patch(`/api/editspace/spacename/${spacId}/deletetag`,{tags:tagname},{withCredentials:true});  
-     if( res.statusText === "OK") {
+     if( res.status === 200) {
        return {success:true};
      }
     } catch (error:any) {

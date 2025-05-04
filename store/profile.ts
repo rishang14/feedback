@@ -13,8 +13,8 @@ export const useProfile = create((set) => ({
         },
         { withCredentials: true }
       );
-
-      if (res.statusText === "OK")
+   console.log(res,"res")
+      if (res.status === 200)
         return { success: true, message: "Username Changed" };
     } catch (error) {
       return { success: false, message: "something went wrong" };
@@ -30,7 +30,7 @@ export const useProfile = create((set) => ({
   deleteUser :async()=>{
      try {
         const res= await axios.delete("/api/deleteprofile",{withCredentials:true}); 
-         if(res.statusText=== "OK") return {success:true}
+         if(res.status=== 200) return {success:true}
      } catch ( error:any
      ) {
        console.log(error)
