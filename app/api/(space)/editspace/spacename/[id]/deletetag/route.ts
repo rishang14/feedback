@@ -4,11 +4,10 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { TagSchema } from "@/app/types/schema";
 import Space from "@/mongoose/space.schema";
-import { error } from "console";
 
 const { auth } = NextAuth(authConfig);
 
-export async function DELETE(request: NextRequest, context: any) {
+export async function PATCH(request: NextRequest, context: any) {
   const session = await auth();
   if (!session?.user?.email) {
     return NextResponse.json(
@@ -35,8 +34,9 @@ export async function DELETE(request: NextRequest, context: any) {
     } 
 
      space.tags= space.tags.filter((t:string) => t !== tags); 
+     await space.save();   
+     return NextResponse.json({error:"Removed Tags successfully"},{status:200})
 
-     await space.save(); 
   } catch (error:any) {
     console.log(error.message); 
     return NextResponse.json({error:"Inetnal Server error "},{status:500});
