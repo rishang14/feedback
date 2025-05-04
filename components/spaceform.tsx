@@ -255,15 +255,13 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
   return (
         <div className="flex lg:flex-row  flex-col-reverse ">
           <div className="md:w-[400px]   flex flex-col items-center mt-2 space-y-6">
-            <div className="text-lg font-semibold flex items-center gap-2">
+            <div className="text-lg font-semibold flex items-center gap-2 text-white">
               <MessageSquare className="h-5 w-5" />
               Live Preview
             </div>
             {activeTab !== "thankyou" ? (
               <Card
-                className={`border-2 ${
-                  dynamicData?.theme === "dark" ? "bg-zinc-900" : "bg-white"
-                } mt-2 flex p-4`}
+                className={`border-2  mt-2 flex p-4 bg-card`}
               >
                 <CardContent className="pt-6">
                   {/* <div className="space-y-4"> */}
@@ -278,7 +276,7 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
                         ? dynamicData.header
                         : inputValues.header}
                     </h1>
-                    <p className="text-gray-400 text-sm md:text-base line-clamp-2">
+                    <p className="text-muted-foreground text-sm md:text-base line-clamp-2">
                       {dynamicData?.customDescription
                         ? dynamicData?.customDescription
                         : inputValues?.customDescription}
@@ -286,7 +284,7 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2 flex flex-col gap-2 ">
-                      <h3 className="p-2 text-lg  text-black ">
+                      <h3 className="p-2 text-lg  text-white ">
                         {" "}
                         {dynamicData?.questionlabel
                           ? dynamicData.questionlabel
@@ -308,20 +306,20 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
                                 <span className="mr-2 text-blue-500 flex-shrink-0">
                                   •
                                 </span>
-                                <span className="truncate">
+                                <span className="truncate text-muted-foreground">
                                   {items.question}
                                 </span>
                               </li>
                             ))
                           : inputValues.questions.map((items: Question) => (
                               <li
-                                className="text-gray-600 text-sm flex items-start"
+                                className="text-gray-200 text-sm flex items-start"
                                 key={items.id}
                               >
                                 <span className="mr-2 text-blue-500 flex-shrink-0">
                                   •
                                 </span>
-                                <span className="truncate">
+                                <span className="truncate text-muted-foreground">
                                   {items.question}
                                 </span>
                               </li>
@@ -330,7 +328,7 @@ const Spaceform = ({ closeModal, edit, spaceid }: SpaceFormProps) => {
                     </div>
 
                     <Button
-                      className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium overflow-hidden"
+                      className="w-full   font-medium overflow-hidden"
                       variant={"secondary"}
                     >
                       {dynamicData?.textbuttonText

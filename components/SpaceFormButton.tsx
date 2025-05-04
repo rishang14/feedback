@@ -1,16 +1,12 @@
 "use client";
-import { useState } from "react";
-import dynamic from "next/dynamic";
+
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogTitle,
   DialogHeader,
   DialogDescription,
 } from "./ui/dialog"; 
-import { PencilIcon } from "lucide-react";
-import { Button } from "./ui/button"; 
 import Spaceform from "./spaceform";
 type Props = {
   edit: boolean;
@@ -23,11 +19,11 @@ type Props = {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={true}>
       <DialogContent
-        className=" flex flex-col p-6 z-1000 min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-gradient-to-b from-zinc-50 to-white "
+        className=" flex flex-col p-6 z-1000 min-w-[80%] min-h-screen max-h-screen overflow-y-scroll bg-foreground "
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-center">
+          <DialogTitle className=" text-4xl font-bold tracking-tight mb-2 text-white text-center">
             {edit ? " Edit Your Review Form" : " Customize Your Review Form"}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-lg text-center">
