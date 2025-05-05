@@ -103,9 +103,9 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea {...field} id="text" className="min-h-[120px] " disabled={pending}/>
+                  <Textarea {...field} id="text"  className="min-h-[120px] text-white " disabled={pending}/>
                 </FormControl>
-                <FormMessage>{errors.text?.message}</FormMessage>
+                <FormMessage className="text-muted-foreground">{errors.text?.message}</FormMessage>
               </FormItem>
             )}
           />
@@ -116,11 +116,11 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel> Your Name</FormLabel>
+                    <FormLabel className="text-white"> Your Name</FormLabel>
                     <FormControl>
-                      <Input {...field} id="name" disabled={pending} />
+                      <Input {...field} id="name" className="text-white" disabled={pending} />
                     </FormControl>
-                    <FormMessage>{errors.name?.message}</FormMessage>
+                    <FormMessage className="text-muted-foreground">{errors.name?.message}</FormMessage>
                   </FormItem>
                 )}
               />
@@ -130,11 +130,11 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel> Your Email</FormLabel>
+                      <FormLabel className="text-white"> Your Email</FormLabel>
                       <FormControl>
-                        <Input {...field} id="email" type="email"  disabled={pending}/>
+                        <Input {...field} id="email" type="email" className="text-white"  disabled={pending}/>
                       </FormControl>
-                      <FormMessage>{errors.email?.message}</FormMessage>
+                      <FormMessage className="text-muted-foreground">{errors.email?.message}</FormMessage>
                     </FormItem>
                   )}
                 />
@@ -170,7 +170,7 @@ const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
             <Button
               variant="secondary"
-              className="bg-gray-800 hover:bg-gray-900 text-white flex items-center gap-2"
+              className=" text-white flex items-center gap-2"
               size="lg"
               type="submit" 
               disabled={pending}
@@ -206,7 +206,7 @@ const ThankyouModal = ({
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle className="text-center flex flex-col items-center gap-4">
+          <DialogTitle className="text-center flex flex-col text-white items-center gap-4">
             {/* <PartyPopper className="h-12 w-12 text-primary" /> */}
             {spacedetail?.thankyouimg && (
               <div className="w-full h-[300px] space-y-4 p-2 rounded-sm">
@@ -224,12 +224,14 @@ const ThankyouModal = ({
             )}
             {spacedetail?.thankYouTitle}
           </DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogDescription className="text-center text-muted-foreground">
             {spacedetail?.thankYouMessage}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-center">
-          <Button
+          <Button 
+          variant={"outline"} 
+          className="text-white"
             onClick={() => {
               setIsOpen(false);
               closeFormmodal(); 

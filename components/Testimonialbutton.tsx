@@ -24,18 +24,18 @@ export function TestimonialFormButton({ spacename, spacedetails }: any) {
             onInteractOutside={(e) => e.preventDefault()}
           >
             <DialogHeader>
-              <DialogTitle className="text-xl">Write review</DialogTitle>
+              <DialogTitle className="text-xl text-white">Write review</DialogTitle>
             </DialogHeader>
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-2 border-b-2 border-indigo-500 pb-1 inline-block">
+              <h3 className="text-lg font-medium mb-2 border-b-2 text-muted-foreground border-indigo-500 pb-1 inline-block">
                 {spacedetails?.questionlabel}
               </h3>
               <ul className="space-y-2 mt-3">
                 {spacedetails?.questions?.map((item: any) => {
                   return (
                     <li className="flex items-start" key={item._id}>
-                      <span className="text-gray-600 mr-2">•</span>
-                      <span>{item.question}</span>
+                      <span className="text-blue-600 mr-2">•</span>
+                      <span className="text-neutral-400">{item.question}</span>
                     </li>
                   );
                 })}
