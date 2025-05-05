@@ -73,7 +73,7 @@ export default function ProfilePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Profile Summary Card */}
-          <Card className="md:col-span-1 bg-neutral-950 border-neutral-800 text-neutral-50">
+          <Card className="md:col-span-1 ">
             <CardHeader className="flex flex-col items-center text-center">
               <Avatar className="h-24 w-24 mb-4">
                 {/* <AvatarImage src={user.avatarUrl || "/placeholder.svg"} alt={user.username} /> */}
@@ -92,10 +92,10 @@ export default function ProfilePage() {
                 </span>
                 {userdetails.isVerified && (
                   <Badge
-                    variant="outline"
-                    className="ml-2 bg-green-50 text-green-700 border-green-200 flex items-center"
+                    // variant="outline"
+                    className="ml-2  border-green-300  text-green-700 flex items-center"
                   >
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
+                    <CheckCircle2 className="h-3 w-3 mr-1 text-green-600" />
                     Verified
                   </Badge>
                 )}
@@ -128,10 +128,10 @@ export default function ProfilePage() {
           </Card>
 
           {/* Account Settings Card */}
-          <Card className="md:col-span-2  bg-neutral-950 border-neutral-800 text-neutral-50">
+          <Card className="md:col-span-2  ">
             <CardHeader>
               <CardTitle>Account Settings</CardTitle>
-              <CardDescription style={{ color: "#a0a0a0" }}>
+              <CardDescription >
                 Manage your account settings and preferences
               </CardDescription>
             </CardHeader>
@@ -207,7 +207,7 @@ export default function ProfilePage() {
               </p>
               <Button
                 variant="destructive"
-                className=" focus-visible:ring-destructive/40 bg-red-500 hover:bg-red-600  aria-invalid:ring-destructive/40"
+                
                 onClick={() => setOpen((prev)=>({
                   ...prev,
                   deleteAccount:true

@@ -89,10 +89,10 @@ const  ChangeUsernameDialog=({
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] bg-neutral-950 border-neutral-800 ">
+      <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>
           <DialogTitle className="text-white">Change Username</DialogTitle>
-          <DialogDescription className="text-neutral-400">
+          <DialogDescription >
             Enter a new username for your account.
           </DialogDescription>
         </DialogHeader>
@@ -100,7 +100,7 @@ const  ChangeUsernameDialog=({
           <form onSubmit={handleSubmit(onsubmit)} className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="current-username" className="text-white">Current Username</Label>
-              <Input id="current-username"  className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50   selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400v text-white "  value={currentUsername} disabled />
+              <Input id="current-username" className="text-white"    value={currentUsername} disabled />
             </div>
  
             <div className="space-y-2">
@@ -109,9 +109,9 @@ const  ChangeUsernameDialog=({
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter Your Name</FormLabel>
+                    <FormLabel className="text-white">Enter Your Name</FormLabel>
                     <FormControl>
-                      <Input {...field} id="username" placeholder="John Doe" disabled={success.loading}  className="focus-visible:border-blue-600 aria-invalid:border-red-900 focus-visible:ring-blue-300/50  text-white selection:bg-neutral-50 selection:text-neutral-900 border-neutral-800 placeholder:text-neutral-400 "/>
+                      <Input {...field} id="username" placeholder="John Doe" className="text-white" disabled={success.loading}  />
                     </FormControl>
                     <FormMessage className="text-neutral-400">{errors.username?.message}</FormMessage>
                   </FormItem>
@@ -121,7 +121,8 @@ const  ChangeUsernameDialog=({
 
             <DialogFooter className="pt-4">
               <Button
-                type="button"
+                type="button" 
+                variant="outline"
                 className="bg-blue-500 text-white "
                 onClick={() => onOpenChange(false)}
               >

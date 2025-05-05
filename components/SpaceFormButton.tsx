@@ -12,7 +12,7 @@ type Props = {
   edit: boolean;
   spaceid?: string; 
   open:boolean,
-  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen:  (open: boolean) => void;
 };
 
  const OpenSpaceFormButton = ({ edit,spaceid ,open,setOpen}:Props) => {
