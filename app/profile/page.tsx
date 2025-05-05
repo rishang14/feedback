@@ -182,7 +182,7 @@ export default function ProfilePage() {
                 >
                   Change Password
                 </Button>
-                <Button
+                {/* <Button
                   variant="outline"
                   className="mb-2"
                   onClick={() => setOpen((prev)=>({
@@ -191,7 +191,7 @@ export default function ProfilePage() {
                   }))}
                 >
                   Forgot Password
-                </Button>
+                </Button> */}
               </div>
             </CardContent>
             <CardFooter className="flex flex-col items-start">
@@ -245,14 +245,14 @@ export default function ProfilePage() {
           }))}
         />
 
-        <ForgotPasswordDialog
+        {/* <ForgotPasswordDialog
           open={open.forgotPassword}
           onOpenChange={(val)=>setOpen((prev)=>({
             ...prev, 
             forgotPassword: val
           }))}
           email={userdetails.email as string}
-        />
+        /> */}
       </div>
     </div>
   );
