@@ -35,5 +35,20 @@ export const useProfile = create((set) => ({
      ) {
        console.log(error)
      }
+  }, 
+  changePassword:async(currentpass:string, newPass:string)=>{
+    try {
+      const res= await axios.patch("api/changepassword",{
+        currentpass,newPass
+      },{withCredentials:true}) 
+
+      if(res.status===200)return {success:true,message:"Password cahnged Successfully!"}
+    } catch (error:any) {
+         console.log(error);  
+         if(error.status===401){
+          return {success:false,error:"Current pass is Wrong",status:401}
+         }
+         return {success:false,error:error.message};
+    }
   }
 }));

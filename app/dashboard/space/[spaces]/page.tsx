@@ -3,14 +3,28 @@
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import {
-  MessageCircleCode,  
+  MessageCircleCode,
   MessageSquare,
   Heart,
   Archive,
   AlertTriangle,
   Boxes,
+  Tags,
   PencilIcon,
+  HeartCrack,
 } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -20,10 +34,16 @@ import { useSpaceDetails } from "@/store/spaceDetails";
 import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
+import { AppSidebar } from "@/components/sidebarmenu";
+import Reviews from "@/components/reviewcomp";
+import TagManager from "@/components/manageTags";
 
 export default function Page() {
-  const [activeSection, setActiveSection] = useState("all");
-  const [open, setopen] = useState(false);
+  const [activeSection, setActiveSection] = useState("review");
+  const [open, setopen] = useState({
+    editspace: false,
+    tagmanager: false,
+  });
   const { spaces } = useParams();
   // @ts-ignore
   const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
@@ -40,118 +60,106 @@ export default function Page() {
     return;
   }
 
-  const sidebarButton = (
-    icon: React.ReactNode,
-    label: string,
-    value: string
-  ) => (
-    <Button
-      variant="sidebutton"
-      className={cn(
-        `w-full justify-start transition-colors ${
-          activeSection === value
-            ? "bg-blue-500 text-white hover:bg-blue-500"
-            : " text-white"
-        }`
-      )}
-      onClick={() => setActiveSection(value)}
-    >
-      {icon}
-      {label}
-    </Button>
-  );
-
   const EditSpaceDialog = dynamic(
     () => import("@/components/SpaceFormButton"),
     {
       ssr: false,
     }
   );
+
+  const TagManager = dynamic(() => import("@/components/manageTags"), {
+    ssr: false,
+  });
+  if (!getSpaceDetails || !questions || !spaces) return <Loading />;
+
   return (
     <>
-      <div className="">
-        {/* Header */}
-        <header className="border-b">
-          <div className="flex h-16 items-center px-4 md:px-6">
-            <div className="ml-auto flex items-center space-x-4">
-        
-              <div className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4 text-white" />
-                <span className="text-white">Text credits</span>
-                <span className="text-muted-foreground">10</span>
+      <SidebarProvider>
+        <AppSidebar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          tagopen={(val: boolean) =>
+            setopen((prev) => ({ ...prev, tagmanager: val }))
+          }
+        />
+        <main className="flex  flex-col w-full ">
+          <header className="border-b border-zinc-800">
+            <div className="flex h-16 items-center px-4 md:px-6">
+              <SidebarTrigger className="h-10 w-10 text-white hover:text-white bg-zinc-800 hover:bg-zinc-800 rounded-md mr-2 " />
+              <div className="ml-auto flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <MessageSquare className="h-4 w-4 text-white" />
+                  <span className="text-white">Text credits</span>
+                  <span className="text-zinc-400">10</span>
+                </div>
+                <Button
+                  onClick={() =>
+                    setopen((prev) => ({
+                      ...prev,
+                      editspace: true,
+                    }))
+                  }
+                  className="flex items-center justify-center space-x-2 bg-blue-600 text-gray-200"
+                >
+                  <PencilIcon className="h-4 w-4" />
+                  <span>Edit Space</span>
+                </Button>
               </div>
-              <Button
-               
-                onClick={() => setopen(true)}
-                className=" bg-blue-600 flex items-center text-gray-200 justify-center space-x-2 cursor-pointer"
-              >
-                <PencilIcon /> Edit Space
-              </Button>
+            </div>
+          </header>
+          <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">
+            <div className="w-full space-y-4">
+              {activeSection === "review" && (
+                <Reviews testimonials={testimonials} />
+              )}
+              {activeSection === "liked" && (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-bold text-white mb-2">
+                    Liked Reviews
+                  </h2>
+                  <p className="text-zinc-400">No liked reviews yet</p>
+                </div>
+              )}
+              {activeSection === "archived" && (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-bold text-white mb-2">
+                    Archived Reviews
+                  </h2>
+                  <p className="text-zinc-400">No archived reviews yet</p>
+                </div>
+              )}
+              {/* {activeSection === "wall-of-love" && (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-bold text-white mb-2">
+                    Wall of Love
+                  </h2>
+                  <p className="text-zinc-400">Your wall of love is empty</p>
+                </div>
+              )} */}
             </div>
           </div>
-        </header>
-
-        {/* Main Content */}
-        <div className="">
-          <aside className="w-64 border-r border-white flex flex-col items-center  p-4">
-            <h2 className="text-lg font-semibold mb-4 text-white ">Inbox</h2>
-            <div className="space-y-2">
-              {sidebarButton(
-                <MessageCircleCode  className="mr-2 h-4 w-4 text-white" />,
-                 "Reviews",
-                 "review"
-              )}
-              {sidebarButton(
-                <Heart className="mr-2 h-4 w-4 text-white" />,
-                "Liked",
-                "liked"
-              )}
-              {sidebarButton(
-                <Archive className="mr-2 h-4 w-4 text-white" />,
-                "Archived",
-                "archived"
-              )}
-              
-            </div>
-  
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold mb-4 text-white">
-                Embed widgets
-              </h2>
-              
-                {sidebarButton(
-                  <Heart className="mr-2 h-4 w-4 text-white" />,
-                  "Wall of Love",
-                  "wall-of-love"
-                )}
-
-            </div>
-          </aside>
-
-          {/* Main Content Area */}
-          <main className="flex-1 p-6   overflow-y-auto ">
-            <div className="w-full flex flex-col gap-3 mt-4  ">
-              {testimonials.map((item: any) => {
-                return (
-                  <TestimonialCard
-                    key={item._id}
-                    name={item?.name as string}
-                    email={item?.email as string}
-                    description={item?.text as string}
-                    avatar=""
-                    starred={item?.rating as number}
-                  />
-                );
-              })}
-            </div>
-          </main>
-        </div>
-      </div>
+        </main>
+      </SidebarProvider>
       <EditSpaceDialog
         edit={true}
-        open={open}
-        setOpen={setopen}
-        spaceid={spaces && (spaces as string)}
+        open={open.editspace}
+        setOpen={(val) =>
+          setopen((prev) => ({
+            ...prev,
+            editspace: val,
+          }))
+        }
+        spaceid={spaces as string}
+      />
+      <TagManager
+        onchangeopen={(val) =>
+          setopen((prev) => ({
+            ...prev,
+            tagmanager: val,
+          }))
+        }
+        open={open.tagmanager}
+        tags={[]}
       />
     </>
   );

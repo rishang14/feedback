@@ -120,13 +120,13 @@ const BasicTab = ({
                     />
 
                     <Button
-                      className="text-lg cursor-pointer bg-white hover:text-gray-400"
+                      className="text-lg cursor-pointer"
                       variant="link"
                       type="button"
                       onClick={() => deletQuestionBox(item.id)} 
                       disabled={pending}
                     >
-                      <Trash2 color="black" />
+                      <Trash2 color="white" />
                     </Button>
                   </div>
                   {validationErrors[`questions.${ind}.question`] && (
@@ -139,13 +139,13 @@ const BasicTab = ({
             })}
 
             <Button
-              className=" w-[100px] p-2  flex items-center text-gray-500 font-bold cursor-pointer"
+              className=" w-[100px] p-2  flex items-center  font-bold cursor-pointer"
               variant={"ghost"}
               onClick={addQuestionBox}
               type="button" 
               disabled={pending}
             >
-              <CirclePlus color="black" /> Add more{" "}
+              <CirclePlus color="white" /> Add more{" "}
             </Button>
           </div>
           <div className="flex items-center justify-center md:flex-row flex-col space-x-10 ">

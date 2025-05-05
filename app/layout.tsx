@@ -33,12 +33,11 @@ export default function RootLayout({
     <html lang="en"  suppressHydrationWarning={true}>
       <body 
       suppressHydrationWarning={true}
-        className={`${popppins.variable} antialiased   `}
+        className={`${popppins.variable} antialiased   dark  bg-background`}
       > 
       <Providers>
        <CustomNav/>
         {children}  
-
           <Toaster/> 
          </Providers>
       </body>
