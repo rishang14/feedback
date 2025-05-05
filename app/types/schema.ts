@@ -131,46 +131,82 @@ export const SpaceNameEditSchema = z.object({
 });
 
 export const usernameSchema = z.object({
-  username:z.string({
-    required_error: "Name is required",
-    invalid_type_error: "Name must Contain 3 words",
-  })
-  .min(3)
-})
-
+  username: z
+    .string({
+      required_error: "Name is required",
+      invalid_type_error: "Name must Contain 3 words",
+    })
+    .min(3),
+});
 
 export const PasswordSchema = z.object({
   currentpass: z
-  .string()
-  .min(5, { message: "Password must be at least 5 characters long" })
-  .refine(
-    (value) => {
-      const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
-      return regex.test(value);
-    },
-    {
-      message:
-        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
-    }
-  ), 
+    .string()
+    .min(5, { message: "Password must be at least 5 characters long" })
+    .refine(
+      (value) => {
+        const regex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+        return regex.test(value);
+      },
+      {
+        message:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+      }
+    ),
   newPass: z
-  .string()
-  .min(5, { message: "Password must be at least 5 characters long" })
-  .refine(
-    (value) => {
-      const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
-      return regex.test(value);
-    },
-    {
-      message:
-        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
-    }
-  )
-})
+    .string()
+    .min(5, { message: "Password must be at least 5 characters long" })
+    .refine(
+      (value) => {
+        const regex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+        return regex.test(value);
+      },
+      {
+        message:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+      }
+    ),
+});
+export const ExtendedPasswordSchema = PasswordSchema.extend({
+  confirmPass: z
+    .string()
+    .min(5, { message: "Password must be at least 5 characters long" })
+    .refine(
+      (value) => {
+        const regex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/;
+        return regex.test(value);
+      },
+      {
+        message:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+      }
+    ),
+}).superRefine(({ newPass, confirmPass,currentpass }, ctx) => {
+  if (newPass !== confirmPass) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Passwords do not match",
+      path: ["confirmPass"],
+    });
+  } 
+  if(newPass === currentpass){
+    ctx.addIssue({
+      code: "custom",
+      message: "New password must be different from current password",
+      path: ["newPass"],
+    });
+    ctx.addIssue({
+      code: "custom",
+      message: "New password must be different from current password",
+      path: ["currentpass"],
+    });
 
+  }
+});
 
-export const TagSchema= z.object({
-  tags:z.string().min(3, { message: "Tags must be at least 3 characters" })
-})
+export const TagSchema = z.object({
+  tags: z.string().min(3, { message: "Tags must be at least 3 characters" }),
+});
