@@ -20,19 +20,19 @@ export async function PATCH(request:NextRequest,context: any) {
   try {
     const {id}= await context.params; 
     const body= await request.json(); 
-    const validatedData= TagSchema.safeParse(body.tags);  
-  
+    const validatedData= TagSchema.safeParse(body);  
+
     if(!validatedData.success){
-        return NextResponse.json({error:"Tags format is incorrect"},{status:401})
+       return NextResponse.json({error:"Tags format is incorrect"},{status:401})
     }   
-    const {tags}=validatedData.data
+    const {tag}=validatedData.data
     const space = await Space.findById(id);  
     if(!space){
      return NextResponse.json({error:"space not found"},{status:404})
     }
-    const exists = space.tags.includes(tags);
-    if(exists) return NextResponse.json({error:"Tag with this name already exists"},{status:401}); 
-    space.tags.push(tags); 
+    const exists = space.tags.includes(tag);
+    if(exists) return NextResponse.json({error:"Tag with this name already exists"},{status:402}); 
+    space.tags.push(tag); 
     await space.save(); 
     return NextResponse.json({message:"Tag is created"},{status:200});
   } catch (error:any) {

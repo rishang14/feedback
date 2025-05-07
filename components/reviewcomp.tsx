@@ -1,20 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { HeartCrack } from "lucide-react";
 import { TestimonialCard } from "./testimonial.Card";
 import { Button } from "./ui/button";
 import Loading from "@/app/loading";
 
 type reviewprop = {
-  testimonials: any[] | null;
+  testimonials: any[] | null; 
+  tags:Array<string>
 };
-const Reviews = ({ testimonials }: reviewprop) => {
-  console.log(typeof testimonials, "reviews");
-  // if (testimonials === null) return <Loading />;
+const Reviews = ({ testimonials,tags }: reviewprop) => {
+  const [active,setActive]=useState("all") 
+
+   const handleChange=(tag:string)=>{
+     setActive(tag)
+   }
+  if (testimonials === null) return <Loading />;
   return (
     <>
-      <Button variant={"outline"} className="text-white ">
+     <div className=" w-full flex items-center gap-2 flex-wrap   space-x-2 ">
+     <Button variant={"outline"} className={`text-white  ${active === "all" ? "bg-neutral-600" :""}`} onClick={()=>handleChange("all")}>
         All
-      </Button>
+      </Button>  
+      {
+        tags?.map((tagButon:string) =>{
+          return  <Button variant={"outline"} className={`text-white  ${active === tagButon ? "bg-neutral-600" : ""}`} key={tagButon}  onClick={()=>handleChange(tagButon)} >
+          {tagButon}
+        </Button>
+        })
+      }
+     </div>
       {testimonials?.length === 0 && (
         <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
           <HeartCrack className="w-8 h-8 text-white " />

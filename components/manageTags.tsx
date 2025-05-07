@@ -57,6 +57,7 @@ export default function TagManager({
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = form;
 
@@ -64,14 +65,21 @@ export default function TagManager({
     setLoading(true);
     try {
       const { tag } = data;
-      const res = await addtag(spaceid, data);
+      const res = await addtag(spaceid, tag);
       if (res.success) {
         toast.success("Tag is Created ", { duration: 3000 });
         await getSpaceDetails(spaceid as string);
-      } else {
-        toast.error("Something went wrong");
+      }  
+      if(!res.success  && res.status === 402){ 
+        console.log(res?.error)
+        setError("tag",{
+          type: "server",
+          message: res?.error || "Something went wrong",
+        })
       }
-    } catch (error: any) {
+      console.log(res,"res")
+    } catch (error: any) { 
+      console.log(error,"err")
     } finally {
       setLoading(false);
     }

@@ -38,11 +38,14 @@ export const useSpaceDetails = create((set) => ({
   } ,
   addtag:async (spacId:string , tagname:string)=>{  
    try {
-    const res= await axios.patch(`/api/editspace/spacename/${spacId}/addtag`,{tags:tagname},{withCredentials:true});  
+    const res= await axios.patch(`/api/editspace/spacename/${spacId}/addtag`,{tag:tagname},{withCredentials:true});  
     if( res.status === 200) {
       return {success:true};
     }
-   } catch (error:any) {
+   } catch (error:any) { 
+    if(error.status === 402){
+      return {success:false,error:"Tags with This name Already Exists", status:402}
+    }
     return  {success:false,error:"Something Went Wrong"}
    }
   },
