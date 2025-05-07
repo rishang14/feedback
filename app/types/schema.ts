@@ -208,5 +208,11 @@ export const ExtendedPasswordSchema = PasswordSchema.extend({
 });
 
 export const TagSchema = z.object({
-  tags: z.string().min(3, { message: "Tags must be at least 3 characters" }),
+  tag: z
+    .string()
+    .min(3, { message: "Tags must be at least 3 characters" })
+    .transform((val) => {
+      const noSpaces = val.trim().replace(/\s+/g, "");
+      return noSpaces.charAt(0).toUpperCase() + noSpaces.slice(1);
+    }),
 });

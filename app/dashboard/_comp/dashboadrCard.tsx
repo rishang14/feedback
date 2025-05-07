@@ -4,7 +4,8 @@ import { Card, CardContent, } from "@/components/ui/card";
 import DropdownMenuDemo from './withdropdownmenu'; 
 import { useRouter } from 'next/navigation';
 
- const DashboardCardWithMenu = ({ item }: { item: any }) => {
+ const DashboardCardWithMenu = ({ item }: { item: any }) => { 
+  console.log(item,"spaces")
   const router = useRouter();
   const handleClick = async (spaces: any) => {
     router.push(`/dashboard/space/${spaces}`);

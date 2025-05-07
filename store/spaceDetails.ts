@@ -7,15 +7,17 @@ import { EditFormSchema } from "@/app/types/schema";
 type prop= z.infer<typeof EditFormSchema>
 export const useSpaceDetails = create((set) => ({
   questions: {},
-  testimonials:[],
+  testimonials:[], 
+  tags:[],
   getSpaceDetails: async (id: string) => {
     try {
       const res = await axios.get(`/api/space/${id}`, {
         withCredentials: true,
       }); 
       const data = await res.data.Questions; 
-      const testimonial= await res.data.Testimonial
-      set({ questions: data , testimonials:testimonial });
+      const testimonial= await res.data.Testimonial; 
+      const Tags= await res.data.Tags;  
+      set({ questions: data , testimonials:testimonial ,tags:Tags});
     } catch (error) {
       console.log(error);
     }
@@ -46,11 +48,13 @@ export const useSpaceDetails = create((set) => ({
   },
   removeTag:async (spacId:string , tagname:string)=>{  
     try {
-     const res= await axios.patch(`/api/editspace/spacename/${spacId}/deletetag`,{tags:tagname},{withCredentials:true});  
+     const res= await axios.patch(`/api/editspace/spacename/${spacId}/deletetag`,{tag:tagname},{withCredentials:true});  
      if( res.status === 200) {
        return {success:true};
-     }
-    } catch (error:any) {
+     } 
+     console.log(res)
+    } catch (error:any) { 
+      console.log(error)
      return  {success:false,error:"Something Went Wrong"}
     }
    }

@@ -46,14 +46,18 @@ export default function Page() {
   });
   const { spaces } = useParams();
   // @ts-ignore
-  const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
+  const {  getSpaceDetails, testimonials ,tags} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
   console.log(testimonials, "testimonials");
   useEffect(() => {
-    if (spaces) getSpaceDetails(spaces as string);
+    async function spaceDetails(){
+      if (spaces) await getSpaceDetails(spaces as string);
+    } 
+
+     spaceDetails()
   }, [spaces]);
-  if (status === "loading" || !questions) return <Loading />;
+  if (status === "loading" ) return <Loading />;
   if (status !== "authenticated") {
     router.push("/signin");
     toast("Pls sign In to access this routes");
@@ -70,7 +74,7 @@ export default function Page() {
   const TagManager = dynamic(() => import("@/components/manageTags"), {
     ssr: false,
   });
-  if (!getSpaceDetails || !questions || !spaces) return <Loading />;
+  // if (!getSpaceDetails || !questions || !spaces) return <Loading />;
 
   return (
     <>
@@ -159,7 +163,8 @@ export default function Page() {
           }))
         }
         open={open.tagmanager}
-        tags={[]}
+        tags={tags} 
+        spaceid={spaces as string}
       />
     </>
   );
