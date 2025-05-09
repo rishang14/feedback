@@ -36,10 +36,12 @@ const TestimonialsSchema= new Schema<Testimnoailstype>({
     required:[true, 'text is required']
  },
   walloflove:{
-    type:Boolean, 
+    type:Boolean,  
+    default:false
   }, 
   archeived:{
-    type:Boolean
+    type:Boolean ,
+    default:false,
   }, 
   consent:{
     type:Boolean, 
