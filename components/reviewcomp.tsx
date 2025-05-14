@@ -45,7 +45,8 @@ const Reviews = ({ testimonials,tags }: reviewprop) => {
             email={item?.email as string}
             description={item?.text as string}
             avatar=""
-            starred={item?.rating as number}
+            starred={item?.rating as number} 
+            tags={tags}
           />
         );
       })}
