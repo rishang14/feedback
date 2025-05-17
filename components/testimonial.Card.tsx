@@ -43,9 +43,11 @@ export function TestimonialCard({
   spaceid,
   // onAction,
   tags,
-}: TestimonialProps) {
+}: TestimonialProps) { 
+  console.log(isarchived,"status")
   // @ts-ignore
-  const { likeTestimonial, unlikeTestimonial } = UseTestimonial();
+  const { likeTestimonial, unlikeTestimonial, archive, unarchive } =
+    UseTestimonial();
   // @ts-ignore
   const { getSpaceDetails } = useSpaceDetails();
   const [open, setisopen] = useState(false);
@@ -65,6 +67,21 @@ export function TestimonialCard({
       }
     } catch (error) {
       toast.error("Pls try again");
+    } finally {
+      await getSpaceDetails(spaceid);
+    }
+  };
+
+  const handlearchive = async (status: boolean, reviewId: string) => {
+    try {
+      const res = status ? await unarchive(reviewId) : await archive(reviewId);
+      if (res.success && status) {
+        toast.success("unarchived successfully", { duration: 3000 });
+      }
+      if (res.success && !status) {
+        toast.success("archived successfully", { duration: 3000 });
+      }
+    } catch (error) {
     } finally {
       await getSpaceDetails(spaceid);
     }
@@ -113,7 +130,11 @@ export function TestimonialCard({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant={"secondary"} size={"icon"}>
+                  <Button
+                    variant={"secondary"}
+                    size={"icon"}
+                    onClick={() => handlearchive(isarchived as boolean, id)}
+                  >
                     {" "}
                     {isarchived ? (
                       <LuArchiveRestore color="#fff" className="w-5 h-5" />
@@ -125,7 +146,9 @@ export function TestimonialCard({
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Archive review</TooltipContent>
+                <TooltipContent>{
+                  isarchived ?"Unarchive review" : "Archive review"
+                  }</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>

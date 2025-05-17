@@ -61,7 +61,7 @@ const Reviews = ({ testimonials, tags,spaceid }: reviewprop) => {
             tags={tags}
             id={item._id}
             isLiked={item.walloflove}
-            isarchived={item.archived} 
+            isarchived={item.archeived} 
             spaceid={spaceid}
           />
         );
