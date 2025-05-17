@@ -33,29 +33,15 @@ const DropDownForTestimonial = ({id,tags}:prop) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup> 
-             <DropdownMenuItem
-              className="cursor-pointer text-gray-200"
-            //   onClick={() => handleCopyClick(item.spacename)}
-            >
-              <Heart  className="text-red-800  " />Like
-            </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer text-gray-200 hover:bg-black"
-            //   onClick={() => handleDialogopen(true)}
             >
               <Archive  className="hover:text-black" /> Archive
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer text-gray-200"
-            //   onClick={() => setDelteIsOpen(true)}
             >
-              <TrashIcon color="red" /> Delete 
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer text-gray-200"
-            //   onClick={() => handleCopyClick(item.spacename)}
-            >
-              <Tags className="hover:text-black" /> Add Tag
+              <Tags className="hover:text-black" /> Manage Tag
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
