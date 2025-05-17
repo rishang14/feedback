@@ -114,7 +114,7 @@ export default function Page() {
           <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={testimonials} tags={tags}/>
+                <Reviews testimonials={testimonials} tags={tags} spaceid={spaces as string}/>
               )}
               {activeSection === "liked" && (
                 <div className="text-center py-10">

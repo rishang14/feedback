@@ -6,9 +6,10 @@ import Loading from "@/app/loading";
 
 type reviewprop = {
   testimonials: any[] | null;
-  tags: Array<string>;
+  tags: Array<string>; 
+  spaceid:string
 };
-const Reviews = ({ testimonials, tags }: reviewprop) => {
+const Reviews = ({ testimonials, tags,spaceid }: reviewprop) => {
   const [active, setActive] = useState("all");
   console.log(testimonials, "test ");
   const handleChange = (tag: string) => {
@@ -60,7 +61,8 @@ const Reviews = ({ testimonials, tags }: reviewprop) => {
             tags={tags}
             id={item._id}
             isLiked={item.walloflove}
-            isarchived={item.archived}
+            isarchived={item.archived} 
+            spaceid={spaceid}
           />
         );
       })}
