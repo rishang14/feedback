@@ -1,21 +1,20 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Heart,
-  Save,
   TrashIcon,
   Tags,
-  MessageCircle,
-  X,
   HeartIcon,
   Archive,
+  Import,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Star } from "lucide-react";
-import DropDownForTestimonial from "./DropDownForTestimonial";
-import { UseTestimonial } from "@/store/testimonial";
+import DeleteReviewDialog from "./deletereview";
+import { UseTestimonial } from "@/store/testimonial"; 
+import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { useSpaceDetails } from "@/store/spaceDetails";
+import { useState } from "react";
 interface TestimonialProps {
   name: string;
   email: string;
@@ -47,7 +46,8 @@ export function TestimonialCard({
   // @ts-ignore
   const { likeTestimonial, unlikeTestimonial } = UseTestimonial();
   // @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails();
+  const { getSpaceDetails } = useSpaceDetails(); 
+  const [open,setisopen]=useState(false)
   const handlelikeUnlike = async (state: boolean, id: string) => {
     try {
       const res = state
@@ -67,8 +67,13 @@ export function TestimonialCard({
     } finally {
       await getSpaceDetails(spaceid);
     }
-  };
-  return (
+  }; 
+
+  const DeleteReview = dynamic(()=> import('./deletereview'),{
+    ssr:false
+  })
+  return ( 
+    <>
     <div className="group relative mx-auto max-w-2xl overflow-hidden bg-card rounded-xl bg-gradient-to-br md:p-6 p-2.5  shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 sm:p-8">
       <div className="flex items-start gap-2 justify-between w-full ">
         <div className="mb-6 flex items-center max-w-[90%]  gap-4">
@@ -96,7 +101,7 @@ export function TestimonialCard({
               }`}
             />
           </Button>
-          <Button variant={"secondary"} size={"icon"}>
+          <Button variant={"secondary"} size={"icon"} onClick={()=>setisopen(true)}>
             {" "}
             <TrashIcon color="#fff" className="w-5 h-5" />{" "}
           </Button>
@@ -145,6 +150,8 @@ export function TestimonialCard({
           </div>
         </div>
       </div>
-    </div>
+    </div>  
+    <DeleteReview isopen={open} spaceid={spaceid} onchangeopen={setisopen} reviewid={id} />
+      </>
   );
 }
