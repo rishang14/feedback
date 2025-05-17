@@ -15,12 +15,13 @@ import { Star } from "lucide-react";
 import DropDownForTestimonial from "./DropDownForTestimonial";
 interface TestimonialProps {
   name: string;
-  email: string;
+  email: string; 
+  id:string,
   description: string;
   avatar: string;
   date?: string;
   isLiked?: boolean;
-  isSaved?: boolean;
+  isarchived?: boolean;
   starred?: number;
   tags?:Array<string>
   // onAction?: (action: string) => void;
@@ -32,7 +33,8 @@ export function TestimonialCard({
   description,
   avatar,
   isLiked,
-  isSaved,
+  isarchived, 
+  id,
   starred,
   // onAction,
   tags
@@ -86,7 +88,6 @@ export function TestimonialCard({
             <Button className="text-neutral-400" variant={"outline"} size={"sm"}>  <Archive  /> Archive </Button>
             <Button className="text-neutral-400" variant={"outline"} size={"sm"}>   <Tags  /> Manage Tag </Button>
           </div>
-           {/* <DropDownForTestimonial id=""/> */}
         </div>
       </div>
     </div>

@@ -5,30 +5,41 @@ import { Button } from "./ui/button";
 import Loading from "@/app/loading";
 
 type reviewprop = {
-  testimonials: any[] | null; 
-  tags:Array<string>
+  testimonials: any[] | null;
+  tags: Array<string>;
 };
-const Reviews = ({ testimonials,tags }: reviewprop) => {
-  const [active,setActive]=useState("all") 
-
-   const handleChange=(tag:string)=>{
-     setActive(tag)
-   }
+const Reviews = ({ testimonials, tags }: reviewprop) => {
+  const [active, setActive] = useState("all");
+  console.log(testimonials, "test ");
+  const handleChange = (tag: string) => {
+    setActive(tag);
+  };
   if (testimonials === null) return <Loading />;
   return (
     <>
-     <div className=" w-full flex items-center gap-2 flex-wrap   space-x-2 ">
-     <Button variant={"outline"} className={`text-white  ${active === "all" ? "bg-neutral-600" :""}`} onClick={()=>handleChange("all")}>
-        All
-      </Button>  
-      {
-        tags?.map((tagButon:string) =>{
-          return  <Button variant={"outline"} className={`text-white  ${active === tagButon ? "bg-neutral-600" : ""}`} key={tagButon}  onClick={()=>handleChange(tagButon)} >
-          {tagButon}
+      <div className=" w-full flex items-center gap-2 flex-wrap   space-x-2 ">
+        <Button
+          variant={"outline"}
+          className={`text-white  ${active === "all" ? "bg-neutral-600" : ""}`}
+          onClick={() => handleChange("all")}
+        >
+          All
         </Button>
-        })
-      }
-     </div>
+        {tags?.map((tagButon: string) => {
+          return (
+            <Button
+              variant={"outline"}
+              className={`text-white  ${
+                active === tagButon ? "bg-neutral-600" : ""
+              }`}
+              key={tagButon}
+              onClick={() => handleChange(tagButon)}
+            >
+              {tagButon}
+            </Button>
+          );
+        })}
+      </div>
       {testimonials?.length === 0 && (
         <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
           <HeartCrack className="w-8 h-8 text-white " />
@@ -45,8 +56,11 @@ const Reviews = ({ testimonials,tags }: reviewprop) => {
             email={item?.email as string}
             description={item?.text as string}
             avatar=""
-            starred={item?.rating as number} 
+            starred={item?.rating as number}
             tags={tags}
+            id={item._id}
+            isLiked={item.walloflove}
+            isarchived={item.archived}
           />
         );
       })}

@@ -19,7 +19,7 @@ import {
     return (
 <Sidebar className="border-r border-zinc-800 bg-neutral-900">
 <SidebarHeader>
-  <h2 className="px-4 text-lg font-semibold text-neurtal-900">Inbox</h2>
+  <h2 className="px-4 text-lg font-semibold text-neurtal-900">Manage Space</h2>
 </SidebarHeader>
 <SidebarContent className="">
   <SidebarGroup>
