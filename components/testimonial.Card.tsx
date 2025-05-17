@@ -1,19 +1,21 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  TrashIcon,
-  Tags,
-  HeartIcon,
-  Archive,
-  Import,
-} from "lucide-react";
+import { TrashIcon, Tags, HeartIcon, Archive, Import } from "lucide-react";
+import { HiOutlineArchiveBoxArrowDown } from "react-icons/hi2";
+import { LuArchiveRestore } from "react-icons/lu";
 import { Button } from "./ui/button";
 import { Star } from "lucide-react";
-import DeleteReviewDialog from "./deletereview";
-import { UseTestimonial } from "@/store/testimonial"; 
+import { UseTestimonial } from "@/store/testimonial";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { useSpaceDetails } from "@/store/spaceDetails";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { useState } from "react";
 interface TestimonialProps {
   name: string;
@@ -27,7 +29,6 @@ interface TestimonialProps {
   starred?: number;
   tags?: Array<string>;
   spaceid: string;
-  // onAction?: (action: string) => void;
 }
 
 export function TestimonialCard({
@@ -46,8 +47,8 @@ export function TestimonialCard({
   // @ts-ignore
   const { likeTestimonial, unlikeTestimonial } = UseTestimonial();
   // @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails(); 
-  const [open,setisopen]=useState(false)
+  const { getSpaceDetails } = useSpaceDetails();
+  const [open, setisopen] = useState(false);
   const handlelikeUnlike = async (state: boolean, id: string) => {
     try {
       const res = state
@@ -67,91 +68,112 @@ export function TestimonialCard({
     } finally {
       await getSpaceDetails(spaceid);
     }
-  }; 
+  };
 
-  const DeleteReview = dynamic(()=> import('./deletereview'),{
-    ssr:false
-  })
-  return ( 
+  const DeleteReview = dynamic(() => import("./deletereview"), {
+    ssr: false,
+  });
+  return (
     <>
-    <div className="group relative mx-auto max-w-2xl overflow-hidden bg-card rounded-xl bg-gradient-to-br md:p-6 p-2.5  shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 sm:p-8">
-      <div className="flex items-start gap-2 justify-between w-full ">
-        <div className="mb-6 flex items-center max-w-[90%]  gap-4">
-          <Avatar className="h-14 w-14 ring-2 ring-slate-700/50 ring-offset-2 ring-offset-slate-900">
-            <AvatarImage src={avatar} alt={name} />
-            <AvatarFallback className="bg-slate-800 text-lg text-slate-200">
-              {name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h3 className="text-xl font-semibold text-slate-100">{name}</h3>
-            <p className="text-sm text-slate-400">{email}</p>
-          </div>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <Button
-            variant={"secondary"}
-            size={"icon"}
-            onClick={() => handlelikeUnlike(isLiked as boolean, id as string)}
-          >
-            {" "}
-            <HeartIcon
-              className={`w-5 h-5 text-red-600  ${
-                isLiked ? "fill-red-600" : ""
-              }`}
-            />
-          </Button>
-          <Button variant={"secondary"} size={"icon"} onClick={()=>setisopen(true)}>
-            {" "}
-            <TrashIcon color="#fff" className="w-5 h-5" />{" "}
-          </Button>
-        </div>
-      </div>
-
-      <div className="relative">
-        <p className="text-lg leading-relaxed text-slate-300">{description}</p>
-        {starred && (
-          <div className="flex ">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`h-5 w-5 ${
-                  star <= starred
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300"
-                } transition-colors`}
-              />
-            ))}
-          </div>
-        )}
-        <div className="mt-6 flex md:flex-row flex-col flex-wrap justify-between gap-3">
-          <div className=" flex gap-2 items-center ">
-            <div className="flex items-center p-1  px-2 gap-2  bg-card  rounded-sm border-card-foreground shadow-sm shadow-amber-50">
-              <span className="text-gray-200">tags</span>
+      <div className="group relative mx-auto max-w-2xl overflow-hidden bg-card rounded-xl bg-gradient-to-br md:p-6 p-2.5  shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 sm:p-8">
+        <div className="flex items-start gap-2 justify-between w-full ">
+          <div className="mb-6 flex items-center max-w-[90%]  gap-4">
+            <Avatar className="h-14 w-14 ring-2 ring-slate-700/50 ring-offset-2 ring-offset-slate-900">
+              <AvatarImage src={avatar} alt={name} />
+              <AvatarFallback className="bg-slate-800 text-lg text-slate-200">
+                {name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h3 className="text-xl font-semibold text-slate-100">{name}</h3>
+              <p className="text-sm text-slate-400">{email}</p>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap">
             <Button
-              className="text-neutral-400"
-              variant={"outline"}
-              size={"sm"}
+              variant={"secondary"}
+              size={"icon"}
+              onClick={() => handlelikeUnlike(isLiked as boolean, id as string)}
             >
               {" "}
-              <Archive /> Archive{" "}
+              <HeartIcon
+                className={`w-5 h-5 text-red-600  ${
+                  isLiked ? "fill-red-600" : ""
+                }`}
+              />
             </Button>
             <Button
-              className="text-neutral-400"
-              variant={"outline"}
-              size={"sm"}
+              variant={"secondary"}
+              size={"icon"}
+              onClick={() => setisopen(true)}
             >
               {" "}
-              <Tags /> Manage Tag{" "}
+              <TrashIcon color="#fff" className="w-5 h-5" />{" "}
             </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant={"secondary"} size={"icon"}>
+                    {" "}
+                    {isarchived ? (
+                      <LuArchiveRestore color="#fff" className="w-5 h-5" />
+                    ) : (
+                      <HiOutlineArchiveBoxArrowDown
+                        color="#fff"
+                        className="w-5 h-5"
+                      />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Archive review</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+
+        <div className="relative">
+          <p className="text-lg leading-relaxed text-slate-300">
+            {description}
+          </p>
+          {starred && (
+            <div className="flex ">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={`h-5 w-5 ${
+                    star <= starred
+                      ? "text-yellow-400 fill-yellow-400"
+                      : "text-gray-300"
+                  } transition-colors`}
+                />
+              ))}
+            </div>
+          )}
+          <div className="mt-6 flex md:flex-row flex-col flex-wrap justify-between gap-3">
+            <div className=" flex gap-2 items-center ">
+              <div className="flex items-center p-1  px-2 gap-2  bg-card  rounded-sm border-card-foreground shadow-sm shadow-amber-50">
+                <span className="text-gray-200">tags</span>
+              </div>
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                className="text-neutral-400"
+                variant={"outline"}
+                size={"sm"}
+              >
+                {" "}
+                <Tags /> Manage Tag{" "}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>  
-    <DeleteReview isopen={open} spaceid={spaceid} onchangeopen={setisopen} reviewid={id} />
-      </>
+      <DeleteReview
+        isopen={open}
+        spaceid={spaceid}
+        onchangeopen={setisopen}
+        reviewid={id}
+      />
+    </>
   );
 }
