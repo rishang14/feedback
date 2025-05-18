@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TrashIcon, Tags, HeartIcon,} from "lucide-react";
+import { TrashIcon, Tags, HeartIcon, X } from "lucide-react";
 import { HiOutlineArchiveBoxArrowDown } from "react-icons/hi2";
 import { LuArchiveRestore } from "react-icons/lu";
 import { Button } from "./ui/button";
@@ -17,6 +17,7 @@ import {
 
 import { useState } from "react";
 import ManageReviewTags from "./reivewformtag";
+import { getspacesWthUserId } from "@/lib/helper";
 interface TestimonialProps {
   name: string;
   email: string;
@@ -24,10 +25,11 @@ interface TestimonialProps {
   description: string;
   avatar: string;
   date?: string;
-  isLiked?: boolean;
-  isarchived?: boolean;
+  isLiked: boolean;
+  isarchived: boolean;
   starred?: number;
-  tags?: Array<string>;
+  reviewtags: Array<string>;
+  spctags?: Array<string>;
   spaceid: string;
 }
 
@@ -41,18 +43,18 @@ export function TestimonialCard({
   id,
   starred,
   spaceid,
+  reviewtags,
   // onAction,
-  tags,
-}: TestimonialProps) { 
-  console.log(isarchived,"status")
+  spctags,
+}: TestimonialProps) {
   // @ts-ignore
-  const { likeTestimonial, unlikeTestimonial, archive, unarchive } =
+  const { likeTestimonial, unlikeTestimonial, archive,unarchive, reovetag } =
     UseTestimonial();
   // @ts-ignore
   const { getSpaceDetails } = useSpaceDetails();
   const [open, setisopen] = useState({
     deletedialog: false,
-    tagdialog:false
+    tagdialog: false,
   });
   const handlelikeUnlike = async (state: boolean, id: string) => {
     try {
@@ -88,8 +90,19 @@ export function TestimonialCard({
     } finally {
       await getSpaceDetails(spaceid);
     }
-  };
+  }; 
 
+  const handleRemoveTag=async(id:string ,tagname:string)=>{
+    try {
+      const res=await reovetag(id,tagname); 
+      if(res.success){
+        toast.success("Removed Successfully",{duration:2000})  
+        await getSpaceDetails(spaceid)
+      }
+    } catch (error) {
+      toast.error("something went wrong")
+    }
+  }
   const DeleteReview = dynamic(() => import("./deletereview"), {
     ssr: false,
   });
@@ -125,10 +138,12 @@ export function TestimonialCard({
             <Button
               variant={"secondary"}
               size={"icon"}
-              onClick={() => setisopen(prev => ({
-                ...prev, 
-                deletedialog:true
-              }))}
+              onClick={() =>
+                setisopen((prev) => ({
+                  ...prev,
+                  deletedialog: true,
+                }))
+              }
             >
               {" "}
               <TrashIcon color="#fff" className="w-5 h-5" />{" "}
@@ -152,9 +167,9 @@ export function TestimonialCard({
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{
-                  isarchived ?"Unarchive review" : "Archive review"
-                  }</TooltipContent>
+                <TooltipContent>
+                  {isarchived ? "Unarchive review" : "Archive review"}
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
@@ -180,22 +195,29 @@ export function TestimonialCard({
           )}
           <div className="mt-6 flex md:flex-row flex-col flex-wrap justify-between gap-3">
             <div className=" flex gap-2 items-center ">
-              <div className="flex items-center p-1  px-2 gap-2  bg-card  rounded-sm border-card-foreground shadow-sm shadow-amber-50">
-                <span className="text-gray-200">tags</span>
-              </div>
+              {reviewtags.map((item) => (
+                <div className="flex items-center p-1  px-2 gap-2  bg-card  rounded-sm border-card-foreground shadow-sm shadow-amber-50" key={item}>
+                  <span className="text-gray-200">{item}</span>
+                  <span className="curosr-pointer" onClick={()=>handleRemoveTag(id ,item)}>
+                    <X className="w-4 h-4 cursor-pointer text-white" />
+                  </span>
+                </div>
+              ))}
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button
                 className="text-neutral-400"
                 variant={"outline"}
-                size={"sm"} 
-                onClick={()=>setisopen(prev => ({
-                  ...prev,
-                  tagdialog:true
-                }))}
+                size={"sm"}
+                onClick={() =>
+                  setisopen((prev) => ({
+                    ...prev,
+                    tagdialog: true,
+                  }))
+                }
               >
                 {" "}
-                <Tags /> Manage Tag{" "}
+                <Tags /> Add Tag{" "}
               </Button>
             </div>
           </div>
@@ -204,20 +226,27 @@ export function TestimonialCard({
       <DeleteReview
         isopen={open.deletedialog}
         spaceid={spaceid}
-        onchangeopen={(value:boolean) => setisopen(prev =>({
-          ...prev,
-          deletedialog:value as boolean
-        }))}
+        onchangeopen={(value: boolean) =>
+          setisopen((prev) => ({
+            ...prev,
+            deletedialog: value as boolean,
+          }))
+        }
         reviewid={id}
-      /> 
-    <ManageReviewTags 
-     isTagDialogOpen={open.tagdialog} 
-     setIsTagDialogOpen={(val:boolean)=> setisopen(prev =>({
-      ...prev,
-      tagdialog:val
-     }))} 
-     tags={tags as Array<string>}
-    />
+      />
+      <ManageReviewTags
+        isTagDialogOpen={open.tagdialog}
+        setIsTagDialogOpen={(val: boolean) =>
+          setisopen((prev) => ({
+            ...prev,
+            tagdialog: val,
+          }))
+        } 
+        id={id} 
+        spcid={spaceid}
+        spctags={spctags as Array<string>} 
+        reviewtags={reviewtags as Array<string>}
+      />
     </>
   );
 }

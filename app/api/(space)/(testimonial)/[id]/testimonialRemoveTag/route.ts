@@ -19,12 +19,12 @@ export async function PATCH(request: NextRequest, context: any) {
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const validatedData = TagSchema.safeParse(body.tag);
+    const validatedData = TagSchema.safeParse(body);
 
     if (!validatedData.success) {
       return NextResponse.json({ error: "Invalid data" }, { status: 401 });
     }
-    const { tags } = validatedData.data;
+    const { tag } = validatedData.data;
     const Testimnoail = await Testimnoails.findById(id);
     if (!Testimnoail) {
       return NextResponse.json(
@@ -33,7 +33,7 @@ export async function PATCH(request: NextRequest, context: any) {
       );
     }
 
-    Testimnoail.tags = Testimnoail.tags.filter((t: string) => t !== tags);
+    Testimnoail.tags = Testimnoail.tags.filter((t: string) => t !== tag);
     await Testimnoail.save();
     return NextResponse.json(
       { message: "Tag removed successfully" },

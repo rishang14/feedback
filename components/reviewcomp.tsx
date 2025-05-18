@@ -58,7 +58,8 @@ const Reviews = ({ testimonials, tags,spaceid }: reviewprop) => {
             description={item?.text as string}
             avatar=""
             starred={item?.rating as number}
-            tags={tags}
+            spctags={tags} 
+            reviewtags={item.tags}
             id={item._id}
             isLiked={item.walloflove}
             isarchived={item.archeived} 

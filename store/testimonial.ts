@@ -5,7 +5,7 @@ export const UseTestimonial = create((set) => ({
   addtag: async (id: string, tagname: string) => {
     try {
       const res = await axios.patch(
-        `/api/${id}/testimonialAddTag`,
+        `/api/${id}/testimoinalAddTag`,
         { tag: tagname },
         { withCredentials: true }
       );
