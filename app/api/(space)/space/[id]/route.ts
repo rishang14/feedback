@@ -4,11 +4,12 @@ import NextAuth from "next-auth";
 import connectDB from "@/lib/db.connect";
 import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import Testimnoails from "@/mongoose/testimonial.schema";
+import Space from "@/mongoose/space.schema";
 
 // const { auth } = NextAuth(authConfig);
 
 export async function GET(
-  req: NextRequest,
+  request: NextRequest,
   context: any
 ) {
   // const session = await auth();
@@ -21,24 +22,25 @@ export async function GET(
 
   await connectDB();
   try {
-    const { id } = await context.params;
+    const { id } = await context.params; 
+    const space = await Space.findById(id); 
+
+    if(!space){
+      return NextResponse.json(
+        { message: "Not Found" },
+        { status: 404 }
+      );
+    }; 
+
+    const Tags =await space?.tags ;  
     const Questions = await SpaceQuestion.find({ spaceId: id }).select(
       "-spaceId"
     );
-
     const Testimonial = await Testimnoails.find({ spaceId: id }).select(
       " -spaceId "
     );
-     
-    console.log(Testimonial,"got it first")
-    if (Questions) {
-      return NextResponse.json({ Questions, Testimonial }, { status: 200 });
-    }
-
-    return NextResponse.json(
-      { message: "space id is Invalid" },
-      { status: 400 }
-    );
+    return NextResponse.json({message:"success ",Tags, Questions,Testimonial},{status:200})
+    
   } catch (error) {
     console.log(error);
     return NextResponse.json(

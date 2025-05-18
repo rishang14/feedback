@@ -208,5 +208,23 @@ export const ExtendedPasswordSchema = PasswordSchema.extend({
 });
 
 export const TagSchema = z.object({
-  tags: z.string().min(3, { message: "Tags must be at least 3 characters" }),
+  tag: z
+    .string()
+    .min(3, { message: "Tags must be at least 3 characters" })
+    .transform((val) => {
+      const noSpaces = val.trim().replace(/\s+/g, "");
+      return noSpaces.charAt(0).toUpperCase() + noSpaces.slice(1);
+    }),
+});
+
+export const testimonialSchema = z.object({
+  _id: z.string(),                    
+  name: z.string(),
+  email: z.string().email(),
+  text: z.string(),
+  consent: z.boolean(),
+  walloflove: z.boolean(),
+  archeived: z.boolean(),           
+  tags: z.array(z.string()),        
+  __v: z.number()                 
 });

@@ -1,43 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import {
-  MessageCircleCode,
   MessageSquare,
-  Heart,
-  Archive,
-  AlertTriangle,
-  Boxes,
-  Tags,
   PencilIcon,
-  HeartCrack,
 } from "lucide-react";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useSpaceDetails } from "@/store/spaceDetails";
-import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
 import { AppSidebar } from "@/components/sidebarmenu";
 import Reviews from "@/components/reviewcomp";
-import TagManager from "@/components/manageTags";
+import { testimonialSchema } from "@/app/types/schema";
 
+type  Review =z.infer<typeof testimonialSchema>;
 export default function Page() {
   const [activeSection, setActiveSection] = useState("review");
   const [open, setopen] = useState({
@@ -46,14 +31,25 @@ export default function Page() {
   });
   const { spaces } = useParams();
   // @ts-ignore
-  const { questions, getSpaceDetails, testimonials } = useSpaceDetails();
+  const {  getSpaceDetails, testimonials ,tags} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-  console.log(testimonials, "testimonials");
+const [review,setReview]=useState<Review[]>(); 
   useEffect(() => {
-    if (spaces) getSpaceDetails(spaces as string);
-  }, [spaces]);
-  if (status === "loading" || !questions) return <Loading />;
+    async function spaceDetails(){
+      if (spaces) await getSpaceDetails(spaces as string);
+    } 
+
+     spaceDetails() 
+  }, [spaces]);  
+
+  useEffect(()=>{
+    if(testimonials.length > 0 ) setReview(testimonials);
+  },[testimonials]) 
+  
+
+  console.log(review)
+  if (status === "loading" ) return <Loading />;
   if (status !== "authenticated") {
     router.push("/signin");
     toast("Pls sign In to access this routes");
@@ -70,7 +66,7 @@ export default function Page() {
   const TagManager = dynamic(() => import("@/components/manageTags"), {
     ssr: false,
   });
-  if (!getSpaceDetails || !questions || !spaces) return <Loading />;
+
 
   return (
     <>
@@ -107,10 +103,11 @@ export default function Page() {
               </div>
             </div>
           </header>
-          <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">
+          <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">  
+            {/* @ts-ignore */}
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={testimonials} />
+                <Reviews testimonials={review ?? null } tags={tags} spaceid={spaces as string} tab="Review"/>
               )}
               {activeSection === "liked" && (
                 <div className="text-center py-10">
@@ -159,7 +156,8 @@ export default function Page() {
           }))
         }
         open={open.tagmanager}
-        tags={[]}
+        tags={tags} 
+        spaceid={spaces as string}
       />
     </>
   );
