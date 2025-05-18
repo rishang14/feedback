@@ -143,7 +143,7 @@ export function LoginForm({
                   </FormItem>
                 )}
               />
-               <div className="flex flex-row gap-2"> 
+               <div className="flex flex-col gap-2"> 
                  <h3 className="text-white">Demo email and Pass</h3> 
                  <span className="text-neutral-400">rishangkumr@gmail.com</span> 
                  <span className="text-neutral-400">Test@00</span>
