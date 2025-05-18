@@ -1,6 +1,5 @@
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TrashIcon, Tags, HeartIcon, Archive, Import } from "lucide-react";
+import { TrashIcon, Tags, HeartIcon,} from "lucide-react";
 import { HiOutlineArchiveBoxArrowDown } from "react-icons/hi2";
 import { LuArchiveRestore } from "react-icons/lu";
 import { Button } from "./ui/button";
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { useState } from "react";
+import ManageReviewTags from "./reivewformtag";
 interface TestimonialProps {
   name: string;
   email: string;
@@ -50,7 +50,10 @@ export function TestimonialCard({
     UseTestimonial();
   // @ts-ignore
   const { getSpaceDetails } = useSpaceDetails();
-  const [open, setisopen] = useState(false);
+  const [open, setisopen] = useState({
+    deletedialog: false,
+    tagdialog:false
+  });
   const handlelikeUnlike = async (state: boolean, id: string) => {
     try {
       const res = state
@@ -122,7 +125,10 @@ export function TestimonialCard({
             <Button
               variant={"secondary"}
               size={"icon"}
-              onClick={() => setisopen(true)}
+              onClick={() => setisopen(prev => ({
+                ...prev, 
+                deletedialog:true
+              }))}
             >
               {" "}
               <TrashIcon color="#fff" className="w-5 h-5" />{" "}
@@ -182,7 +188,11 @@ export function TestimonialCard({
               <Button
                 className="text-neutral-400"
                 variant={"outline"}
-                size={"sm"}
+                size={"sm"} 
+                onClick={()=>setisopen(prev => ({
+                  ...prev,
+                  tagdialog:true
+                }))}
               >
                 {" "}
                 <Tags /> Manage Tag{" "}
@@ -192,11 +202,22 @@ export function TestimonialCard({
         </div>
       </div>
       <DeleteReview
-        isopen={open}
+        isopen={open.deletedialog}
         spaceid={spaceid}
-        onchangeopen={setisopen}
+        onchangeopen={(value:boolean) => setisopen(prev =>({
+          ...prev,
+          deletedialog:value as boolean
+        }))}
         reviewid={id}
-      />
+      /> 
+    <ManageReviewTags 
+     isTagDialogOpen={open.tagdialog} 
+     setIsTagDialogOpen={(val:boolean)=> setisopen(prev =>({
+      ...prev,
+      tagdialog:val
+     }))} 
+     tags={tags as Array<string>}
+    />
     </>
   );
 }

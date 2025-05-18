@@ -16,7 +16,7 @@ import { useSpaceDetails } from "@/store/spaceDetails";
 
 type prop = {
   isopen: boolean;
-  onchangeopen: React.Dispatch<React.SetStateAction<boolean>>;
+  onchangeopen:(open: boolean) => void;
   spaceid: string;
   reviewid: string;
 };
