@@ -45,7 +45,8 @@ const [review,setReview]=useState<Review[]>();
 
   useEffect(()=>{
     if(testimonials.length > 0 ) setReview(testimonials);
-  },[testimonials])
+  },[testimonials]) 
+  
 
   console.log(review)
   if (status === "loading" ) return <Loading />;
@@ -65,7 +66,7 @@ const [review,setReview]=useState<Review[]>();
   const TagManager = dynamic(() => import("@/components/manageTags"), {
     ssr: false,
   });
-  // if (!getSpaceDetails || !questions || !spaces) return <Loading />;
+
 
   return (
     <>
