@@ -86,7 +86,8 @@ export function TestimonialCard({
       if (res.success && !status) {
         toast.success("archived successfully", { duration: 3000 });
       }
-    } catch (error) {
+    } catch (error) { 
+      toast.error("something went wrong")
     } finally {
       await getSpaceDetails(spaceid);
     }

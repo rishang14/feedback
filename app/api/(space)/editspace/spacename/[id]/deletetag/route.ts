@@ -4,6 +4,7 @@ import connectDB from "@/lib/db.connect";
 import { NextRequest, NextResponse } from "next/server";
 import { TagSchema } from "@/app/types/schema";
 import Space from "@/mongoose/space.schema";
+import Testimnoails from "@/mongoose/testimonial.schema";
 
 const { auth } = NextAuth(authConfig);
 
@@ -26,19 +27,44 @@ export async function PATCH(request: NextRequest, context: any) {
         { status: 401 }
       );
     }
-    const { tag } = validatedData.data; 
-    console.log(tag,"tags")
+    const { tag } = validatedData.data;
+    console.log(tag, "tags");
     const space = await Space.findById(id);
     if (!space) {
       return NextResponse.json({ error: "Space Not Found" }, { status: 404 });
-    } 
+    }
+    space.tags = space.tags.filter((t: string) => t !== tag);
 
-     space.tags= space.tags.filter((t:string) => t !== tag); 
-     await space.save();   
-     return NextResponse.json({message:"Removed Tags successfully"},{status:200})
+    await space.save();
 
-  } catch (error:any) {
-    console.log(error.message); 
-    return NextResponse.json({error:"Inetnal Server error "},{status:500});
+    const reviews = await Testimnoails.find({ spaceId: id });
+    if (reviews.length === 0) {
+      return NextResponse.json(
+        { message: "No reviews Found" },
+        { status: 200 }
+      );
+    }
+    for (const review of reviews) {
+      console.log("Original review tags:", review.tags);
+      console.log("Tag to remove:", `"${tag}"`);
+      const reviewWithUpdatedTags = review.tags.filter(
+        (tags: string) => tags.trim().toLowerCase() !== tag.trim().toLowerCase()
+      );
+      if (reviewWithUpdatedTags.length !== review.tags.length) {
+        review.tags = reviewWithUpdatedTags;
+        await review.save();
+      }
+    }
+
+    return NextResponse.json(
+      { message: "Removed Tags successfully from Reviews and space" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.log(error.message);
+    return NextResponse.json(
+      { error: "Inetnal Server error " },
+      { status: 500 }
+    );
   }
 }
