@@ -2,12 +2,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import React from "react";
+import React, { useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { UseTestimonial } from "@/store/testimonial";
 import { toast } from "sonner";
@@ -30,10 +29,12 @@ const ManageReviewTags = ({
   id,
 }: props) => {
   // @ts-ignore
-  const { addtag } = UseTestimonial();
+  const { addtag } = UseTestimonial(); 
+  const [loading,setLoading]=useState(false)
   //    @ts-ignore
   const { getSpaceDetails } = useSpaceDetails();
-  const addTag = async (name: string, id: string) => {
+  const addTag = async (name: string, id: string) => { 
+    setLoading(true)
     try {
       const res = await addtag(id, name);
       if (res.success) {
@@ -42,6 +43,8 @@ const ManageReviewTags = ({
       }
     } catch (error) {
       toast.error("something went wrong", { duration: 3000 });
+    }finally{
+        setLoading(false)
     }
   };
   return (
@@ -64,7 +67,8 @@ const ManageReviewTags = ({
                   size={"sm"}
                   variant={"secondary"}
                   key={i}
-                  onClick={() => addTag(item, id)}
+                  onClick={() => addTag(item, id)} 
+                  disabled={loading}
                 >
                   <CirclePlus className="text-white w-4 h-4 " /> {item}
                 </Button>

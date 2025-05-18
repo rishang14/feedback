@@ -1,43 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import {
-  MessageCircleCode,
   MessageSquare,
-  Heart,
-  Archive,
-  AlertTriangle,
-  Boxes,
-  Tags,
   PencilIcon,
-  HeartCrack,
 } from "lucide-react";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useSpaceDetails } from "@/store/spaceDetails";
-import { TestimonialCard } from "@/components/testimonial.Card";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
 import { AppSidebar } from "@/components/sidebarmenu";
 import Reviews from "@/components/reviewcomp";
-import TagManager from "@/components/manageTags";
+import { testimonialSchema } from "@/app/types/schema";
 
+type  Review =z.infer<typeof testimonialSchema>;
 export default function Page() {
   const [activeSection, setActiveSection] = useState("review");
   const [open, setopen] = useState({
@@ -49,14 +34,20 @@ export default function Page() {
   const {  getSpaceDetails, testimonials ,tags} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession();
-  console.log(testimonials, "testimonials");
+const [review,setReview]=useState<Review[]>(); 
   useEffect(() => {
     async function spaceDetails(){
       if (spaces) await getSpaceDetails(spaces as string);
     } 
 
-     spaceDetails()
-  }, [spaces]);
+     spaceDetails() 
+  }, [spaces]);  
+
+  useEffect(()=>{
+    if(testimonials.length > 0 ) setReview(testimonials);
+  },[testimonials])
+
+  console.log(review)
   if (status === "loading" ) return <Loading />;
   if (status !== "authenticated") {
     router.push("/signin");
@@ -111,10 +102,11 @@ export default function Page() {
               </div>
             </div>
           </header>
-          <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">
+          <div className="flex-1 overflow-y-auto bg-zinc-950 p-6">  
+            {/* @ts-ignore */}
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={testimonials} tags={tags} spaceid={spaces as string}/>
+                <Reviews testimonials={review ?? null } tags={tags} spaceid={spaces as string} tab="Review"/>
               )}
               {activeSection === "liked" && (
                 <div className="text-center py-10">
