@@ -46,7 +46,7 @@ const [review,setReview]=useState<Review[]>();
   useEffect(()=>{
     if(testimonials.length > 0 ) setReview(testimonials);
   },[testimonials]) 
-  
+
 
   console.log(review)
   if (status === "loading" ) return <Loading />;
@@ -107,7 +107,7 @@ const [review,setReview]=useState<Review[]>();
             {/* @ts-ignore */}
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={review ?? null } tags={tags} spaceid={spaces as string} tab="Review"/>
+                <Reviews testimonials={review ?? [] } tags={tags} spaceid={spaces as string} tab="Review"/>
               )}
               {activeSection === "liked" && (
                 <div className="text-center py-10">

@@ -9,7 +9,7 @@ import { testimonialSchema } from "@/app/types/schema";
 type review = z.infer<typeof testimonialSchema>;
 
 type reviewprop = {
-  testimonials: review[] | null;
+  testimonials: review[] ;
   tags: Array<string>;
   spaceid: string;
   tab: string;
@@ -20,7 +20,15 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
   const handleChange = (tag: string) => {
     setActive(tag);
   };
-  if (testimonials === null) return <Loading />;
+  if (testimonials === null) return <Loading />; 
+  if(testimonials.length === 0 ) return <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
+          <HeartCrack className="w-8 h-8 text-white " />
+          <p className="text-4xl text-white text-balance font-stretch-50%">
+            {
+                "No reviews are available"   
+            }
+          </p>
+        </div>
 
   return (
     <>
