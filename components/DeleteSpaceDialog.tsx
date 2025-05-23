@@ -15,13 +15,14 @@ import { toast } from 'sonner';
 
 type prop = {
   isopen: boolean;
-  onchangeopen: React.Dispatch<React.SetStateAction<boolean>>;
+  onchangeopen: (val:boolean) => void;
   spaceid: string;
 }; 
 
 const DeleteSpaceDialog = ({isopen,onchangeopen,spaceid}:prop) => {  
   // @ts-ignore 
- const {deleteSpace,getspace} =useSpace() 
+ const {deleteSpace,getspace} =useSpace()  
+ console.log(isopen,"renderd deletetab")
  const [pending,setpending]=useState(false)
   const handleDelete=async(id: string)=>{ 
     setpending(true);
@@ -60,4 +61,4 @@ const DeleteSpaceDialog = ({isopen,onchangeopen,spaceid}:prop) => {
   )
 }
 
-export default DeleteSpaceDialog
+export default React.memo(DeleteSpaceDialog)

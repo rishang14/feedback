@@ -4,8 +4,8 @@ import { Card, CardContent, } from "@/components/ui/card";
 import DropdownMenuDemo from './withdropdownmenu'; 
 import { useRouter } from 'next/navigation';
 
- const DashboardCardWithMenu = ({ item }: { item: any }) => { 
-  console.log(item,"spaces")
+ const DashboardCardWithMenu = ({ item }: { item: any }) => {  
+  console.log("rendered from child compoenent",)
   const router = useRouter();
   const handleClick = async (spaces: any) => {
     router.push(`/dashboard/space/${spaces}`);
@@ -30,4 +30,4 @@ import { useRouter } from 'next/navigation';
 };
 
 
-export default DashboardCardWithMenu
+export default React.memo(DashboardCardWithMenu)

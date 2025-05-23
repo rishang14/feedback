@@ -16,8 +16,11 @@ import { toast } from "sonner";
 import { useSpace } from "@/store/getSpace";
 
 const DropdownMenuDemo = ({ item }: any) => {
-  const [editopen, setEditIsOpen] = useState(false);
-  const [deleteopen, setDelteIsOpen] = useState(false);
+  console.log("i am also rendered dropdown");
+  const [open, setisopen] = useState({
+    editopen: false,
+    deleteopen: false,
+  });
   // @ts-ignore
   const { copyspaceReviewForm } = useSpace();
   const handleCopyClick = async (spacename: string) => {
@@ -25,8 +28,11 @@ const DropdownMenuDemo = ({ item }: any) => {
     if (res.success) toast.success("Review form is copied", { duration: 3000 });
     else toast.error("Pls try again", { duration: 3000 });
   };
-  const handleDialogopen = (newstate: boolean) => {
-    setEditIsOpen(newstate);
+  const handleDialogopen = (newstate: boolean, dialogname: string) => {
+    setisopen((prev) => ({
+      ...prev,
+      [dialogname]: newstate,
+    }));
   };
 
   const EditDialog = dynamic(() => import("@/components/EditspaceDialog"), {
@@ -55,13 +61,13 @@ const DropdownMenuDemo = ({ item }: any) => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               className="cursor-pointer text-gray-200 hover:bg-black"
-              onClick={() => handleDialogopen(true)}
+              onClick={() => handleDialogopen(true, "editopen")}
             >
               <PencilIcon className="hover:text-black" /> Edit Space Name
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer text-gray-200"
-              onClick={() => setDelteIsOpen(true)}
+              onClick={() => handleDialogopen(true, "deleteopen")}
             >
               <TrashIcon color="red" /> Delete Space
             </DropdownMenuItem>
@@ -74,18 +80,31 @@ const DropdownMenuDemo = ({ item }: any) => {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <EditDialog
-        isopen={editopen}
-        onchangeopen={setEditIsOpen}
-        spaceid={item._id as string}
-      />
-      <DeleteDialog
-        isopen={deleteopen}
-        onchangeopen={setDelteIsOpen}
-        spaceid={item._id as string}
-      />
+     
+        <EditDialog
+          isopen={open.editopen}
+          onchangeopen={(val: boolean) =>
+            setisopen((prev) => ({
+              ...prev,
+              editopen: val,
+            }))
+          }
+          spaceid={item._id as string}
+        />
+
+        <DeleteDialog
+          isopen={open.deleteopen}
+          onchangeopen={(val: boolean) =>
+            setisopen((prev) => ({
+              ...prev,
+              deleteopen: val,
+            }))
+          }
+          spaceid={item._id as string}
+        />
+
     </>
   );
 };
 
-export default DropdownMenuDemo;
+export default React.memo(DropdownMenuDemo);

@@ -29,7 +29,7 @@ import { toast } from "sonner";
 
 type prop = {
   isopen: boolean;
-  onchangeopen: React.Dispatch<React.SetStateAction<boolean>>;
+  onchangeopen: (val:boolean) => void;
   spaceid: string;
 };
 
@@ -37,7 +37,7 @@ type spacemanetype = z.infer<typeof SpaceNameEditSchema>;
 const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
   //  @ts-ignore
   const { getspace } = useSpace(); 
-  console.log(isopen,"after close")
+  console.log(isopen,"rendered")
   const form = useForm<spacemanetype>({
     resolver: zodResolver(SpaceNameEditSchema),
     defaultValues: {
@@ -144,4 +144,4 @@ const EditspaceDialog = ({ isopen, onchangeopen, spaceid }: prop) => {
   );
 };
 
-export default EditspaceDialog;
+export default React.memo(EditspaceDialog);
