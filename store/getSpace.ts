@@ -8,7 +8,7 @@ export const useSpace = create((set) => ({
   spaceReviewDetail:{},
   getspace: async () => {
     try {
-      const res = await axios.get("/api/getspace", { withCredentials: true });
+      const res = await axios.get("/api/getspace",{ adapter: 'fetch', fetchOptions: { priority: 'high' },  withCredentials: true } );
       const data =await res.data.spaces;
       set({ spaces: data });
     } catch (error) {

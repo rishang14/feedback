@@ -29,12 +29,12 @@ const ManageReviewTags = ({
   id,
 }: props) => {
   // @ts-ignore
-  const { addtag } = UseTestimonial(); 
-  const [loading,setLoading]=useState(false)
+  const { addtag } = UseTestimonial();
+  const [loading, setLoading] = useState(false);
   //    @ts-ignore
   const { getSpaceDetails } = useSpaceDetails();
-  const addTag = async (name: string, id: string) => { 
-    setLoading(true)
+  const addTag = async (name: string, id: string) => {
+    setLoading(true);
     try {
       const res = await addtag(id, name);
       if (res.success) {
@@ -43,8 +43,8 @@ const ManageReviewTags = ({
       }
     } catch (error) {
       toast.error("something went wrong", { duration: 3000 });
-    }finally{
-        setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -59,22 +59,23 @@ const ManageReviewTags = ({
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
-          <h2 className="text-white"> Available Tags : </h2>
+          <h2 className="text-white"> Apply Tags : </h2>
           <div className="flex items-center gap-2 flex-wrap">
-            {spctags.map((item: string, i) => {
-              return (
-                <Button
-                  size={"sm"}
-                  variant={"secondary"}
-                  key={i}
-                  onClick={() => addTag(item, id)} 
-                  disabled={loading}
-                >
-                  <CirclePlus className="text-white w-4 h-4 " /> {item}
-                </Button>
-              );
-            })}
-          </div>
+            {spctags.map((item: string, i) => { 
+              const alreadyExists= reviewtags.includes(item)
+                return (
+                  <Button
+                    size={"sm"}
+                    variant={"secondary"}
+                    key={i} 
+                    onClick={() => addTag(item, id)}
+                    disabled={loading || alreadyExists}
+                  >
+                    <CirclePlus className="text-white w-4 h-4 " /> {item}
+                  </Button>
+                );
+              })}
+        </div> 
         </div>
       </DialogContent>
     </Dialog>

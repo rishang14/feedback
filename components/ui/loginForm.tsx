@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form";
 import Loading from "@/app/loading";
 import { toast } from "sonner";  
+import { useSpace } from "@/store/getSpace";
 
 
 interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
@@ -40,7 +41,9 @@ export function LoginForm({
 }: LoginFormProps) { 
 
   const router = useRouter();  
-  const {status} =useSession(); 
+  const {status} =useSession();  
+  // @ts-ignore
+  const {getspace}=useSpace()
   // console.log(status); 
   // console.log(data)
   const [loading,setLoading]=useState(false)
@@ -84,7 +87,8 @@ export function LoginForm({
         toast.error("Pls try again",{duration:3000})
       }
     }finally{
-      setLoading(false)
+      setLoading(false); 
+       await getspace()
     }
   };
   

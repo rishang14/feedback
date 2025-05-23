@@ -36,7 +36,8 @@ type props = {
 
 type formProp = z.infer<typeof reviewForm>;
 
-const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => {
+const ReviewForm = ({ closeModal, spacename, spacedetail }: props) => { 
+  console.log(spacedetail,spacename,"details")
   const [pending,setPending]=useState(false)
   const [open, setOpen] = useState(false);
   const form = useForm<formProp>({

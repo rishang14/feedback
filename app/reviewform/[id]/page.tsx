@@ -18,7 +18,7 @@ const Page = () => {
     const fetchData = async () => { 
       if(id){
         const res= await getspaceReviewForm(id as string); 
-        console.log(res,"res")
+       
          if(!res.success){
           setError(true)
          }

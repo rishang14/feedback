@@ -17,24 +17,14 @@ export async function GET() {
   } 
   await connectDB();
   try {
-    const email = session?.user?.email;
+    const email = session?.user?.email; 
     const userId = await User.findOne({ email }).select("_id");
-    // console.log(userId,"id")
 
     const spaces = await Space.find({ userId }).select("_id spacename");
     // console.log(spaces,"spaces")
+    if(!spaces) return NextResponse.json({message:"No spaces founf "},{status:404}) 
 
-    if (spaces) {
-      return NextResponse.json(
-        { messge: "got ur id ", spaces },
-        { status: 200 }
-      );
-    } else {
-      return NextResponse.json(
-        { message: "currently there is no spaces" },
-        { status: 200 }
-      );
-    }
+      return NextResponse.json({message:"spaces",spaces},{status:200})
   } catch (error) {
     console.log(error);
   }

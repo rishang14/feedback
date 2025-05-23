@@ -44,8 +44,8 @@ const [review,setReview]=useState<Review[]>();
   }, [spaces]);  
 
   useEffect(()=>{
-    if(testimonials.length > 0 ) setReview(testimonials);
-  },[testimonials]) 
+    if(testimonials) setReview(testimonials);
+  },[testimonials,review]) 
 
 
   console.log(review)
