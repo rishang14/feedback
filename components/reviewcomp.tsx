@@ -19,7 +19,14 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
   console.log(testimonials, "test ");
   const handleChange = (tag: string) => {
     setActive(tag);
-  };
+  }; 
+  const filteredReviews = React.useMemo(() => {
+  if (!testimonials) return [];
+  if (active === "all") return testimonials;
+  return testimonials.filter(item => item.tags.includes(active));
+}, [testimonials, active]);
+
+
   if (testimonials === null) return <Loading />; 
   if(testimonials.length === 0 ) return <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
           <HeartCrack className="w-8 h-8 text-white " />
@@ -59,17 +66,17 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
           })}
         </div>
       )}
-      {testimonials?.length === 0 && (
+      {filteredReviews?.length === 0 && (
         <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
           <HeartCrack className="w-8 h-8 text-white " />
           <p className="text-4xl text-white text-balance font-stretch-50%">
             {
-              tab === " Review" ?  "No reviews are available"    : `Pls ${tab} review .` 
+              tab === "Review" ?  "No reviews are available"    : `Pls ${tab} review .` 
             }
           </p>
         </div>
       )}
-      {testimonials?.map((item: any) => {
+      {filteredReviews?.map((item: any) => {
         return (
           <TestimonialCard
             key={item._id}
