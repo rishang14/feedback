@@ -6,19 +6,19 @@ import SpaceQuestion from "@/mongoose/spaceQuestion.schema";
 import Testimnoails from "@/mongoose/testimonial.schema";
 import Space from "@/mongoose/space.schema";
 
-// const { auth } = NextAuth(authConfig);
+const { auth } = NextAuth(authConfig);
 
 export async function GET(
   request: NextRequest,
   context: any
 ) {
-  // const session = await auth();
-  // if (!session?.user?.email) {
-  //   return NextResponse.json(
-  //     { error: "You are not allowed to access this api route" },
-  //     { status: 400 }
-  //   );
-  // }
+  const session = await auth();
+  if (!session?.user?.email) {
+    return NextResponse.json(
+      { error: "You are not allowed to access this api route" },
+      { status: 400 }
+    );
+  }
 
   await connectDB();
   try {

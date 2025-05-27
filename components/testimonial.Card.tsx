@@ -17,41 +17,35 @@ import {
 } from "@/components/ui/tooltip";
 
 interface TestimonialProps {
-  name: string;
-  email: string;
-  id: string;
-  description: string;
-  avatar: string;
-  date?: string;
-  isLiked: boolean;
-  isarchived: boolean;
-  starred?: number;
-  reviewtags: Array<string>;
+  item: {
+    name: string;
+    email: string;
+    _id: string;
+    text: string;
+    avatar?: string;
+    rating?: number;
+    tags: string[];
+    walloflove: boolean;
+    archeived: boolean;
+  }; 
+ 
   spctags?: Array<string>;
   spaceid: string;
   tab: string;
 }
 
 export function TestimonialCard({
-  name,
-  email,
-  description,
-  avatar,
-  isLiked,
-  isarchived,
-  id,
-  starred,
+ item,
   spaceid,
-  reviewtags,
   tab,
-  // onAction,
-  spctags,
+  // onAction, 
+  spctags, 
 }: TestimonialProps) {
   // @ts-ignore
   const { likeTestimonial, unlikeTestimonial, archive, unarchive, reovetag } =
     UseTestimonial();
   // @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails();
+  const { getreviews } = useSpaceDetails();
   const [open, setisopen] = useState({
     deletedialog: false,
     tagdialog: false,
@@ -73,7 +67,7 @@ export function TestimonialCard({
     } catch (error) {
       toast.error("Pls try again");
     } finally {
-      await getSpaceDetails(spaceid);
+      await getreviews(spaceid,tab);
     }
   };
 
@@ -89,7 +83,7 @@ export function TestimonialCard({
     } catch (error) { 
       toast.error("something went wrong")
     } finally {
-      await getSpaceDetails(spaceid);
+       await getreviews(spaceid,tab);
     }
   };
 
@@ -98,7 +92,7 @@ export function TestimonialCard({
       const res = await reovetag(id, tagname);
       if (res.success) {
         toast.success("Removed Successfully", { duration: 2000 });
-        await getSpaceDetails(spaceid);
+         await getreviews(spaceid,tab);
       }
     } catch (error) {
       toast.error("something went wrong");
@@ -117,26 +111,26 @@ export function TestimonialCard({
         <div className="flex items-start gap-2 justify-between w-full ">
           <div className="mb-6 flex items-center max-w-[90%]  gap-4">
             <Avatar className="h-14 w-14 ring-2 ring-slate-700/50 ring-offset-2 ring-offset-slate-900">
-              <AvatarImage src={avatar} alt={name} />
+              <AvatarImage src={item?.avatar ?? ""} alt={item.name} />
               <AvatarFallback className="bg-slate-800 text-lg text-slate-200">
-                {name.charAt(0)}
+                {item.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-xl font-semibold text-slate-100">{name}</h3>
-              <p className="text-sm text-slate-400">{email}</p>
+              <h3 className="text-xl font-semibold text-slate-100">{item.name}</h3>
+              <p className="text-sm text-slate-400">{item.email}</p>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={"secondary"}
               size={"icon"}
-              onClick={() => handlelikeUnlike(isLiked as boolean, id as string)}
+              onClick={() => handlelikeUnlike(item.walloflove as boolean, item._id as string)}
             >
               {" "}
               <HeartIcon
                 className={`w-5 h-5 text-red-600  ${
-                  isLiked ? "fill-red-600" : ""
+                  item.walloflove ? "fill-red-600" : ""
                 }`}
               />
             </Button>
@@ -159,10 +153,10 @@ export function TestimonialCard({
                   <Button
                     variant={"secondary"}
                     size={"icon"}
-                    onClick={() => handlearchive(isarchived as boolean, id)}
+                    onClick={() => handlearchive(item.archeived as boolean, item._id)}
                   >
                     {" "}
-                    {isarchived ? (
+                    {item.archeived ? (
                       <LuArchiveRestore color="#fff" className="w-5 h-5" />
                     ) : (
                       <HiOutlineArchiveBoxArrowDown
@@ -173,24 +167,27 @@ export function TestimonialCard({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {isarchived ? "Unarchive review" : "Archive review"}
+                  {item.archeived ? "Unarchive review" : "Archive review"}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
         </div>
 
-        <div className="relative">
-          <p className="text-lg leading-relaxed text-slate-300">
-            {description}
+        <div className="relative"> 
+          
+          <p className="text-lg leading-relaxed  break-words text-slate-300">
+            {item.text}
           </p>
-          {starred && (
+     
+          {item?.rating && (
             <div className="flex ">
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className={`h-5 w-5 ${
-                    star <= starred
+                  className={`h-5 w-5 ${ 
+                    // @ts-ignore
+                    star <= item.rating
                       ? "text-yellow-400 fill-yellow-400"
                       : "text-gray-300"
                   } transition-colors`}
@@ -198,18 +195,18 @@ export function TestimonialCard({
               ))}
             </div>
           )}
-          {tab === "Review" && (
+          {tab === "review" && (
             <div className="mt-6 flex md:flex-row flex-col flex-wrap justify-between gap-3">
               <div className=" flex gap-2 items-center ">
-                {reviewtags.map((item) => (
+                {item?.tags.map((i) => (
                   <div
                     className="flex items-center p-1  px-2 gap-2  bg-card  rounded-sm border-card-foreground shadow-sm shadow-amber-50"
-                    key={item}
+                    key={i}
                   >
-                    <span className="text-gray-200">{item}</span>
+                    <span className="text-gray-200">{i}</span>
                     <span
                       className="curosr-pointer"
-                      onClick={() => handleRemoveTag(id, item)}
+                      onClick={() => handleRemoveTag(item._id, i)}
                     >
                       <X className="w-4 h-4 cursor-pointer text-white" />
                     </span>
@@ -245,7 +242,7 @@ export function TestimonialCard({
             deletedialog: value as boolean,
           }))
         }
-        reviewid={id}
+        reviewid={item._id}
       />
       <ReviewTagManager
         isTagDialogOpen={open.tagdialog}
@@ -255,10 +252,10 @@ export function TestimonialCard({
             tagdialog: val,
           }))
         }
-        id={id}
+        id={item._id}
         spcid={spaceid}
         spctags={spctags as Array<string>}
-        reviewtags={reviewtags as Array<string>}
+        reviewtags={item.tags as Array<string>}
       />
     </>
   );

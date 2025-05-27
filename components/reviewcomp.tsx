@@ -26,6 +26,7 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
   return testimonials.filter(item => item.tags.includes(active));
 }, [testimonials, active]);
 
+console.log(testimonials,"testimonials");
 
   if (testimonials === null) return <Loading />; 
   if(testimonials.length === 0 ) return <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
@@ -39,7 +40,7 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
 
   return (
     <>
-      {tab === "Review" && (
+      {tab === "review" && (
         <div className=" w-full flex items-center gap-2 flex-wrap   space-x-2 ">
           <Button
             variant={"outline"}
@@ -71,7 +72,7 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
           <HeartCrack className="w-8 h-8 text-white " />
           <p className="text-4xl text-white text-balance font-stretch-50%">
             {
-              tab === "Review" ?  "No reviews are available"    : `Pls ${tab} review .` 
+              tab === "review" ?  "No reviews are available"    : `Pls ${tab} review .` 
             }
           </p>
         </div>
@@ -80,18 +81,10 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
         return (
           <TestimonialCard
             key={item._id}
-            name={item?.name as string}
-            email={item?.email as string}
-            description={item?.text as string}
-            avatar=""
-            starred={item?.rating as number}
-            spctags={tags}
-            reviewtags={item.tags}
-            id={item._id}
-            isLiked={item.walloflove}
-            isarchived={item.archeived}
+            item={item}
             spaceid={spaceid} 
             tab={tab}
+            spctags={tags}
           />
         );
       })}

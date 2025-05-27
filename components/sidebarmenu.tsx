@@ -42,8 +42,8 @@ import {
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton
-            isActive={activeSection === "archived"}
-            onClick={() => setActiveSection("archived")}
+            isActive={activeSection === "archeived"}
+            onClick={() => setActiveSection("archeived")}
           >
             <Archive className="h-4 w-4" />
             <span>Archived</span>
