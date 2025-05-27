@@ -26,6 +26,7 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
   return testimonials.filter(item => item.tags.includes(active));
 }, [testimonials, active]);
 
+console.log(testimonials,"testimonials");
 
   if (testimonials === null) return <Loading />; 
   if(testimonials.length === 0 ) return <div className="flex items-center  border-accent-foreground  flex-col justify-center  h-20">
@@ -80,18 +81,10 @@ const Reviews = ({ testimonials, tags, spaceid, tab }: reviewprop) => {
         return (
           <TestimonialCard
             key={item._id}
-            name={item?.name as string}
-            email={item?.email as string}
-            description={item?.text as string}
-            avatar=""
-            starred={item?.rating as number}
-            spctags={tags}
-            reviewtags={item.tags}
-            id={item._id}
-            isLiked={item.walloflove}
-            isarchived={item.archeived}
+            item={item}
             spaceid={spaceid} 
             tab={tab}
+            spctags={tags}
           />
         );
       })}

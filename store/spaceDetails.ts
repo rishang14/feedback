@@ -15,9 +15,8 @@ export const useSpaceDetails = create((set) => ({
         withCredentials: true,
       }); 
       const data = await res.data.Questions; 
-      const testimonial= await res.data.Testimonial; 
       const Tags= await res.data.Tags;  
-      set({ questions: data , testimonials:testimonial ,tags:Tags});
+      set({ questions: data  ,tags:Tags});
     } catch (error) {
       console.log(error);
     }
@@ -60,5 +59,21 @@ export const useSpaceDetails = create((set) => ({
       console.log(error)
      return  {success:false,error:"Something Went Wrong"}
     }
+   },  
+   getreviews: async(spaceid:string,tab:string)=>{ 
+    if(tab==="liked")tab="walloflove"
+     try {
+       const res= await axios.get("/api/gettestimonial",{
+    params: {
+      spaceid,
+    tab
+    }, 
+    withCredentials:true
+  });   
+    const review= await res.data.review; 
+    set({testimonials:review})
+     } catch (error) {
+      
+     }
    }
 }));

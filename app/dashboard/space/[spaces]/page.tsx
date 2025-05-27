@@ -34,22 +34,31 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState(activetab);
   const { spaces } = useParams();
   // @ts-ignore
-  const {  getSpaceDetails, testimonials ,tags} = useSpaceDetails();
+  const {  getSpaceDetails, testimonials ,tags,getreviews} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession(); 
   console.log(query.get("tab"),"tab");
-const [review,setReview]=useState<Review[]>(); 
   useEffect(() => {
     async function spaceDetails(){
       if (spaces) await getSpaceDetails(spaces as string);
     } 
-
      spaceDetails() 
   }, [spaces]);  
    
-  useEffect(()=>{
-    if(testimonials) setReview(testimonials);
-  },[testimonials]) 
+   
+useEffect(() => {
+  const fetchReviews = async () => {
+    const tab = query.get("tab") ?? "review";
+    try {
+      const res = await getreviews(spaces as string, tab);
+    } catch (error) {
+      console.error("Error fetching reviews", error);
+      // setReviews([]);
+    }
+  };
+
+  if (spaces) fetchReviews();
+}, [spaces, query]);
   
 const updateTabAndPathname = useCallback(
   (val: string) => {
@@ -119,23 +128,13 @@ const updateTabAndPathname = useCallback(
             {/* @ts-ignore */}
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={review ?? [] } tags={tags} spaceid={spaces as string} tab="Review"/>
+                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Review"/>
               )}
               {activeSection === "liked" && (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-bold text-white mb-2">
-                    Liked Reviews
-                  </h2>
-                  <p className="text-zinc-400">No liked reviews yet</p>
-                </div>
+                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Liked"/>
               )}
-              {activeSection === "archived" && (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-bold text-white mb-2">
-                    Archived Reviews
-                  </h2>
-                  <p className="text-zinc-400">No archived reviews yet</p>
-                </div>
+              {activeSection === "archeived" && (
+                 <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Archeived"/>
               )}
               {/* {activeSection === "wall-of-love" && (
                 <div className="text-center py-10">
