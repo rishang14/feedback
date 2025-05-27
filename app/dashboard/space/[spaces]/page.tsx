@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
@@ -13,7 +13,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useSpaceDetails } from "@/store/spaceDetails";
 import { toast } from "sonner";
@@ -24,16 +24,20 @@ import { testimonialSchema } from "@/app/types/schema";
 
 type  Review =z.infer<typeof testimonialSchema>;
 export default function Page() {
-  const [activeSection, setActiveSection] = useState("review");
   const [open, setopen] = useState({
     editspace: false,
     tagmanager: false,
-  });
+  });  
+  const query= useSearchParams(); 
+  const pathname= usePathname() ; 
+  const activetab= query.get("tab") ?? "review";
+  const [activeSection, setActiveSection] = useState(activetab);
   const { spaces } = useParams();
   // @ts-ignore
   const {  getSpaceDetails, testimonials ,tags} = useSpaceDetails();
   const router = useRouter();
-  const { status } = useSession();
+  const { status } = useSession(); 
+  console.log(query.get("tab"),"tab");
 const [review,setReview]=useState<Review[]>(); 
   useEffect(() => {
     async function spaceDetails(){
@@ -42,13 +46,22 @@ const [review,setReview]=useState<Review[]>();
 
      spaceDetails() 
   }, [spaces]);  
-
+   
   useEffect(()=>{
     if(testimonials) setReview(testimonials);
-  },[testimonials,review]) 
+  },[testimonials]) 
+  
+const updateTabAndPathname = useCallback(
+  (val: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("tab", val);
 
+    router.replace(`${pathname}?${params.toString()}`); 
+    setActiveSection(val)
+  },
+  [ pathname, router] 
+);
 
-  console.log(review)
   if (status === "loading" ) return <Loading />;
   if (status !== "authenticated") {
     router.push("/signin");
@@ -62,7 +75,6 @@ const [review,setReview]=useState<Review[]>();
       ssr: false,
     }
   );
-
   const TagManager = dynamic(() => import("@/components/manageTags"), {
     ssr: false,
   });
@@ -73,7 +85,7 @@ const [review,setReview]=useState<Review[]>();
       <SidebarProvider>
         <AppSidebar
           activeSection={activeSection}
-          setActiveSection={setActiveSection}
+          setActiveSection={updateTabAndPathname}
           tagopen={(val: boolean) =>
             setopen((prev) => ({ ...prev, tagmanager: val }))
           }

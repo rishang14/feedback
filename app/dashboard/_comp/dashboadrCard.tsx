@@ -7,8 +7,12 @@ import { useRouter } from 'next/navigation';
  const DashboardCardWithMenu = ({ item }: { item: any }) => {  
   console.log("rendered from child compoenent",)
   const router = useRouter();
-  const handleClick = async (spaces: any) => {
-    router.push(`/dashboard/space/${spaces}`);
+  const handleClick = async (spaces: any) => { 
+    const query = new URLSearchParams({
+    tab: "review",
+    page: "1",
+  }).toString();
+    router.push(`/dashboard/space/${spaces}?${query}`);
   };
 
   return (
