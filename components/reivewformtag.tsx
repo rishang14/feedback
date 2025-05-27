@@ -32,19 +32,20 @@ const ManageReviewTags = ({
   const { addtag } = UseTestimonial();
   const [loading, setLoading] = useState(false);
   //    @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails();
+  const { getreviews } = useSpaceDetails();
   const addTag = async (name: string, id: string) => {
     setLoading(true);
     try {
       const res = await addtag(id, name);
       if (res.success) {
         toast.success("Tag added Successfully", { duration: 2000 });
-        await getSpaceDetails(spcid);
+       
       }
     } catch (error) {
       toast.error("something went wrong", { duration: 3000 });
     } finally {
-      setLoading(false);
+      setLoading(false); 
+       await getreviews(spcid,"review");
     }
   };
   return (
