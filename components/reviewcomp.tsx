@@ -40,7 +40,7 @@ console.log(testimonials,"testimonials");
 
   return (
     <>
-      {tab === "Review" && (
+      {tab === "review" && (
         <div className=" w-full flex items-center gap-2 flex-wrap   space-x-2 ">
           <Button
             variant={"outline"}
@@ -72,7 +72,7 @@ console.log(testimonials,"testimonials");
           <HeartCrack className="w-8 h-8 text-white " />
           <p className="text-4xl text-white text-balance font-stretch-50%">
             {
-              tab === "Review" ?  "No reviews are available"    : `Pls ${tab} review .` 
+              tab === "review" ?  "No reviews are available"    : `Pls ${tab} review .` 
             }
           </p>
         </div>

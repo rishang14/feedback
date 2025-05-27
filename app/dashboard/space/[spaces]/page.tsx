@@ -128,13 +128,13 @@ const updateTabAndPathname = useCallback(
             {/* @ts-ignore */}
             <div className="w-full space-y-4">
               {activeSection === "review" && (
-                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Review"/>
+                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="review"/>
               )}
               {activeSection === "liked" && (
-                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Liked"/>
+                <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="walloflove"/>
               )}
               {activeSection === "archeived" && (
-                 <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="Archeived"/>
+                 <Reviews testimonials={testimonials ?? [] } tags={tags} spaceid={spaces as string} tab="archeived"/>
               )}
               {/* {activeSection === "wall-of-love" && (
                 <div className="text-center py-10">

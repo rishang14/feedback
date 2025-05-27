@@ -45,7 +45,7 @@ export function TestimonialCard({
   const { likeTestimonial, unlikeTestimonial, archive, unarchive, reovetag } =
     UseTestimonial();
   // @ts-ignore
-  const { getSpaceDetails } = useSpaceDetails();
+  const { getreviews } = useSpaceDetails();
   const [open, setisopen] = useState({
     deletedialog: false,
     tagdialog: false,
@@ -67,7 +67,7 @@ export function TestimonialCard({
     } catch (error) {
       toast.error("Pls try again");
     } finally {
-      await getSpaceDetails(spaceid);
+      await getreviews(spaceid,tab);
     }
   };
 
@@ -83,7 +83,7 @@ export function TestimonialCard({
     } catch (error) { 
       toast.error("something went wrong")
     } finally {
-      await getSpaceDetails(spaceid);
+       await getreviews(spaceid,tab);
     }
   };
 
@@ -92,7 +92,7 @@ export function TestimonialCard({
       const res = await reovetag(id, tagname);
       if (res.success) {
         toast.success("Removed Successfully", { duration: 2000 });
-        await getSpaceDetails(spaceid);
+         await getreviews(spaceid,tab);
       }
     } catch (error) {
       toast.error("something went wrong");
@@ -195,7 +195,7 @@ export function TestimonialCard({
               ))}
             </div>
           )}
-          {tab === "Review" && (
+          {tab === "review" && (
             <div className="mt-6 flex md:flex-row flex-col flex-wrap justify-between gap-3">
               <div className=" flex gap-2 items-center ">
                 {item?.tags.map((i) => (
