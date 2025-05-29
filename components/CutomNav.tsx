@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 const CustomNav = () => { 
     const path =usePathname()  
-    const pathsnames=["/reviewform/","/dashboard/space/",'/signup','/signin','/verifyemail']
+    const pathsnames=["/reviewform/","/dashboard/space/",'/signup','/signin','/verifyemail', '/embedreview']
     const shouldHideNav = pathsnames.some(prefix => path.startsWith(prefix));
   
     return  ( !shouldHideNav && <Nav/> )
