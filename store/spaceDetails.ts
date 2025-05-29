@@ -16,9 +16,10 @@ export const useSpaceDetails = create((set) => ({
       }); 
       const data = await res.data.Questions; 
       const Tags= await res.data.Tags;  
-      set({ questions: data  ,tags:Tags});
+      set({ questions: data  ,tags:Tags}); 
+      return {success:true };
     } catch (error) {
-      console.log(error);
+      return {success : false};
     }
   }, 
   editSpaceForm: async(changeditems:prop, spaceid:string)=>{
