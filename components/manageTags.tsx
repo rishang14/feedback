@@ -45,7 +45,7 @@ export default function TagManager({
   const [loading, setLoading] = useState(false);
 
   // @ts-ignore
-  const { addtag, getSpaceDetails, removeTag } = useSpaceDetails();
+  const { addtag, getSpaceDetails, removeTag ,getreviews} = useSpaceDetails();
   console.log(spaceid, "id");
   const form = useForm<tagSchema>({
     resolver: zodResolver(TagSchema),
@@ -91,7 +91,7 @@ export default function TagManager({
       const res = await removeTag(spaceid, tag as string);
       if (res.success) {
         toast.success("Deleted Success fulluy");
-        await getSpaceDetails(spaceid as string);
+        await getreviews(spaceid as string,"review");
       }
     } catch (error) {
     } finally {

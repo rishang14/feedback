@@ -40,7 +40,13 @@ export default function Page() {
   console.log(query.get("tab"),"tab");
   useEffect(() => {
     async function spaceDetails(){
-      if (spaces) await getSpaceDetails(spaces as string);
+      if (spaces) {
+        const res= await getSpaceDetails(spaces as string); 
+        if(!res.success){
+          router.push("/not-found"); 
+          return null;
+        }
+      }
     } 
      spaceDetails() 
   }, [spaces]);  
