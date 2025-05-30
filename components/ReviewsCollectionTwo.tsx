@@ -36,8 +36,8 @@ const ReviewsCollectionTwo = ({ testimonial, ind }: any) => {
     <Card
       key={testimonial.id}
       className={cn(
-        "group relative bg-card hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1",
-        getSizeClasses(testimonial.size)
+        " masonry-card  group relative bg-card hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1",
+        // getSizeClasses(testimonial.size)
       )}
       style={{
         animationDelay: `${ind * 100}ms`,

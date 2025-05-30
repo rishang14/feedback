@@ -21,12 +21,14 @@ import Loading from "@/app/loading";
 import { AppSidebar } from "@/components/sidebarmenu";
 import Reviews from "@/components/reviewcomp";
 import { testimonialSchema } from "@/app/types/schema";
+import Embededmodal from "@/components/Embededmodal";
 
 type  Review =z.infer<typeof testimonialSchema>;
 export default function Page() {
   const [open, setopen] = useState({
     editspace: false,
-    tagmanager: false,
+    tagmanager: false, 
+    embed:false
   });  
   const query= useSearchParams(); 
   const pathname= usePathname() ; 
@@ -103,6 +105,9 @@ const updateTabAndPathname = useCallback(
           setActiveSection={updateTabAndPathname}
           tagopen={(val: boolean) =>
             setopen((prev) => ({ ...prev, tagmanager: val }))
+          } 
+           embedopen={(val: boolean) =>
+            setopen((prev) => ({ ...prev, embed: val }))
           }
         />
         <main className="flex  flex-col w-full ">
@@ -175,7 +180,11 @@ const updateTabAndPathname = useCallback(
         open={open.tagmanager}
         tags={tags} 
         spaceid={spaces as string}
-      />
+      /> 
+      <Embededmodal embedopen={open.embed} setembedopen={(val:boolean)=> setopen((prev)=> ({
+        ...prev,
+        embed:val
+      }))}/>
     </>
   );
 }

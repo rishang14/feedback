@@ -1,7 +1,31 @@
-import { Star, Sparkles } from "lucide-react";
+"use client"
+import { Star, Sparkles } from "lucide-react"; 
+import Masonry from 'react-masonry-css'
 import AcceternityReviewsCollection from "@/components/ReviewsCollectionone";
 import ReviewsCollectionTwo from "@/components/ReviewsCollectionTwo";
+import ReviewCollectionThree from "@/components/ReviewCollectionThree";   
 
+const breakpointColumnsObj = {
+  default: 4,
+  1100: 3,
+  700: 2,
+  500: 1
+};
+
+export const MasonaryComp = ({ testimonials }:any) => {
+  return (
+    <Masonry
+      breakpointCols={breakpointColumnsObj}
+      className="my-masonry-grid"
+      columnClassName="my-masonry-grid_column"
+    >
+      {testimonials.map((item:any, ind:any) => (
+        <ReviewsCollectionTwo testimonial={item} key={ind} ind={ind} />
+      ))}
+    </Masonry>
+  );
+};
+ 
 const testimonials = [
   {
     id: 1,
@@ -111,23 +135,36 @@ const testimonials = [
     text: "Great for e-commerce integration. Has helped us streamline our inventory management.",
     size: "medium",
   },
-]
+];
 
-const Page = () => {
+const Testimonialobj = {
+  one: ({ testimonials }:any) =>
+    testimonials.map((item:any, ind:any) => (
+      <AcceternityReviewsCollection testimonial={item} key={ind} ind={ind} />
+    )),
+  two: MasonaryComp,
+  three: ({ testimonials }:any) =>
+    testimonials.map((item:any, ind:any) => (
+      <ReviewCollectionThree testimonial={item} index={ind} key={ind} />
+    )),
+};
+
+const Page = () => {  
+
+
+  const Component = Testimonialobj["three"];
   return (
-        <div className="container bg-background">
-        {/* <div className=" max-w-[1390px] container flex flex-wrap space-x-3 md:flex-row flex-col  space-y-3  bg-white">
-          {testimonials.map((item, ind) => (
-            <AcceternityReviewsCollection testimonial={item} key={ind} />
-          ))}
-            </div> */} 
-              <div className="grid grid-cols-1 max-w-[1290px] mx-auto md:grid-cols-4 gap-4 auto-rows-min mb-8">
-             { testimonials.map((item, ind) => (
-             <ReviewsCollectionTwo  testimonial={item} key={ind} ind={ind}/>
-          )) }
-            </div>
-        </div>
+    <div className="container bg-background">
+     <div className="grid grid-cols-1 max-w-[1290px] mx-auto md:grid-cols-4 gap-4 auto-rows-min mb-8"> 
+          <Component testimonials={testimonials}  />
+        </div> 
+    </div>
   );
 };
 
-export default Page;
+export default Page; 
+
+
+
+
+
