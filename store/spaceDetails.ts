@@ -2,6 +2,7 @@ import axios from "axios";
 import z from "zod"
 import { create } from "zustand"; 
 import { EditFormSchema } from "@/app/types/schema";
+import { error } from "console";
 
 
 type prop= z.infer<typeof EditFormSchema>
@@ -66,7 +67,7 @@ export const useSpaceDetails = create((set) => ({
      try {
        const res= await axios.get("/api/gettestimonial",{
     params: {
-      spaceid,
+    spaceid,
     tab
     }, 
     withCredentials:true
@@ -76,5 +77,20 @@ export const useSpaceDetails = create((set) => ({
      } catch (error) {
       
      }
+   }, 
+   embedReviews:async(sId:string,style:string)=>{
+      try {
+         const res= await axios.get("/api/embedtestimonial",{
+          params:{
+            sId,
+            style,
+          },
+          withCredentials:true
+         }) 
+
+         return { review :res.data.review ,error:false}
+      } catch (error:any) {
+         return {errormsg:error.response.data.error,error:true}
+      }
    }
 }));

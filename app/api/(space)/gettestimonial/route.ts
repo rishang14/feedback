@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import Testimnoails from "@/mongoose/testimonial.schema";
 import Space from "@/mongoose/space.schema";
 import connectDB from "@/lib/db.connect";
-import { error } from "console";
+
 
 const { auth } = NextAuth(authConfig);
 export async function GET(req: NextRequest) {

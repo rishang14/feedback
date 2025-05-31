@@ -21,12 +21,14 @@ import Loading from "@/app/loading";
 import { AppSidebar } from "@/components/sidebarmenu";
 import Reviews from "@/components/reviewcomp";
 import { testimonialSchema } from "@/app/types/schema";
+import Embededmodal from "@/components/Embededmodal";
 
 type  Review =z.infer<typeof testimonialSchema>;
 export default function Page() {
   const [open, setopen] = useState({
     editspace: false,
-    tagmanager: false,
+    tagmanager: false, 
+    embed:false
   });  
   const query= useSearchParams(); 
   const pathname= usePathname() ; 
@@ -34,14 +36,15 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState(activetab);
   const { spaces } = useParams();
   // @ts-ignore
-  const {  getSpaceDetails, testimonials ,tags,getreviews} = useSpaceDetails();
+  const {  getSpaceDetails, testimonials ,tags,getreviews,embedReviews} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession(); 
   console.log(query.get("tab"),"tab");
   useEffect(() => {
     async function spaceDetails(){
       if (spaces) {
-        const res= await getSpaceDetails(spaces as string); 
+        const res= await getSpaceDetails(spaces as string);  
+        const response= await embedReviews(spaces as string, "one");
         if(!res.success){
           router.push("/not-found"); 
           return null;
@@ -103,6 +106,9 @@ const updateTabAndPathname = useCallback(
           setActiveSection={updateTabAndPathname}
           tagopen={(val: boolean) =>
             setopen((prev) => ({ ...prev, tagmanager: val }))
+          } 
+           embedopen={(val: boolean) =>
+            setopen((prev) => ({ ...prev, embed: val }))
           }
         />
         <main className="flex  flex-col w-full ">
@@ -175,6 +181,13 @@ const updateTabAndPathname = useCallback(
         open={open.tagmanager}
         tags={tags} 
         spaceid={spaces as string}
+      /> 
+      <Embededmodal embedopen={open.embed} setembedopen={(val:boolean)=> setopen((prev)=> ({
+        ...prev,
+        embed:val 
+    
+      }))}
+       sid={spaces as string} 
       />
     </>
   );

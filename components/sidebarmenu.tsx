@@ -12,10 +12,11 @@ import {
     MessageCircleCode,  
     Heart,
     Archive,
-    Tags,
+    Tags, 
+    SeparatorVertical
   } from "lucide-react"; 
    
-  export function AppSidebar({activeSection,setActiveSection,tagopen}:any) {
+  export function AppSidebar({activeSection,setActiveSection,tagopen,embedopen}:any) {
     return (
 <Sidebar className="border-r border-zinc-800 bg-neutral-900">
 <SidebarHeader>
@@ -49,15 +50,6 @@ import {
             <span>Archived</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
-        {/* <SidebarMenuItem>
-          <SidebarMenuButton
-            isActive={activeSection === "wall-of-love"}
-            onClick={() => setActiveSection("wall-of-love")}
-          >
-            <Heart className="h-4 w-4" />
-            <span>Wall of Love</span>
-          </SidebarMenuButton> 
-        </SidebarMenuItem> */}
         <SidebarMenuItem>
           <SidebarMenuButton
            
@@ -66,7 +58,15 @@ import {
             <Tags className="h-4 w-4" />
             <span>Manage Tags</span>
           </SidebarMenuButton>
-        </SidebarMenuItem>
+        </SidebarMenuItem> 
+         <SidebarMenuItem>
+          <SidebarMenuButton 
+          onClick={()=>embedopen(true)}
+          >
+            <SeparatorVertical className="h-4 w-4" />
+            <span>Embed reiwes </span>
+          </SidebarMenuButton> 
+        </SidebarMenuItem> 
       </SidebarMenu>
     </SidebarGroupContent>
   </SidebarGroup>
