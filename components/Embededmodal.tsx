@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Copy, ArrowLeft, CheckCircle2 } from "lucide-react"; 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { toast } from "sonner";
 
 type prop = {
   embedopen: boolean;
@@ -47,16 +48,16 @@ const Embedhome = ({ embedopen, setembedopen,sid }: prop) => {
   const [style,setstyle]=useState("one")
 
  
-  const copyCode = () => {
-    const codeSnippet = document.getElementById("embed-code")?.textContent;
-    if (codeSnippet) {
-      navigator.clipboard.writeText(codeSnippet);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+  const copyCode =async (embedCode:string) => {
+ try {
+     await navigator.clipboard.writeText(embedCode); 
+     toast.success("copied to clipboard",{duration:2000})
+ } catch (error:any){
+   
+ }
   };
   const Link=`https://feedbackvault.vercel.app/embedreview?sid=${sid}&style=${style}`
-  const embedCode = `<iframe height="800px" id=${sid} src=${Link}></iframe>`;
+  const embedCode = `<iframe height="800px" id="${sid}" src="${Link}"></iframe>`;
 
   return (
     <>
@@ -71,7 +72,7 @@ const Embedhome = ({ embedopen, setembedopen,sid }: prop) => {
             <div className="flex items-center justify-center mb-6">
               <span className="ml-3 text-xl text-white">Choose a layout</span>
             </div>
-            <div className=" flex gap-2 justify-center  p-3">
+            <div className=" flex gap-2 md:justify-center items-center md:flex-row flex-col p-3">
               {
                 img.map((item:any)=>{
                   return <Card
@@ -92,11 +93,11 @@ const Embedhome = ({ embedopen, setembedopen,sid }: prop) => {
             </div>
           </div>
          
-          <DialogFooter className="flex gap-2 items-center"> 
-             <div className="bg-muted p-4 flex flex-wrap break-words w-full rounded-md ">
-            <code className="text-blue-600">{embedCode}</code>
+          <DialogFooter className="flex gap-2 md:flex-row flex-col items-center"> 
+             <div className="bg-muted p-4 flex flex-wrap break-words w-full rounded-md overflow-hidden ">
+            <code className="text-blue-600 break-words">{embedCode}</code>
           </div>
-            <Button onClick={copyCode} className="flex items-center gap-2">
+            <Button onClick={()=> copyCode(embedCode)} className="flex items-center gap-2">
               {copied ? "Copied!" : "Copy Code"}
               {copied ? (
                 <Check className="h-4 w-4" />
@@ -112,3 +113,5 @@ const Embedhome = ({ embedopen, setembedopen,sid }: prop) => {
 };
 
 export default React.memo(Embedhome);
+
+
