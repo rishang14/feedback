@@ -39,11 +39,11 @@ const AcceternityReviewsCollection = ({ testimonial }: any) => {
             <CardDescription className="text-gray-400 text-xs">{testimonial.email}</CardDescription>
           </div>
         </div> 
-        {testimonial.rating && <div className="flex mt-2">{renderStars(testimonial.rating)}</div>}
+        {testimonial.rating && <div className="flex mt-2">{renderStars(testimonial?.rating)}</div>}
       </CardHeader>
 
-      <CardContent className="pt-0">
-        <p className="text-gray-300 leading-relaxed text-sm">"{testimonial.text}"</p>
+      <CardContent className="pt-0 break-words">
+        <p className="text-gray-300 leading-relaxed break-words text-sm">"{testimonial.text}"</p>
       </CardContent>
       {hoveredCard === testimonial.id && (
         <>

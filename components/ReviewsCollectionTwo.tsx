@@ -60,14 +60,14 @@ const ReviewsCollectionTwo = ({ testimonial, ind }: any) => {
               {testimonial.name}
             </h4>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {testimonial.role}
+              {testimonial.email}
             </p>
           </div>
         </div>
-        <div className="flex pt-3">{renderStars(testimonial.rating)}</div>
+        <div className="flex pt-3">{renderStars(testimonial?.rating)}</div>
       </CardHeader>
 
-      <CardContent className="text-neutral-400">
+      <CardContent className="text-neutral-400 break-words">
           "{testimonial.text}"
       </CardContent>
     </Card>

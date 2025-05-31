@@ -25,8 +25,8 @@ const ReviewCollectionThree = ({testimonial ,index}:any) => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.email}</p>
                   </div>
                 </div>
-                <div className="flex mb-3">{renderStars(testimonial.rating)}</div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">"{testimonial.text}"</p>
+                <div className="flex mb-3">{renderStars(testimonial?.rating)}</div>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed break-words">"{testimonial.text}"</p>
               </CardContent>
             </Card>
   )

@@ -36,14 +36,15 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState(activetab);
   const { spaces } = useParams();
   // @ts-ignore
-  const {  getSpaceDetails, testimonials ,tags,getreviews} = useSpaceDetails();
+  const {  getSpaceDetails, testimonials ,tags,getreviews,embedReviews} = useSpaceDetails();
   const router = useRouter();
   const { status } = useSession(); 
   console.log(query.get("tab"),"tab");
   useEffect(() => {
     async function spaceDetails(){
       if (spaces) {
-        const res= await getSpaceDetails(spaces as string); 
+        const res= await getSpaceDetails(spaces as string);  
+        const response= await embedReviews(spaces as string, "one");
         if(!res.success){
           router.push("/not-found"); 
           return null;
@@ -183,8 +184,11 @@ const updateTabAndPathname = useCallback(
       /> 
       <Embededmodal embedopen={open.embed} setembedopen={(val:boolean)=> setopen((prev)=> ({
         ...prev,
-        embed:val
-      }))}/>
+        embed:val 
+    
+      }))}
+       sid={spaces as string} 
+      />
     </>
   );
 }
